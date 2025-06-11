@@ -106,50 +106,58 @@ $jscomp.inherits(Menu, Phaser.Scene);
 Menu.prototype.create = function() {
     var a = this, b = this;
     
-    // 添加纯色背景 - 使用#73cdff颜色，稍微增加宽度确保没有黑边
-    this.add.rectangle(187.5, 406, 400, 820, 0x73cdff);
+    // 响应式尺寸计算
+    var centerX = config.width / 2;
+    var centerY = config.height / 2;
+    var uiScale = Math.min(config.width / 375, config.height / 812);
     
-    // 添加游戏标题并设置动画 - 与preload界面位置保持一致
-    var c = this.add.sprite(187.5, 200, "game_title");
-    c.setScale(0.6); // 适当缩小以适应屏幕
+    // 添加纯色背景 - 响应式尺寸
+    this.add.rectangle(centerX, centerY, config.width + 50, config.height + 50, 0x73cdff);
+    
+    // 添加游戏标题并设置动画 - 响应式位置和缩放
+    var titleY = config.height * 0.246; // 约24.6% (200/812)
+    var c = this.add.sprite(centerX, titleY, "game_title");
+    c.setScale(0.6 * uiScale); // 响应式缩放
     this.tweens.add({
         targets: c,
-        y: c.y + 10,
+        y: c.y + 10 * uiScale,
         duration: 1300,
         ease: "Sine.easeInOut",
         yoyo: !0,
         repeat: -1
     });
     
-    // 显示最高分数 - 调整位置适应新布局
-    this.add.text(187.5, 420, "BEST SCORE:", {
+    // 显示最高分数 - 响应式位置和字体大小
+    var scoreY = config.height * 0.52; // 约52% (420/812)
+    this.add.text(centerX, scoreY, "BEST SCORE:", {
         fontFamily: "PoetsenOne",
-        fontSize: 22,
+        fontSize: Math.floor(22 * uiScale),
         align: "center",
         color: "#FFFFFF"
     }).setOrigin(.5);
     
-    this.add.text(187.5, 450, String(best_score), {
+    this.add.text(centerX, scoreY + 30 * uiScale, String(best_score), {
         fontFamily: "PoetsenOne",
-        fontSize: 18,
+        fontSize: Math.floor(18 * uiScale),
         align: "center",
         color: "#FFFFFF"
     }).setOrigin(.5);
     
-    // 添加开始游戏按钮 - 与preload界面位置保持一致
-    var playBtn = draw_button(187.5, 580, "play", this);
-    playBtn.setScale(0.7); // 缩小按钮以适应屏幕
+    // 添加开始游戏按钮 - 响应式位置和缩放
+    var playBtnY = config.height * 0.714; // 约71.4% (580/812)
+    var playBtn = draw_button(centerX, playBtnY, "play", this);
+    playBtn.setScale(0.7 * uiScale); // 响应式缩放
     
     // 处理按钮点击事件
     this.input.on("gameobjectdown", function(c, d) {
         if (d.button) {
             play_sound("click", a);
             
-            // 按钮点击动画 - 调整缩放比例和时长
+            // 按钮点击动画 - 响应式缩放比例和时长
             a.tweens.add({
                 targets: d,
-                scaleX: .6,
-                scaleY: .6,
+                scaleX: .6 * uiScale,
+                scaleY: .6 * uiScale,
                 yoyo: !0,
                 ease: "Linear",
                 duration: 100,

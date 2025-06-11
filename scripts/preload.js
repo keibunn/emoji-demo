@@ -60,22 +60,31 @@ Load.prototype.preload = function() {
     // 开始游戏加载
     PokiSDK.gameLoadingStart();
     
-    // 添加纯色背景 - 使用#73cdff颜色，稍微增加宽度确保没有黑边
-    this.add.rectangle(187.5, 406, 400, 820, 0x73cdff);
-    var titleSprite = this.add.sprite(187.5, 200, "game_title");
-    titleSprite.setScale(0.6); // 与menu界面保持一致的大小
+    // 响应式尺寸计算
+    var centerX = config.width / 2;
+    var centerY = config.height / 2;
+    var uiScale = Math.min(config.width / 375, config.height / 812);
     
-    // 创建加载进度条
-    var b = this.add.rectangle(187.5, 500, 300, 20);
-    b.setStrokeStyle(4, 16777215);
+    // 添加纯色背景 - 响应式尺寸
+    this.add.rectangle(centerX, centerY, config.width + 50, config.height + 50, 0x73cdff);
+    var titleY = config.height * 0.246; // 约24.6% (200/812)
+    var titleSprite = this.add.sprite(centerX, titleY, "game_title");
+    titleSprite.setScale(0.6 * uiScale); // 响应式缩放
+    
+    // 创建响应式加载进度条
+    var progressY = config.height * 0.616; // 约61.6% (500/812)
+    var progressWidth = config.width * 0.8; // 宽度为屏幕的80%
+    var b = this.add.rectangle(centerX, progressY, progressWidth, 20 * uiScale);
+    b.setStrokeStyle(4 * uiScale, 16777215);
     b.alpha = .7;
     
-    var c = this.add.rectangle(187.5, 500, 290, 10, 16777215);
+    var c = this.add.rectangle(centerX, progressY, progressWidth - 10 * uiScale, 10 * uiScale, 16777215);
     c.alpha = .8;
+    var maxProgressWidth = progressWidth - 10 * uiScale;
     
     // 监听加载进度
     this.load.on("progress", function(a) {
-        c.width = 290 * a
+        c.width = maxProgressWidth * a
     });
     
     // 加载完成处理
@@ -84,9 +93,10 @@ Load.prototype.preload = function() {
         b.destroy();
         c.destroy();
         
-        // 创建开始按钮
-        var d = draw_button(187.5, 580, "start", a);
-        d.setScale(0.7); // 与menu界面保持一致的大小
+        // 创建响应式开始按钮
+        var startBtnY = config.height * 0.714; // 约71.4% (580/812)
+        var d = draw_button(centerX, startBtnY, "start", a);
+        d.setScale(0.7 * uiScale); // 响应式缩放
         a.tweens.add({
             targets: d,
             alpha: .5,
