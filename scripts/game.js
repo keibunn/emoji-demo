@@ -91,19 +91,24 @@ var N=this;PokiSDK.gameplayStart();this.add.sprite(0,0,"background").setOrigin(0
 q=0,z={width:80,height:77},H=(config.width-8*z.width)/2+z.width/2,I=(config.height-10*z.height)/2+z.height/2,l=Array(10),r=[],m=1,t=18+player_data.drop_mode;22<t&&(t=22);console.log("Max: "+t);for(var A=0;40>A;A++)m>t&&(m=1),r.push(m),m++;r=r.concat(r);h(r);m=0;if(last_array)for(l=last_array,r=0;10>r;r++)for(m=0;8>m;m++)l[r][m].filled&&(t=l[r][m].color,A=this.add.sprite(H+z.width*m,I+z.height*r,"obj"+t).setInteractive(),A.color=t,A.piece=!0,A.pos={x:m,y:r},A.setDepth(10),u.add(A));else for(t=0;10>t;t++){A=[];for(var L=
 0;8>L;L++){var P=r[m],aa={color:P,filled:!0},M=this.add.sprite(H+z.width*L,I+z.height*t,"obj"+P).setInteractive();M.color=P;M.piece=!0;M.pos={x:L,y:t};M.setDepth(10);u.add(M);m++;A.push(aa)}l[t]=A}var headerSprite = this.add.sprite(0,0,"header").setOrigin(0);
 headerSprite.setDepth(1);
-this.add.sprite(config.width/2,35,"score_bar");var ba=this.add.text(config.width/2,35,String(player_data.score),{fontFamily:"robotomono",fontSize:40,align:"center",color:"#FFFFFF"}).setOrigin(.5);
+var scoreBarSprite = this.add.sprite(config.width/2,35,"score_bar");
+scoreBarSprite.depth = 50;
+var ba=this.add.text(config.width/2,35,String(player_data.score),{fontFamily:"robotomono",fontSize:40,align:"center",color:"#FFFFFF"}).setOrigin(.5);
+ba.depth = 50;
 var footerSprite = this.add.sprite(0,config.height,"footer").setOrigin(0,1);
 footerSprite.setDepth(1);
 
 // 添加时间限制显示
 timeLimitSprite = this.add.sprite(120,35,"time_limit");
 timeLimitSprite.setScale(1);
+timeLimitSprite.depth = 50;
 var remainingTime = gameTimeLimit - globalGameTimer;
 var minutes = Math.floor(remainingTime / 60);
 var seconds = remainingTime % 60;
 timeText = this.add.text(120,35,(minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds),{fontFamily:"robotomono",fontSize:28,align:"center",color:"#FFFFFF"}).setOrigin(.5);
+timeText.depth = 50;
 
-m=draw_button(650,40,"hint",this);0===player_data.hint_left&&(m.alpha=.5);r=draw_button(560,40,"shuffle",this);0===player_data.shuffle_left&&(r.alpha=.5);m=this.add.sprite(m.x+35,m.y+25,"circle");r=this.add.sprite(r.x+35,r.y+25,"circle");var Z=this.add.text(m.x,m.y,String(player_data.hint_left),{fontFamily:"robotomono",fontSize:30,align:"center",color:"#FFFFFF"}).setOrigin(.5),Y=this.add.text(r.x,r.y,String(player_data.shuffle_left),{fontFamily:"robotomono",fontSize:30,align:"center",color:"#FFFFFF"}).setOrigin(.5),D=this.add.sprite(180,180,"sign");D.setDepth(100);D.setVisible(!1);var C=this.add.sprite(r.x,140,"arrow");C.setDepth(100);C.setVisible(!1);this.tweens.add({targets:D,scaleX:1.1,scaleY:1.1,ease:"Linear",duration:250,yoyo:!0,repeat:-1});this.tweens.add({targets:C,y:C.y+20,ease:"Linear",duration:250,yoyo:!0,repeat:-1});for(r=0;25>r;r++)m=this.add.sprite(80,80,"lines"),m.setDepth(100),m.setVisible(!1),J.add(m);
+m=draw_button(650,40,"hint",this);m.depth = 50;0===player_data.hint_left&&(m.alpha=.5);r=draw_button(560,40,"shuffle",this);r.depth = 50;0===player_data.shuffle_left&&(r.alpha=.5);m=this.add.sprite(m.x+35,m.y+25,"circle");m.depth = 50;r=this.add.sprite(r.x+35,r.y+25,"circle");r.depth = 50;var Z=this.add.text(m.x,m.y,String(player_data.hint_left),{fontFamily:"robotomono",fontSize:30,align:"center",color:"#FFFFFF"}).setOrigin(.5);Z.depth = 50;var Y=this.add.text(r.x,r.y,String(player_data.shuffle_left),{fontFamily:"robotomono",fontSize:30,align:"center",color:"#FFFFFF"}).setOrigin(.5);Y.depth = 50;var D=this.add.sprite(180,180,"sign");D.setDepth(100);D.setVisible(!1);var C=this.add.sprite(r.x,140,"arrow");C.setDepth(100);C.setVisible(!1);this.tweens.add({targets:D,scaleX:1.1,scaleY:1.1,ease:"Linear",duration:250,yoyo:!0,repeat:-1});this.tweens.add({targets:C,y:C.y+20,ease:"Linear",duration:250,yoyo:!0,repeat:-1});for(r=0;25>r;r++)m=this.add.sprite(80,80,"lines"),m.setDepth(100),m.setVisible(!1),J.add(m);
 
 // 添加时间事件
 gameTimeEvent = this.time.addEvent({delay:1000,callback:function(){
