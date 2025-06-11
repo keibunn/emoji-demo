@@ -4,7 +4,7 @@
 	<title>Onet Fruit Classic</title>
 	<meta charset="utf-8">
 	<!-- Allow fullscreen mode on iOS devices. (These are Apple specific meta tags.) -->
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui, viewport-fit=cover" />
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 	<link rel="apple-touch-icon" sizes="256x256" href="img/icon.png" />
@@ -18,11 +18,29 @@
 			padding: 0;
 			margin: 0;
 		}
+		:root {
+			--vh: 1vh;
+		}
 		html, body {
+			height: 100%;
+			min-height: 100vh;
+			min-height: calc(var(--vh, 1vh) * 100);
 			background-image: url('img/cover.png');
 			overflow: hidden;
 			touch-action: none;
 			-ms-touch-action: none;
+			position: relative;
+			margin: 0;
+			padding: 0;
+		}
+		#game_content {
+			height: 100vh;
+			min-height: calc(var(--vh, 1vh) * 100);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			position: relative;
+			width: 100%;
 		}
 		canvas {
 			touch-action-delay: none;
@@ -44,6 +62,27 @@
 	</style>
 	<script src="./scripts/v2/poki-sdk-mock.js"></script>
 	<script type="text/javascript" src="scripts/phaser.min.js"></script>
+	<script type="text/javascript">
+		// 移动端高度适配脚本
+		function adjustMobileHeight() {
+			const vh = window.innerHeight * 0.01;
+			document.documentElement.style.setProperty('--vh', vh + 'px');
+			
+			// 动态设置body和game_content高度
+			document.body.style.height = window.innerHeight + 'px';
+			const gameContent = document.getElementById('game_content');
+			if (gameContent) {
+				gameContent.style.height = window.innerHeight + 'px';
+			}
+		}
+		
+		// 页面加载时执行
+		window.addEventListener('load', adjustMobileHeight);
+		// 窗口大小改变时执行（处理横竖屏切换）
+		window.addEventListener('resize', adjustMobileHeight);
+		// 页面显示时执行（处理从后台切回前台）
+		window.addEventListener('pageshow', adjustMobileHeight);
+	</script>
 </head>
 <body>
 	<div style="font-family:robotomono; position:absolute; left:-1000px; visibility:hidden;">.</div>
