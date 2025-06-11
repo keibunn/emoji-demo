@@ -68,43 +68,27 @@ Load.prototype.preload = function() {
     // 添加纯色背景 - 响应式尺寸
     this.add.rectangle(centerX, centerY, config.width + 50, config.height + 50, 0x73cdff);
     
-    // 添加游戏标题 - 简洁的预加载界面，不需要header和footer
-    var titleY = config.height * 0.246; // 约24.6% (200/812)
-    var titleSprite = this.add.sprite(centerX, titleY, "game_title");
+    // 添加游戏标题 - 垂直居中偏上
+    var titleSprite = this.add.sprite(centerX, centerY - 100 * uiScale, "game_title");
     titleSprite.setScale(0.6 * uiScale); // 响应式缩放
-    
-    // 创建响应式加载进度条
-    var progressY = config.height * 0.616; // 约61.6% (500/812)
-    var progressWidth = config.width * 0.8; // 宽度为屏幕的80%
-    var b = this.add.rectangle(centerX, progressY, progressWidth, 20 * uiScale);
-    b.setStrokeStyle(4 * uiScale, 16777215);
-    b.alpha = .7;
-    
-    var c = this.add.rectangle(centerX, progressY, progressWidth - 10 * uiScale, 10 * uiScale, 16777215);
-    c.alpha = .8;
-    var maxProgressWidth = progressWidth - 10 * uiScale;
-    
-    // 监听加载进度
-    this.load.on("progress", function(a) {
-        c.width = maxProgressWidth * a
-    });
     
     // 加载完成处理
     this.load.on("complete", function() {
         PokiSDK.gameLoadingFinished();
-        b.destroy();
-        c.destroy();
         
-        // 创建响应式开始按钮
-        var startBtnY = config.height * 0.714; // 约71.4% (580/812)
-        var d = draw_button(centerX, startBtnY, "start", a);
+        // 创建开始按钮 - 在标题下方居中
+        var d = draw_button(centerX, centerY + 50 * uiScale, "start", a);
         d.setScale(0.7 * uiScale); // 响应式缩放
+        
+        // 简单的按钮脉冲动画
         a.tweens.add({
             targets: d,
-            alpha: .5,
+            scaleX: .75 * uiScale,
+            scaleY: .75 * uiScale,
             yoyo: !0,
-            duration: 300,
-            loop: -1
+            ease: "Linear",
+            duration: 800,
+            repeat: -1
         })
     }, this);
     
