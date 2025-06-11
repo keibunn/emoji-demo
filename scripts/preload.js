@@ -60,21 +60,22 @@ Load.prototype.preload = function() {
     // 开始游戏加载
     PokiSDK.gameLoadingStart();
     
-    // 添加背景和标题
-    this.add.sprite(360, 540, "background");
-    this.add.sprite(360, 320, "game_title");
+    // 添加纯色背景 - 使用#73cdff颜色，稍微增加宽度确保没有黑边
+    this.add.rectangle(187.5, 406, 400, 820, 0x73cdff);
+    var titleSprite = this.add.sprite(187.5, 200, "game_title");
+    titleSprite.setScale(0.6); // 与menu界面保持一致的大小
     
     // 创建加载进度条
-    var b = this.add.rectangle(config.width / 2, 600, 600, 20);
+    var b = this.add.rectangle(187.5, 500, 300, 20);
     b.setStrokeStyle(4, 16777215);
     b.alpha = .7;
     
-    var c = this.add.rectangle(config.width / 2, 600, 590, 10, 16777215);
+    var c = this.add.rectangle(187.5, 500, 290, 10, 16777215);
     c.alpha = .8;
     
     // 监听加载进度
     this.load.on("progress", function(a) {
-        c.width = 590 * a
+        c.width = 290 * a
     });
     
     // 加载完成处理
@@ -84,7 +85,8 @@ Load.prototype.preload = function() {
         c.destroy();
         
         // 创建开始按钮
-        var d = draw_button(360, 700, "start", a);
+        var d = draw_button(187.5, 580, "start", a);
+        d.setScale(0.7); // 与menu界面保持一致的大小
         a.tweens.add({
             targets: d,
             alpha: .5,
