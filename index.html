@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Onet Fruit Classic</title>
+	<title>设计友好报Vol.09——暑假特辑</title>
 	<meta charset="utf-8">
 	<!-- Allow fullscreen mode on iOS devices. (These are Apple specific meta tags.) -->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui, viewport-fit=cover" />
@@ -63,25 +63,14 @@
 	<script src="./scripts/v2/poki-sdk-mock.js"></script>
 	<script type="text/javascript" src="scripts/phaser.min.js"></script>
 	<script type="text/javascript">
-		// 移动端高度适配脚本
+		// 简化的移动端适配脚本
 		function adjustMobileHeight() {
-			const vh = window.innerHeight * 0.01;
-			document.documentElement.style.setProperty('--vh', vh + 'px');
-			
-			// 动态设置body和game_content高度
-			document.body.style.height = window.innerHeight + 'px';
-			const gameContent = document.getElementById('game_content');
-			if (gameContent) {
-				gameContent.style.height = window.innerHeight + 'px';
-			}
+			// 使用标准viewport高度，不进行动态调整
+			document.documentElement.style.setProperty('--vh', '1vh');
 		}
 		
 		// 页面加载时执行
 		window.addEventListener('load', adjustMobileHeight);
-		// 窗口大小改变时执行（处理横竖屏切换）
-		window.addEventListener('resize', adjustMobileHeight);
-		// 页面显示时执行（处理从后台切回前台）
-		window.addEventListener('pageshow', adjustMobileHeight);
 	</script>
 </head>
 <body>
