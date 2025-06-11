@@ -101,7 +101,7 @@ headerSprite.setDepth(1);
 var footerSprite = this.add.sprite(config.width/2, config.height, "footer").setOrigin(0.5, 1);
 footerSprite.setDisplaySize(config.width, footerSprite.height * (config.width / footerSprite.width));
 footerSprite.setDepth(1);var y="play",n=0,p=this,E,O=!1,u=this.add.group();this.add.group();var J=this.add.group(),
-q=0,z={width:40,height:38.5};
+q=0;
 
 // 计算header和footer的实际高度
 var headerHeight = headerSprite.displayHeight;
@@ -110,22 +110,38 @@ var footerHeight = footerSprite.displayHeight;
 // 计算可用的游戏区域高度 (减去header、footer和UI区域)
 var availableHeight = config.height - headerHeight - footerHeight;
 var topUIHeight = config.height * 0.15; // 为顶部UI预留15%的高度
+var gameAreaHeight = availableHeight - topUIHeight;
+
+// 计算最优的网格尺寸以适配游戏区域
+var maxGridWidth = (config.width * 0.9) / 8; // 游戏区域宽度的90%分给8列
+var maxGridHeight = gameAreaHeight / 10; // 游戏区域高度分给10行
+
+// 选择较小的值确保网格不超出边界，并添加适当的缩放
+var gridSize = Math.min(maxGridWidth, maxGridHeight) * 0.8; // 70%的空间留给obj，30%用作间距
+// 添加额外的间距因子
+var spacingMultiplier = 1.25; // 增加40%的间距
+var z = {width: gridSize * spacingMultiplier, height: gridSize * spacingMultiplier};
 
 // 重新计算游戏区域位置，确保在header和footer之间居中
-H=(config.width-8*z.width)/2+z.width/2;
-I=headerHeight + topUIHeight + (availableHeight - topUIHeight - 10*z.height)/2 + z.height/2;
+H = (config.width - 8 * z.width) / 2 + z.width / 2;
+// 向上移动obj网格 - 减少Y坐标偏移
+var upwardOffset = config.height * 0.05; // 向上移动屏幕高度的5%
+I = headerHeight + topUIHeight + (gameAreaHeight - 10 * z.height) / 2 + z.height / 2 - upwardOffset;
 
-l=Array(10),r=[],m=1,t=18+player_data.drop_mode;22<t&&(t=22);console.log("Max: "+t);for(var A=0;40>A;A++)m>t&&(m=1),r.push(m),m++;r=r.concat(r);h(r);m=0;if(last_array)for(l=last_array,r=0;10>r;r++)for(m=0;8>m;m++)l[r][m].filled&&(t=l[r][m].color,A=this.add.sprite(H+z.width*m,I+z.height*r,"obj"+t).setInteractive(),A.color=t,A.piece=!0,A.pos={x:m,y:r},A.setScale(0.5),A.setDepth(10),u.add(A));else for(t=0;10>t;t++){A=[];for(var L=
-0;8>L;L++){var P=r[m],aa={color:P,filled:!0},M=this.add.sprite(H+z.width*L,I+z.height*t,"obj"+P).setInteractive();M.color=P;M.piece=!0;M.pos={x:L,y:t};M.setScale(0.5);M.setDepth(10);u.add(M);m++;A.push(aa)}l[t]=A}
+// 计算obj的最佳缩放比例 (假设原始obj图片大小约为64x64像素)
+var objScale = gridSize / 64;
+
+l=Array(10),r=[],m=1,t=18+player_data.drop_mode;22<t&&(t=22);console.log("Max: "+t);for(var A=0;40>A;A++)m>t&&(m=1),r.push(m),m++;r=r.concat(r);h(r);m=0;if(last_array)for(l=last_array,r=0;10>r;r++)for(m=0;8>m;m++)l[r][m].filled&&(t=l[r][m].color,A=this.add.sprite(H+z.width*m,I+z.height*r,"obj"+t).setInteractive(),A.color=t,A.piece=!0,A.pos={x:m,y:r},A.setScale(objScale),A.setDepth(10),u.add(A));else for(t=0;10>t;t++){A=[];for(var L=
+0;8>L;L++){var P=r[m],aa={color:P,filled:!0},M=this.add.sprite(H+z.width*L,I+z.height*t,"obj"+P).setInteractive();M.color=P;M.piece=!0;M.pos={x:L,y:t};M.setScale(objScale);M.setDepth(10);u.add(M);m++;A.push(aa)}l[t]=A}
 // 响应式布局顶部UI元素 - 按要求的顺序排列：time limit、score bar、shuffle button、hint button
-var topUIY = headerHeight + topUIHeight * 0.5; // 位于header下方，topUIHeight区域的中间
+var topUIY = headerHeight + topUIHeight * 0.2; // 位于header下方，topUIHeight区域的中间
 var uiScale = Math.min(config.width / 375, config.height / 812); // 根据屏幕尺寸动态缩放
 
 // 计算响应式X坐标 (基于屏幕宽度的百分比)
-var timeLimitX = config.width * 0.147;  // 约14.7% (55/375)
+var timeLimitX = config.width * 0.165;  // 约14.7% (55/375) 
 var scoreBarX = config.width * 0.453;   // 约45.3% (170/375)  
-var shuffleBtnX = config.width * 0.707; // 约70.7% (265/375)
-var hintBtnX = config.width * 0.853;    // 约85.3% (320/375)
+var shuffleBtnX = config.width * 0.727; // 约70.7% (265/375)
+var hintBtnX = config.width * 0.860;    // 约85.3% (320/375)
 
 // 1. 时间限制显示 (最左边)
 timeLimitSprite = this.add.sprite(timeLimitX,topUIY,"time_limit");
@@ -134,14 +150,14 @@ timeLimitSprite.depth = 50;
 var remainingTime = gameTimeLimit - globalGameTimer;
 var minutes = Math.floor(remainingTime / 60);
 var seconds = remainingTime % 60;
-timeText = this.add.text(timeLimitX,topUIY,(minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds),{fontFamily:"robotomono",fontSize:Math.floor(18 * uiScale),align:"center",color:"#FFFFFF"}).setOrigin(.5);
+timeText = this.add.text(timeLimitX,topUIY,(minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds),{fontFamily:"robotomono",fontSize:Math.floor(24 * uiScale),align:"center",color:"#FFFFFF"}).setOrigin(.5);
 timeText.depth = 50;
 
 // 2. 分数条 (左边第二个)
 var scoreBarSprite = this.add.sprite(scoreBarX,topUIY,"score_bar");
 scoreBarSprite.setScale(0.55 * uiScale);
 scoreBarSprite.depth = 50;
-var ba=this.add.text(scoreBarX,topUIY,String(player_data.score),{fontFamily:"robotomono",fontSize:Math.floor(20 * uiScale),align:"center",color:"#FFFFFF"}).setOrigin(.5);
+var ba=this.add.text(scoreBarX,topUIY,String(player_data.score),{fontFamily:"robotomono",fontSize:Math.floor(26 * uiScale),align:"center",color:"#FFFFFF"}).setOrigin(.5);
 ba.depth = 50;
 
 // 3. 洗牌按钮 (右边第二个)
@@ -154,8 +170,8 @@ var hintBtn=draw_button(hintBtnX,topUIY,"hint",this);hintBtn.setScale(0.55 * uiS
 var hintCircle=this.add.sprite(hintBtn.x+17*uiScale,hintBtn.y+13*uiScale,"circle");hintCircle.setScale(0.55 * uiScale);hintCircle.depth = 50;
 var Z=this.add.text(hintCircle.x,hintCircle.y,String(player_data.hint_left),{fontFamily:"robotomono",fontSize:Math.floor(18 * uiScale),align:"center",color:"#FFFFFF"}).setOrigin(.5);Z.depth = 50;
 
-// 调整选中特效尺寸以适配缩小的emoji对象 (响应式)
-var D=this.add.sprite(config.width/2,config.height/2,"sign");D.setScale(0.5 * uiScale);D.setDepth(100);D.setVisible(!1);var C=this.add.sprite(shuffleBtn.x,topUIY+30*uiScale,"arrow");C.setScale(0.55 * uiScale);C.setDepth(100);C.setVisible(!1);this.tweens.add({targets:D,scaleX:0.55*uiScale,scaleY:0.55*uiScale,ease:"Linear",duration:250,yoyo:!0,repeat:-1});this.tweens.add({targets:C,y:C.y+20*uiScale,ease:"Linear",duration:250,yoyo:!0,repeat:-1});for(r=0;25>r;r++)m=this.add.sprite(config.width*0.21,config.height*0.1,"lines"),m.setScale(0.5 * uiScale),m.setDepth(100),m.setVisible(!1),J.add(m);
+// 调整选中特效尺寸以适配自适应的emoji对象 (响应式)
+var D=this.add.sprite(config.width/2,config.height/2,"sign");D.setScale(objScale);D.setDepth(100);D.setVisible(!1);var C=this.add.sprite(shuffleBtn.x,topUIY+30*uiScale,"arrow");C.setScale(0.55 * uiScale);C.setDepth(100);C.setVisible(!1);this.tweens.add({targets:D,scaleX:objScale * 1.1,scaleY:objScale * 1.1,ease:"Linear",duration:250,yoyo:!0,repeat:-1});this.tweens.add({targets:C,y:C.y+20*uiScale,ease:"Linear",duration:250,yoyo:!0,repeat:-1});for(r=0;25>r;r++)m=this.add.sprite(config.width*0.21,config.height*0.1,"lines"),m.setScale(0.5 * uiScale),m.setDepth(100),m.setVisible(!1),J.add(m);
 
 // 添加时间事件
 gameTimeEvent = this.time.addEvent({delay:1000,callback:function(){
@@ -172,19 +188,51 @@ function getGameConfig() {
 	const screenHeight = window.innerHeight;
 	const aspectRatio = screenWidth / screenHeight;
 	
-	// 基础尺寸 (375x812 是iPhone X的尺寸)
-	let gameWidth = 375;
-	let gameHeight = 812;
+	// 检测设备类型
+	const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+	const isTablet = /(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(navigator.userAgent);
 	
-	// 根据屏幕比例调整游戏尺寸
-	if (aspectRatio > 0.5) {
-		// 更宽的屏幕 (如横屏或平板)
-		gameHeight = Math.min(screenHeight, 812);
-		gameWidth = Math.min(screenWidth, gameHeight * 0.46);
+	// 基础尺寸设定
+	let gameWidth, gameHeight;
+	
+	if (isMobile && !isTablet) {
+		// 手机端适配
+		if (aspectRatio > 0.6) {
+			// 较宽的手机屏幕或横屏
+			gameWidth = Math.min(screenWidth * 0.95, 480);
+			gameHeight = Math.min(screenHeight * 0.95, gameWidth * 1.6);
+		} else {
+			// 标准竖屏手机
+			gameWidth = Math.min(screenWidth * 0.95, 375);
+			gameHeight = Math.min(screenHeight * 0.95, 812);
+		}
+	} else if (isTablet) {
+		// 平板适配
+		gameWidth = Math.min(screenWidth * 0.8, 600);
+		gameHeight = Math.min(screenHeight * 0.9, 900);
 	} else {
-		// 更窄的屏幕 (如竖屏手机)
-		gameWidth = Math.min(screenWidth, 375);
-		gameHeight = Math.min(screenHeight, gameWidth * 2.16);
+		// 桌面端适配
+		if (aspectRatio > 1.2) {
+			// 宽屏显示器
+			gameWidth = Math.min(screenWidth * 0.4, 450);
+			gameHeight = Math.min(screenHeight * 0.85, 850);
+		} else {
+			// 标准显示器
+			gameWidth = Math.min(screenWidth * 0.6, 500);
+			gameHeight = Math.min(screenHeight * 0.9, 900);
+		}
+	}
+	
+	// 确保最小尺寸
+	gameWidth = Math.max(gameWidth, 320);
+	gameHeight = Math.max(gameHeight, 568);
+	
+	// 确保比例合理
+	if (gameHeight / gameWidth < 1.4) {
+		gameHeight = gameWidth * 1.6;
+	}
+	if (gameHeight / gameWidth > 2.5) {
+		gameHeight = gameWidth * 2.2;
 	}
 	
 	return {
@@ -196,7 +244,14 @@ function getGameConfig() {
 			parent: "game_content",
 			autoCenter: Phaser.Scale.CENTER_BOTH,
 			width: gameWidth,
-			height: gameHeight
+			height: gameHeight,
+			fullscreenTarget: 'game_content'
+		},
+		input: {
+			// 支持触摸和鼠标
+			mouse: true,
+			touch: true,
+			smoothFactor: 0.2
 		},
 		scene: [Boot, Load, Menu, Game]
 	};
