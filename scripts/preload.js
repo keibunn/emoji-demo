@@ -67,18 +67,34 @@ Load.prototype.preload = function() {
     
     // 添加纯色背景 - 响应式尺寸
     this.add.rectangle(centerX, centerY, config.width + 50, config.height + 50, 0x73cdff);
-    var titleY = config.height * 0.246; // 约24.6% (200/812)
-    var titleSprite = this.add.sprite(centerX, titleY, "game_title");
+    
+    // 添加响应式 header (顶部)
+    var headerSprite = this.add.sprite(centerX, 0, "header").setOrigin(0.5, 0);
+    headerSprite.setDisplaySize(config.width, headerSprite.height * (config.width / headerSprite.width));
+    headerSprite.setDepth(1);
+    
+    // 添加响应式 footer (底部)  
+    var footerSprite = this.add.sprite(centerX, config.height, "footer").setOrigin(0.5, 1);
+    footerSprite.setDisplaySize(config.width, footerSprite.height * (config.width / footerSprite.width));
+    footerSprite.setDepth(1);
+    
+    // 计算可用区域
+    var headerHeight = headerSprite.displayHeight;
+    var footerHeight = footerSprite.displayHeight;
+    var availableHeight = config.height - headerHeight - footerHeight;
+    var availableCenterY = headerHeight + availableHeight/2;
+    
+    // 添加游戏标题 - 在可用区域中心上方
+    var titleSprite = this.add.sprite(centerX, availableCenterY - availableHeight*0.2, "game_title");
     titleSprite.setScale(0.6 * uiScale); // 响应式缩放
     
-    // 创建响应式加载进度条
-    var progressY = config.height * 0.616; // 约61.6% (500/812)
+    // 创建响应式加载进度条 - 在可用区域中心
     var progressWidth = config.width * 0.8; // 宽度为屏幕的80%
-    var b = this.add.rectangle(centerX, progressY, progressWidth, 20 * uiScale);
+    var b = this.add.rectangle(centerX, availableCenterY + availableHeight*0.15, progressWidth, 20 * uiScale);
     b.setStrokeStyle(4 * uiScale, 16777215);
     b.alpha = .7;
     
-    var c = this.add.rectangle(centerX, progressY, progressWidth - 10 * uiScale, 10 * uiScale, 16777215);
+    var c = this.add.rectangle(centerX, availableCenterY + availableHeight*0.15, progressWidth - 10 * uiScale, 10 * uiScale, 16777215);
     c.alpha = .8;
     var maxProgressWidth = progressWidth - 10 * uiScale;
     
@@ -93,9 +109,8 @@ Load.prototype.preload = function() {
         b.destroy();
         c.destroy();
         
-        // 创建响应式开始按钮
-        var startBtnY = config.height * 0.714; // 约71.4% (580/812)
-        var d = draw_button(centerX, startBtnY, "start", a);
+        // 创建响应式开始按钮 - 在可用区域下方
+        var d = draw_button(centerX, availableCenterY + availableHeight*0.35, "start", a);
         d.setScale(0.7 * uiScale); // 响应式缩放
         a.tweens.add({
             targets: d,

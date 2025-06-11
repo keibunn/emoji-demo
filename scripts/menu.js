@@ -114,9 +114,24 @@ Menu.prototype.create = function() {
     // 添加纯色背景 - 响应式尺寸
     this.add.rectangle(centerX, centerY, config.width + 50, config.height + 50, 0x73cdff);
     
-    // 添加游戏标题并设置动画 - 响应式位置和缩放
-    var titleY = config.height * 0.246; // 约24.6% (200/812)
-    var c = this.add.sprite(centerX, titleY, "game_title");
+    // 添加响应式 header (顶部)
+    var headerSprite = this.add.sprite(centerX, 0, "header").setOrigin(0.5, 0);
+    headerSprite.setDisplaySize(config.width, headerSprite.height * (config.width / headerSprite.width));
+    headerSprite.setDepth(1);
+    
+    // 添加响应式 footer (底部)  
+    var footerSprite = this.add.sprite(centerX, config.height, "footer").setOrigin(0.5, 1);
+    footerSprite.setDisplaySize(config.width, footerSprite.height * (config.width / footerSprite.width));
+    footerSprite.setDepth(1);
+    
+    // 计算可用区域
+    var headerHeight = headerSprite.displayHeight;
+    var footerHeight = footerSprite.displayHeight;
+    var availableHeight = config.height - headerHeight - footerHeight;
+    var availableCenterY = headerHeight + availableHeight/2;
+    
+    // 添加游戏标题并设置动画 - 在可用区域中心上方
+    var c = this.add.sprite(centerX, availableCenterY - availableHeight*0.2, "game_title");
     c.setScale(0.6 * uiScale); // 响应式缩放
     this.tweens.add({
         targets: c,
@@ -127,25 +142,23 @@ Menu.prototype.create = function() {
         repeat: -1
     });
     
-    // 显示最高分数 - 响应式位置和字体大小
-    var scoreY = config.height * 0.52; // 约52% (420/812)
-    this.add.text(centerX, scoreY, "BEST SCORE:", {
+    // 显示最高分数 - 在可用区域中心
+    this.add.text(centerX, availableCenterY + availableHeight*0.1, "BEST SCORE:", {
         fontFamily: "PoetsenOne",
         fontSize: Math.floor(22 * uiScale),
         align: "center",
         color: "#FFFFFF"
     }).setOrigin(.5);
     
-    this.add.text(centerX, scoreY + 30 * uiScale, String(best_score), {
+    this.add.text(centerX, availableCenterY + availableHeight*0.17, String(best_score), {
         fontFamily: "PoetsenOne",
         fontSize: Math.floor(18 * uiScale),
         align: "center",
         color: "#FFFFFF"
     }).setOrigin(.5);
     
-    // 添加开始游戏按钮 - 响应式位置和缩放
-    var playBtnY = config.height * 0.714; // 约71.4% (580/812)
-    var playBtn = draw_button(centerX, playBtnY, "play", this);
+    // 添加开始游戏按钮 - 在可用区域下方
+    var playBtn = draw_button(centerX, availableCenterY + availableHeight*0.35, "play", this);
     playBtn.setScale(0.7 * uiScale); // 响应式缩放
     
     // 处理按钮点击事件

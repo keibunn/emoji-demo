@@ -87,11 +87,38 @@ function updateTimeDisplay(){
     timeText.setText((minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds));
 }
 
-var N=this;PokiSDK.gameplayStart();var gameBg = this.add.sprite(0,0,"background2").setOrigin(0);gameBg.setDisplaySize(config.width, config.height);var y="play",n=0,p=this,E,O=!1,u=this.add.group();this.add.group();var J=this.add.group(),
-q=0,z={width:40,height:38.5},H=(config.width-8*z.width)/2+z.width/2,I=(config.height-10*z.height)/2+z.height/2+60,l=Array(10),r=[],m=1,t=18+player_data.drop_mode;22<t&&(t=22);console.log("Max: "+t);for(var A=0;40>A;A++)m>t&&(m=1),r.push(m),m++;r=r.concat(r);h(r);m=0;if(last_array)for(l=last_array,r=0;10>r;r++)for(m=0;8>m;m++)l[r][m].filled&&(t=l[r][m].color,A=this.add.sprite(H+z.width*m,I+z.height*r,"obj"+t).setInteractive(),A.color=t,A.piece=!0,A.pos={x:m,y:r},A.setScale(0.5),A.setDepth(10),u.add(A));else for(t=0;10>t;t++){A=[];for(var L=
+var N=this;PokiSDK.gameplayStart();
+
+// 移除背景图片，使用纯色背景
+this.add.rectangle(config.width/2, config.height/2, config.width, config.height, 0x73cdff);
+
+// 添加响应式 header (顶部)
+var headerSprite = this.add.sprite(config.width/2, 0, "header").setOrigin(0.5, 0);
+headerSprite.setDisplaySize(config.width, headerSprite.height * (config.width / headerSprite.width));
+headerSprite.setDepth(1);
+
+// 添加响应式 footer (底部)  
+var footerSprite = this.add.sprite(config.width/2, config.height, "footer").setOrigin(0.5, 1);
+footerSprite.setDisplaySize(config.width, footerSprite.height * (config.width / footerSprite.width));
+footerSprite.setDepth(1);var y="play",n=0,p=this,E,O=!1,u=this.add.group();this.add.group();var J=this.add.group(),
+q=0,z={width:40,height:38.5};
+
+// 计算header和footer的实际高度
+var headerHeight = headerSprite.displayHeight;
+var footerHeight = footerSprite.displayHeight;
+
+// 计算可用的游戏区域高度 (减去header、footer和UI区域)
+var availableHeight = config.height - headerHeight - footerHeight;
+var topUIHeight = config.height * 0.15; // 为顶部UI预留15%的高度
+
+// 重新计算游戏区域位置，确保在header和footer之间居中
+H=(config.width-8*z.width)/2+z.width/2;
+I=headerHeight + topUIHeight + (availableHeight - topUIHeight - 10*z.height)/2 + z.height/2;
+
+l=Array(10),r=[],m=1,t=18+player_data.drop_mode;22<t&&(t=22);console.log("Max: "+t);for(var A=0;40>A;A++)m>t&&(m=1),r.push(m),m++;r=r.concat(r);h(r);m=0;if(last_array)for(l=last_array,r=0;10>r;r++)for(m=0;8>m;m++)l[r][m].filled&&(t=l[r][m].color,A=this.add.sprite(H+z.width*m,I+z.height*r,"obj"+t).setInteractive(),A.color=t,A.piece=!0,A.pos={x:m,y:r},A.setScale(0.5),A.setDepth(10),u.add(A));else for(t=0;10>t;t++){A=[];for(var L=
 0;8>L;L++){var P=r[m],aa={color:P,filled:!0},M=this.add.sprite(H+z.width*L,I+z.height*t,"obj"+P).setInteractive();M.color=P;M.piece=!0;M.pos={x:L,y:t};M.setScale(0.5);M.setDepth(10);u.add(M);m++;A.push(aa)}l[t]=A}
 // 响应式布局顶部UI元素 - 按要求的顺序排列：time limit、score bar、shuffle button、hint button
-var topUIY = config.height * 0.18; // Y坐标基于屏幕高度的18%
+var topUIY = headerHeight + topUIHeight * 0.5; // 位于header下方，topUIHeight区域的中间
 var uiScale = Math.min(config.width / 375, config.height / 812); // 根据屏幕尺寸动态缩放
 
 // 计算响应式X坐标 (基于屏幕宽度的百分比)
