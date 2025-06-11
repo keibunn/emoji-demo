@@ -87,7 +87,7 @@ function updateTimeDisplay(){
     timeText.setText((minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds));
 }
 
-var N=this;PokiSDK.gameplayStart();this.add.sprite(0,0,"background").setOrigin(0);var y="play",n=0,p=this,E,O=!1,u=this.add.group();this.add.group();var J=this.add.group(),
+var N=this;PokiSDK.gameplayStart();this.add.sprite(0,0,"background2").setOrigin(0);var y="play",n=0,p=this,E,O=!1,u=this.add.group();this.add.group();var J=this.add.group(),
 q=0,z={width:80,height:77},H=(config.width-8*z.width)/2+z.width/2,I=(config.height-10*z.height)/2+z.height/2,l=Array(10),r=[],m=1,t=18+player_data.drop_mode;22<t&&(t=22);console.log("Max: "+t);for(var A=0;40>A;A++)m>t&&(m=1),r.push(m),m++;r=r.concat(r);h(r);m=0;if(last_array)for(l=last_array,r=0;10>r;r++)for(m=0;8>m;m++)l[r][m].filled&&(t=l[r][m].color,A=this.add.sprite(H+z.width*m,I+z.height*r,"obj"+t).setInteractive(),A.color=t,A.piece=!0,A.pos={x:m,y:r},A.setDepth(10),u.add(A));else for(t=0;10>t;t++){A=[];for(var L=
 0;8>L;L++){var P=r[m],aa={color:P,filled:!0},M=this.add.sprite(H+z.width*L,I+z.height*t,"obj"+P).setInteractive();M.color=P;M.piece=!0;M.pos={x:L,y:t};M.setDepth(10);u.add(M);m++;A.push(aa)}l[t]=A}var headerSprite = this.add.sprite(0,0,"header").setOrigin(0);
 headerSprite.setDepth(1);
