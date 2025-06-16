@@ -157,8 +157,8 @@ Menu.prototype.create = function() {
         color: "#FFFFFF"
     }).setOrigin(.5);
     
-    // 添加开始游戏按钮 - 在底部20%位置
-    var playBtn = draw_button(centerX, config.height * 0.8, "play", this);
+    // 添加开始游戏按钮 - 在可用区域下方
+    var playBtn = draw_button(centerX, availableCenterY + availableHeight*0.35, "play", this);
     playBtn.setScale(0.5 * uiScale); // 缩放至85%
     
     // 处理按钮点击事件
