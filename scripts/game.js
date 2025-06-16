@@ -206,8 +206,8 @@ function getGameConfig() {
 		gameHeight = Math.min(screenHeight * 0.9, 900);
 	} else {
 		// 桌面端适配 - 使用更大的固定尺寸
-		gameWidth = 600;
-		gameHeight = 900;
+		gameWidth = 800;
+		gameHeight = 1200;
 	}
 	
 	// 确保最小尺寸
@@ -226,20 +226,8 @@ function getGameConfig() {
 		type: Phaser.AUTO,
 		width: gameWidth,
 		height: gameHeight,
-		antialias: true,
-		antialiasGL: true,
-		resolution: window.devicePixelRatio || 1,
-		roundPixels: false,
-		pixelArt: false,
-		render: {
-			antialias: true,
-			antialiasGL: true,
-			mipmapFilter: 'LINEAR_MIPMAP_LINEAR',
-			roundPixels: false,
-			pixelArt: false
-		},
 		scale: {
-			mode: isMobile && !isTablet ? Phaser.Scale.RESIZE : Phaser.Scale.ENVELOP,
+			mode: Phaser.Scale.FIT,
 			parent: "game_content",
 			autoCenter: Phaser.Scale.CENTER_BOTH,
 			width: gameWidth,
