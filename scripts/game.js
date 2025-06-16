@@ -205,9 +205,22 @@ function getGameConfig() {
 		gameWidth = Math.min(screenWidth * 0.8, 600);
 		gameHeight = Math.min(screenHeight * 0.9, 900);
 	} else {
-		// 桌面端适配 - 恢复固定尺寸
-		gameWidth = 375;
-		gameHeight = 812;
+		// 桌面端适配 - 使用更大的尺寸
+		const maxWidth = Math.min(screenWidth * 0.8, 800);
+		const maxHeight = Math.min(screenHeight * 0.9, 1200);
+		
+		// 保持16:9或类似的合适比例
+		if (maxWidth / maxHeight > 0.75) {
+			gameWidth = maxHeight * 0.75;
+			gameHeight = maxHeight;
+		} else {
+			gameWidth = maxWidth;
+			gameHeight = maxWidth * 1.33;
+		}
+		
+		// 确保最小尺寸
+		gameWidth = Math.max(gameWidth, 375);
+		gameHeight = Math.max(gameHeight, 600);
 	}
 	
 	// 确保最小尺寸
