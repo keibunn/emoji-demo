@@ -239,12 +239,11 @@ function getGameConfig() {
 			pixelArt: false
 		},
 		scale: {
-			mode: Phaser.Scale.FIT,
+			mode: isMobile && !isTablet ? Phaser.Scale.RESIZE : Phaser.Scale.ENVELOP,
 			parent: "game_content",
 			autoCenter: Phaser.Scale.CENTER_BOTH,
 			width: gameWidth,
-			height: gameHeight,
-			fullscreenTarget: 'game_content'
+			height: gameHeight
 		},
 		input: {
 			// 支持触摸和鼠标
