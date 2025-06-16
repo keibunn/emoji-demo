@@ -77,6 +77,17 @@
 			html, body {
 				-webkit-text-size-adjust: 100%;
 				-ms-text-size-adjust: 100%;
+				width: 100%;
+				height: 100%;
+				margin: 0;
+				padding: 0;
+			}
+			#game_content {
+				width: 100vw !important;
+				height: 100vh !important;
+				min-height: calc(var(--vh, 1vh) * 100) !important;
+				padding: 0 !important;
+				margin: 0 !important;
 			}
 			canvas {
 				width: 100vw !important;
@@ -85,6 +96,7 @@
 				max-height: 100vh !important;
 				image-rendering: auto;
 				image-rendering: high-quality;
+				object-fit: cover;
 			}
 		}
 		
@@ -212,6 +224,30 @@
 		
 		// 移动端特殊处理
 		if (isMobile) {
+			// 强制全屏显示
+			function forceFullscreen() {
+				const gameContent = document.getElementById('game_content');
+				if (gameContent) {
+					gameContent.style.width = '100vw';
+					gameContent.style.height = '100vh';
+					gameContent.style.position = 'fixed';
+					gameContent.style.top = '0';
+					gameContent.style.left = '0';
+					gameContent.style.margin = '0';
+					gameContent.style.padding = '0';
+				}
+			}
+			
+			// 立即执行
+			forceFullscreen();
+			
+			// 在页面加载完成后再次执行
+			window.addEventListener('load', forceFullscreen);
+			window.addEventListener('resize', forceFullscreen);
+			window.addEventListener('orientationchange', () => {
+				setTimeout(forceFullscreen, 100);
+			});
+			
 			// 防止缩放
 			document.addEventListener('touchstart', preventZoom, { passive: false });
 			document.addEventListener('touchmove', preventZoom, { passive: false });
