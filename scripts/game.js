@@ -197,24 +197,17 @@ function getGameConfig() {
 	let gameWidth, gameHeight;
 	
 	if (isMobile && !isTablet) {
-		// 手机端适配 - 填满整个屏幕
+		// 手机端适配
 		gameWidth = screenWidth;
 		gameHeight = screenHeight;
 	} else if (isTablet) {
 		// 平板适配
-		gameWidth = Math.min(screenWidth * 0.9, 600);
-		gameHeight = Math.min(screenHeight * 0.95, 900);
+		gameWidth = Math.min(screenWidth * 0.8, 600);
+		gameHeight = Math.min(screenHeight * 0.9, 900);
 	} else {
-		// 桌面端适配
-		if (aspectRatio > 1.2) {
-			// 宽屏显示器
-			gameWidth = Math.min(screenWidth * 0.4, 450);
-			gameHeight = Math.min(screenHeight * 0.85, 850);
-		} else {
-			// 标准显示器
-			gameWidth = Math.min(screenWidth * 0.6, 500);
-			gameHeight = Math.min(screenHeight * 0.9, 900);
-		}
+		// 桌面端适配 - 恢复固定尺寸
+		gameWidth = 375;
+		gameHeight = 812;
 	}
 	
 	// 确保最小尺寸
@@ -246,7 +239,7 @@ function getGameConfig() {
 			pixelArt: false
 		},
 		scale: {
-			mode: isMobile && !isTablet ? Phaser.Scale.RESIZE : Phaser.Scale.FIT,
+			mode: Phaser.Scale.FIT,
 			parent: "game_content",
 			autoCenter: Phaser.Scale.CENTER_BOTH,
 			width: gameWidth,
