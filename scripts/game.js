@@ -126,7 +126,7 @@ var z = {width: gridSize * spacingMultiplier, height: gridSize * spacingMultipli
 // 重新计算游戏区域位置，确保在header和footer之间居中
 H = (config.width - 8 * z.width) / 2 + z.width / 2;
 // 向上移动obj网格 - 减少Y坐标偏移
-var upwardOffset = config.height * 0.15; // 向上移动屏幕高度的15%（从5%增加到15%）
+var upwardOffset = config.height * 0.09; // 向上移动屏幕高度的9%（从15%调整到9%）
 I = headerHeight + topUIHeight + (gameAreaHeight - 10 * z.height) / 2 + z.height / 2 - upwardOffset;
 
 // 计算obj的最佳缩放比例 (假设原始obj图片大小约为64x64像素)
@@ -135,7 +135,7 @@ var objScale = gridSize / 64;
 l=Array(10),r=[],m=1,t=18+player_data.drop_mode;22<t&&(t=22);console.log("Max: "+t);for(var A=0;40>A;A++)m>t&&(m=1),r.push(m),m++;r=r.concat(r);h(r);m=0;if(last_array)for(l=last_array,r=0;10>r;r++)for(m=0;8>m;m++)l[r][m].filled&&(t=l[r][m].color,A=this.add.sprite(H+z.width*m,I+z.height*r,"obj"+t).setInteractive(),A.color=t,A.piece=!0,A.pos={x:m,y:r},A.setScale(objScale),A.setDepth(10),u.add(A));else for(t=0;10>t;t++){A=[];for(var L=
 0;8>L;L++){var P=r[m],aa={color:P,filled:!0},M=this.add.sprite(H+z.width*L,I+z.height*t,"obj"+P).setInteractive();M.color=P;M.piece=!0;M.pos={x:L,y:t};M.setScale(objScale);M.setDepth(10);u.add(M);m++;A.push(aa)}l[t]=A}
 // 响应式布局顶部UI元素 - 按要求的顺序排列：time limit、score bar、shuffle button、hint button
-var topUIY = config.height * 0.06; // UI元素整体上移，位于屏幕顶部6%的位置
+var topUIY = config.height * 0.10; // UI元素位于屏幕顶部10%的位置
 var uiScale = Math.min(config.width / 375, config.height / 812); // 根据屏幕尺寸动态缩放
 
 // 计算响应式X坐标 (基于屏幕宽度的百分比)
@@ -147,29 +147,29 @@ var hintBtnX = config.width * 0.860;    // 约85.3% (320/375)
 // 1. 时间限制显示 (最左边)
 timeLimitSprite = this.add.sprite(timeLimitX,topUIY,"time_limit");
 timeLimitSprite.setScale(0.55 * uiScale);
-timeLimitSprite.depth = 100;
+timeLimitSprite.depth = 50;
 var remainingTime = gameTimeLimit - globalGameTimer;
 var minutes = Math.floor(remainingTime / 60);
 var seconds = remainingTime % 60;
 timeText = this.add.text(timeLimitX,topUIY,(minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds),{fontFamily:"robotomono",fontSize:Math.floor(24 * uiScale),align:"center",color:"#FFFFFF"}).setOrigin(.5);
-timeText.depth = 100;
+timeText.depth = 50;
 
 // 2. 分数条 (左边第二个)
 var scoreBarSprite = this.add.sprite(scoreBarX,topUIY,"score_bar");
 scoreBarSprite.setScale(0.55 * uiScale);
-scoreBarSprite.depth = 100;
+scoreBarSprite.depth = 50;
 var ba=this.add.text(scoreBarX,topUIY,String(player_data.score),{fontFamily:"robotomono",fontSize:Math.floor(26 * uiScale),align:"center",color:"#FFFFFF"}).setOrigin(.5);
-ba.depth = 100;
+ba.depth = 50;
 
 // 3. 洗牌按钮 (右边第二个)
-var shuffleBtn=draw_button(shuffleBtnX,topUIY,"shuffle",this);shuffleBtn.setScale(0.55 * uiScale);shuffleBtn.depth = 100;0===player_data.shuffle_left&&(shuffleBtn.alpha=.5);
-var shuffleCircle=this.add.sprite(shuffleBtn.x+17*uiScale,shuffleBtn.y+13*uiScale,"circle");shuffleCircle.setScale(0.55 * uiScale);shuffleCircle.depth = 100;
-var Y=this.add.text(shuffleCircle.x,shuffleCircle.y,String(player_data.shuffle_left),{fontFamily:"robotomono",fontSize:Math.floor(18 * uiScale),align:"center",color:"#FFFFFF"}).setOrigin(.5);Y.depth = 100;
+var shuffleBtn=draw_button(shuffleBtnX,topUIY,"shuffle",this);shuffleBtn.setScale(0.55 * uiScale);shuffleBtn.depth = 50;0===player_data.shuffle_left&&(shuffleBtn.alpha=.5);
+var shuffleCircle=this.add.sprite(shuffleBtn.x+17*uiScale,shuffleBtn.y+13*uiScale,"circle");shuffleCircle.setScale(0.55 * uiScale);shuffleCircle.depth = 50;
+var Y=this.add.text(shuffleCircle.x,shuffleCircle.y,String(player_data.shuffle_left),{fontFamily:"robotomono",fontSize:Math.floor(18 * uiScale),align:"center",color:"#FFFFFF"}).setOrigin(.5);Y.depth = 50;
 
 // 4. 提示按钮 (最右边)
-var hintBtn=draw_button(hintBtnX,topUIY,"hint",this);hintBtn.setScale(0.55 * uiScale);hintBtn.depth = 100;0===player_data.hint_left&&(hintBtn.alpha=.5);
-var hintCircle=this.add.sprite(hintBtn.x+17*uiScale,hintBtn.y+13*uiScale,"circle");hintCircle.setScale(0.55 * uiScale);hintCircle.depth = 100;
-var Z=this.add.text(hintCircle.x,hintCircle.y,String(player_data.hint_left),{fontFamily:"robotomono",fontSize:Math.floor(18 * uiScale),align:"center",color:"#FFFFFF"}).setOrigin(.5);Z.depth = 100;
+var hintBtn=draw_button(hintBtnX,topUIY,"hint",this);hintBtn.setScale(0.55 * uiScale);hintBtn.depth = 50;0===player_data.hint_left&&(hintBtn.alpha=.5);
+var hintCircle=this.add.sprite(hintBtn.x+17*uiScale,hintBtn.y+13*uiScale,"circle");hintCircle.setScale(0.55 * uiScale);hintCircle.depth = 50;
+var Z=this.add.text(hintCircle.x,hintCircle.y,String(player_data.hint_left),{fontFamily:"robotomono",fontSize:Math.floor(18 * uiScale),align:"center",color:"#FFFFFF"}).setOrigin(.5);Z.depth = 50;
 
 // 调整选中特效尺寸以适配自适应的emoji对象 (响应式)
 var D=this.add.sprite(config.width/2,config.height/2,"sign");D.setScale(objScale);D.setDepth(100);D.setVisible(!1);var C=this.add.sprite(shuffleBtn.x,topUIY+30*uiScale,"arrow");C.setScale(0.55 * uiScale);C.setDepth(100);C.setVisible(!1);this.tweens.add({targets:D,scaleX:objScale * 1.1,scaleY:objScale * 1.1,ease:"Linear",duration:250,yoyo:!0,repeat:-1});this.tweens.add({targets:C,y:C.y+20*uiScale,ease:"Linear",duration:250,yoyo:!0,repeat:-1});for(r=0;25>r;r++)m=this.add.sprite(config.width*0.21,config.height*0.1,"lines"),m.setScale(0.5 * uiScale),m.setDepth(100),m.setVisible(!1),J.add(m);
