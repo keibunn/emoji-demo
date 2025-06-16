@@ -240,6 +240,18 @@ function getGameConfig() {
 		type: Phaser.AUTO,
 		width: gameWidth,
 		height: gameHeight,
+		antialias: true,
+		antialiasGL: true,
+		resolution: window.devicePixelRatio || 1,
+		roundPixels: false,
+		pixelArt: false,
+		render: {
+			antialias: true,
+			antialiasGL: true,
+			mipmapFilter: 'LINEAR_MIPMAP_LINEAR',
+			roundPixels: false,
+			pixelArt: false
+		},
 		scale: {
 			mode: Phaser.Scale.FIT,
 			parent: "game_content",

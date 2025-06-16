@@ -66,9 +66,10 @@
 			max-width: 100vw;
 			max-height: 100vh;
 			border-radius: 0;
-			image-rendering: pixelated;
-			image-rendering: -moz-crisp-edges;
-			image-rendering: crisp-edges;
+			image-rendering: auto;
+			image-rendering: high-quality;
+			image-rendering: -webkit-optimize-contrast;
+			-ms-interpolation-mode: bicubic;
 		}
 		
 		/* 移动端优化 */
@@ -82,6 +83,17 @@
 				height: 100vh !important;
 				max-width: 100vw !important;
 				max-height: 100vh !important;
+				image-rendering: auto;
+				image-rendering: high-quality;
+			}
+		}
+		
+		/* 高DPI屏幕优化 */
+		@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+			canvas {
+				image-rendering: auto;
+				image-rendering: high-quality;
+				image-rendering: -webkit-optimize-contrast;
 			}
 		}
 		
