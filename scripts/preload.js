@@ -76,15 +76,15 @@ Load.prototype.preload = function() {
     this.load.on("complete", function() {
         PokiSDK.gameLoadingFinished();
         
-        // 创建开始按钮 - 在标题下方居中
-        var d = draw_button(centerX, centerY + 50 * uiScale, "start", a);
-        d.setScale(0.7 * uiScale); // 响应式缩放
+        // 创建开始按钮 - 在底部20%位置
+        var d = draw_button(centerX, config.height * 0.8, "start", a);
+        d.setScale(0.5 * uiScale); // 缩放至85%
         
         // 简单的按钮脉冲动画
         a.tweens.add({
             targets: d,
-            scaleX: .75 * uiScale,
-            scaleY: .75 * uiScale,
+            scaleX: .55 * uiScale,
+            scaleY: .55 * uiScale,
             yoyo: !0,
             ease: "Linear",
             duration: 800,

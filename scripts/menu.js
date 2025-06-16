@@ -157,9 +157,9 @@ Menu.prototype.create = function() {
         color: "#FFFFFF"
     }).setOrigin(.5);
     
-    // 添加开始游戏按钮 - 在底部15%位置（更靠下）
-    var playBtn = draw_button(centerX, config.height * 0.9, "play", this);
-    playBtn.setScale(0.3 * uiScale); // 更小的按钮
+    // 添加开始游戏按钮 - 在可用区域下方
+    var playBtn = draw_button(centerX, availableCenterY + availableHeight*0.35, "play", this);
+    playBtn.setScale(0.7 * uiScale); // 响应式缩放
     
     // 处理按钮点击事件
     this.input.on("gameobjectdown", function(c, d) {
@@ -169,8 +169,8 @@ Menu.prototype.create = function() {
             // 按钮点击动画 - 响应式缩放比例和时长
             a.tweens.add({
                 targets: d,
-                scaleX: .25 * uiScale,
-                scaleY: .25 * uiScale,
+                scaleX: .6 * uiScale,
+                scaleY: .6 * uiScale,
                 yoyo: !0,
                 ease: "Linear",
                 duration: 100,
