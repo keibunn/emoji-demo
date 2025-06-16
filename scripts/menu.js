@@ -158,8 +158,8 @@ Menu.prototype.create = function() {
     }).setOrigin(.5);
     
     // 添加开始游戏按钮 - 在底部20%位置
-    var playBtn = draw_button(centerX, config.height * 0.8, "play", this);
-    playBtn.setScale(0.5 * uiScale); // 缩放至85%
+    var playBtn = draw_button(centerX, config.height * 0.85, "play", this);
+    playBtn.setScale(0.4 * uiScale); // 进一步缩小按钮
     
     // 处理按钮点击事件
     this.input.on("gameobjectdown", function(c, d) {
@@ -169,8 +169,8 @@ Menu.prototype.create = function() {
             // 按钮点击动画 - 响应式缩放比例和时长
             a.tweens.add({
                 targets: d,
-                scaleX: .45 * uiScale,
-                scaleY: .45 * uiScale,
+                scaleX: .35 * uiScale,
+                scaleY: .35 * uiScale,
                 yoyo: !0,
                 ease: "Linear",
                 duration: 100,
