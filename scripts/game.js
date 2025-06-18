@@ -118,17 +118,23 @@ function updateTimeDisplay(){
 }
 
 var N=this;PokiSDK.gameplayStart();this.add.sprite(0,0,"background").setOrigin(0);var y="play",n=0,p=this,E,O=!1,u=this.add.group();this.add.group();var J=this.add.group();
-// emoji矩阵严格25px左右边距设计
+// emoji矩阵严格25px左右边距设计 - 真正居中布局
 var emojiSideMargin = 25; // 严格左右边距25px
 var availableEmojiWidth = screenWidth - (emojiSideMargin * 2); // 可用于emoji矩阵的宽度
 
-// 计算emoji单元格尺寸 - 基于8列布局
+// 计算emoji单元格尺寸 - 基于8列布局，充分利用可用空间
 var cellWidth = Math.floor(availableEmojiWidth / 8);
 var cellHeight = Math.floor(cellWidth * 0.97); // 保持宽高比
 
-// 限制emoji大小范围，确保既不会太小也不会太大
-cellWidth = Math.max(42, Math.min(cellWidth, 85));
-cellHeight = Math.max(40, Math.min(cellHeight, 82));
+// 适当放大emoji，确保较小屏幕下也有足够大小，移除过小的最大限制
+cellWidth = Math.max(40, cellWidth); // 最小40px
+cellHeight = Math.max(38, cellHeight); // 最小38px
+
+// 如果计算出的尺寸太大，适当限制（针对超大屏幕）
+if(cellWidth > 65) {
+    cellWidth = 65;
+    cellHeight = Math.floor(cellWidth * 0.97);
+}
 
 q=0,z={width:cellWidth,height:cellHeight};
 
@@ -141,29 +147,32 @@ var headerHeight = Math.floor(screenHeight * 0.12);
 var footerHeight = Math.floor(screenHeight * 0.15);
 var availableHeight = screenHeight - headerHeight - footerHeight;
 
-// emoji矩阵精确定位 - 确保严格25px左边距
-var emojiGridStartX = emojiSideMargin; // 矩阵左边距严格25px
+// emoji矩阵真正居中布局 - 计算完美居中的X坐标
+var emojiGridStartX = (screenWidth - actualGridWidth) / 2; // 矩阵真正居中
 var emojiGridStartY = headerHeight + (availableHeight - actualGridHeight) / 2;
 
 // emoji中心点计算 - 基于左上角起始点
 H = emojiGridStartX + z.width / 2;  // 第一个emoji的中心X坐标
 I = emojiGridStartY + z.height / 2; // 第一个emoji的中心Y坐标
 
-// 精确边距调试信息
+// 精确居中布局调试信息
+var actualLeftMargin = emojiGridStartX;
 var actualRightMargin = screenWidth - emojiGridStartX - actualGridWidth;
-console.log("=== Emoji矩阵精确布局调试 ===");
+console.log("=== Emoji矩阵完美居中布局调试 ===");
 console.log("屏幕尺寸: " + screenWidth + " x " + screenHeight);
 console.log("单个emoji尺寸: " + z.width + " x " + z.height);
 console.log("矩阵实际尺寸: " + actualGridWidth + " x " + actualGridHeight);
 console.log("矩阵起始坐标(左上角): (" + emojiGridStartX + ", " + emojiGridStartY + ")");
 console.log("第一个emoji中心点: (" + H + ", " + I + ")");
 console.log("===============================");
-console.log("边距验证:");
-console.log("- 设计左边距: " + emojiSideMargin + "px");
-console.log("- 实际左边距: " + emojiGridStartX + "px");
-console.log("- 实际右边距: " + actualRightMargin + "px");
+console.log("居中效果验证:");
+console.log("- 目标边距: " + emojiSideMargin + "px (左右各" + emojiSideMargin + "px)");
+console.log("- 实际左边距: " + actualLeftMargin.toFixed(1) + "px");
+console.log("- 实际右边距: " + actualRightMargin.toFixed(1) + "px");
+console.log("- 边距差值: " + Math.abs(actualLeftMargin - actualRightMargin).toFixed(1) + "px");
+console.log("- 是否完美居中: " + (Math.abs(actualLeftMargin - actualRightMargin) < 1 ? "✅ 是" : "❌ 否"));
 console.log("- 可用emoji宽度: " + availableEmojiWidth + "px");
-console.log("- 矩阵是否居中: " + (emojiGridStartX === actualRightMargin ? "是" : "否"));
+console.log("- 实际使用宽度: " + actualGridWidth + "px");
 console.log("===============================");
 
 l=Array(10),r=[],m=1,maxType=18+player_data.drop_mode;22<maxType&&(maxType=22);console.log("Max: "+maxType);for(var A=0;40>A;A++)m>maxType&&(m=1),r.push(m),m++;r=r.concat(r);h(r);m=0;console.log("Total emoji types in array:", r.length);console.log("last_array status:", last_array ? "exists" : "null");
@@ -174,18 +183,22 @@ if(last_array)for(l=last_array,r=0;10>r;r++)for(m=0;8>m;m++)l[r][m].filled&&(max
 var emojiX = emojiGridStartX + z.width/2 + z.width * col;
 var emojiY = emojiGridStartY + z.height/2 + z.height * row;
 var M=this.add.sprite(emojiX, emojiY,"obj"+P).setInteractive();M.color=P;M.piece=!0;M.pos={x:col,y:row};M.setDisplaySize(z.width,z.height);u.add(M);m++;A.push(aa);emojiCount++;if(emojiCount <= 5 || emojiCount % 10 === 0) console.log("Created emoji", emojiCount, "at position ("+col+","+row+") with color obj"+P+" at coordinates ("+emojiX+","+emojiY+")")}l[row]=A}console.log("Total emojis created:", emojiCount);
-// 验证边距计算
-var firstEmojiX = emojiGridStartX + z.width/2;
-var lastEmojiX = emojiGridStartX + z.width/2 + z.width * 7; // 第8列（索引7）
-var actualLeftMargin = firstEmojiX - z.width/2; // 第一个emoji左边缘
-var actualRightMargin = screenWidth - (lastEmojiX + z.width/2); // 最后一个emoji右边缘
-console.log("=== 边距验证计算 ===");
-console.log("第一个emoji中心X: " + firstEmojiX + ", 左边缘: " + (firstEmojiX - z.width/2));
-console.log("最后一个emoji中心X: " + lastEmojiX + ", 右边缘: " + (lastEmojiX + z.width/2));
-console.log("实际左边距: " + actualLeftMargin + "px");
-console.log("实际右边距: " + actualRightMargin + "px");
-console.log("边距差值: " + Math.abs(actualLeftMargin - actualRightMargin) + "px");
-console.log("======================");
+// 详细的边距验证计算
+var firstEmojiX = emojiGridStartX + z.width/2; // 第一个emoji中心X
+var lastEmojiX = emojiGridStartX + z.width/2 + z.width * 7; // 第8列emoji中心X
+var leftEdge = firstEmojiX - z.width/2; // 第一个emoji左边缘
+var rightEdge = lastEmojiX + z.width/2; // 最后一个emoji右边缘
+var finalLeftMargin = leftEdge; // 左边距
+var finalRightMargin = screenWidth - rightEdge; // 右边距
+
+console.log("=== 最终边距详细验证 ===");
+console.log("第一个emoji中心X: " + firstEmojiX.toFixed(1) + ", 左边缘: " + leftEdge.toFixed(1));
+console.log("最后一个emoji中心X: " + lastEmojiX.toFixed(1) + ", 右边缘: " + rightEdge.toFixed(1));
+console.log("最终左边距: " + finalLeftMargin.toFixed(1) + "px");
+console.log("最终右边距: " + finalRightMargin.toFixed(1) + "px");
+console.log("边距差值: " + Math.abs(finalLeftMargin - finalRightMargin).toFixed(1) + "px");
+console.log("边距是否接近25px: 左" + (Math.abs(finalLeftMargin - 25) < 2 ? "✅" : "❌") + " 右" + (Math.abs(finalRightMargin - 25) < 2 ? "✅" : "❌"));
+console.log("========================");
 // 重新设置全局H和I变量为第一个emoji的坐标，以保持兼容性
 H = emojiGridStartX + z.width/2;
 I = emojiGridStartY + z.height/2;}
