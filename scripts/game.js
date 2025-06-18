@@ -105,7 +105,7 @@ function updateTimeDisplay(){
 
 var N=this;PokiSDK.gameplayStart();this.add.sprite(0,0,"background").setOrigin(0);var y="play",n=0,p=this,E,O=!1,u=this.add.group();this.add.group();var J=this.add.group();
 // 响应式emoji网格大小计算
-var cellWidth = Math.floor((screenWidth * 0.80) / 8);
+var cellWidth = Math.floor((screenWidth * 0.85) / 8);
 var cellHeight = Math.floor(cellWidth * 0.97);
 
 // 确保emoji大小在合理范围内
@@ -121,7 +121,9 @@ var headerHeight = Math.floor(screenHeight * 0.12);
 var footerHeight = Math.floor(screenHeight * 0.15);
 var availableHeight = screenHeight - headerHeight - footerHeight;
 
-H=(screenWidth-gridWidth)/2+z.width/2;
+// 增加emoji网格的左右边距，保持游戏整体尺寸不变
+var emojiMargin = screenWidth * 0.05; // 左右各增加5%边距
+H=(screenWidth-gridWidth)/2+z.width/2+emojiMargin;
 I=headerHeight+(availableHeight-gridHeight)/2+z.height/2;
 
 l=Array(10),r=[],m=1,maxType=18+player_data.drop_mode;22<maxType&&(maxType=22);console.log("Max: "+maxType);for(var A=0;40>A;A++)m>maxType&&(m=1),r.push(m),m++;r=r.concat(r);h(r);m=0;console.log("Total emoji types in array:", r.length);console.log("last_array status:", last_array ? "exists" : "null");
