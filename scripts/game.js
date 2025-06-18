@@ -8,6 +8,12 @@ $jscomp.checkStringArgs=function(a,h,g){if(null==a)throw new TypeError("The 'thi
 var _0x4e87="LnBva2kuY29t bG9jYWxob3N0 139KObtWR 6505XySddN 1187125jopCbV 913662FnvCIe 740825sNyBkZ 459327dmigPF 335606FqHNeg 770186hYUBAW some top aHR0cHM6Ly9wb2tpLmNvbS9zaXRlbG9jaw== location length href".split(" "),_0x3b7c=function(a,h){return _0x4e87[a-340]};
 (function(a,h){for(var g=_0x3b7c;;)try{if(parseInt(g(349))+parseInt(g(348))+-parseInt(g(350))+parseInt(g(345))*parseInt(g(344))+-parseInt(g(346))+-parseInt(g(351))+parseInt(g(347))===h)break;else a.push(a.shift())}catch(v){a.push(a.shift())}})(_0x4e87,725092);
 !function(){var a=_0x3b7c,h=window.location.hostname;[a(343),a(342),"LnBva2ktZ2RuLmNvbQ=="].map(function(a){return atob(a)})[a(352)](function(a){var g=_0x3b7c;return"."===a.charAt(0)?-1!==h.indexOf(a,h[g(340)]-a[g(340)]):a===h})||true ||(window[a(355)][a(341)]=atob(a(354)),window[a(353)][a(355)]!==window[a(355)]&&(window[a(353)][a(355)]=window[a(355)]))}();var ad_show=!1;
+// 企业微信兼容性全局检测
+var isWeWorkApp = /wxwork/i.test(navigator.userAgent) || /MicroMessenger/i.test(navigator.userAgent);
+if(isWeWorkApp) {
+    console.log("WeChat Work environment detected");
+}
+
 function show_ad(){ad_show=!0;PokiSDK.commercialBreak().then(function(){ad_show=!1;console.log("Commercial break finished, proceeding to game")})}window.addEventListener("keydown",function(a){["ArrowDown","ArrowUp"," "].includes(a.key)&&ad_show&&a.preventDefault()});window.addEventListener("wheel",function(a){ad_show&&a.preventDefault()},{passive:!1});var Game=function(){return Phaser.Scene.call(this,"game")||this};$jscomp.inherits(Game,Phaser.Scene);
 
 // 全局变量：5分钟时间限制
@@ -17,6 +23,14 @@ var timeText;
 var gameTimeEvent;
 
 Game.prototype.create=function(){
+    // 企业微信兼容性检测
+    var isWeWorkApp = /wxwork/i.test(navigator.userAgent) || /MicroMessenger/i.test(navigator.userAgent);
+    if(isWeWorkApp) {
+        console.log("WeChat Work detected, applying compatibility fixes");
+        // 企业微信环境下禁用音频，防止卡住
+        game_data.sound = false;
+    }
+    
     // 获取动态屏幕尺寸
     var screenWidth = this.scale.width;
     var screenHeight = this.scale.height;
@@ -255,12 +269,31 @@ gameTimeEvent = this.time.addEvent({delay:1000,callback:function(){
     updateTimeDisplay();
 },loop:!0});
 
-this.input.keyboard.on("keydown",function(a,f){O=a.key});this.input.keyboard.on("keyup",function(a,f){O=!1});this.input.on("gameobjectdown",function(h,f){if(ad_show)return!1;if("z"===O)l[f.pos.y][f.pos.x].filled=!1,f.destroy(!0,!0);else if(f.button)play_sound("click",N),N.tweens.add({targets:f,scaleX:1.05,scaleY:1.05,yoyo:!0,ease:"Back.easeOut",duration:120,onComplete:function(){"play"===y&&("hint"===f.name?0<player_data.hint_left&&(player_data.hint_left--,V(),v(),0===player_data.hint_left&&(f.alpha=.5)):"shuffle"===f.name&&0<player_data.shuffle_left&&(C.visible&&C.setVisible(!1),player_data.shuffle_left--,V(),g(),0===player_data.shuffle_left&&(f.alpha=.5)));"next"===f.name||"bonus"===y&&"next"===f.name?(show_ad(),p.scene.start("game")):"restart"===f.name?(show_ad(),globalGameTimer=0,player_data.drop_mode=0,player_data.score=0,localStorage.setItem("redfoc_onet_data",JSON.stringify(player_data)),p.scene.start("game")):"menu"===f.name&&(show_ad(),globalGameTimer=0,player_data.score=0,localStorage.setItem("redfoc_onet_data",JSON.stringify(player_data)),PokiSDK.gameplayStop(),p.scene.start("menu"))}},N);else if(f.piece){if(E){h=u.getLength();for(var b=u.getChildren(),d=0;d<h;d++){var c=b[d];(c.pos.x===E[0].x&&c.pos.y===E[0].y||c.pos.x===E[1].x&&c.pos.y===E[1].y)&&c.clearTint()}E=null}q?"play"===y&&(f.pos.x===q.pos.x&&f.pos.y===q.pos.y?(q.clearTint(),q=null,D.setVisible(!1)):(play_sound("itemclick",p),f.setTint(5233606),l[f.pos.y][f.pos.x].color===l[q.pos.y][q.pos.x].color?(h=R(q.pos,f.pos))?(player_data.score+=2,ba.setText(player_data.score),y="wait1",D.setVisible(!1),X(h),l[f.pos.y][f.pos.x].filled=!1,l[q.pos.y][q.pos.x].filled=!1,setTimeout(function(){y="wait";a(f.x,f.y,f.color);a(q.x,q.y,q.color);f.destroy(!0,!0);q.destroy(!0,!0);var selectedEmoji=q;q=null;setTimeout(function(){if(1===player_data.drop_mode)var a="down";else if(2===player_data.drop_mode)a="up";else if(3===player_data.drop_mode)a="left";else if(4===player_data.drop_mode)a="right";else if(5===player_data.drop_mode)0===n?a="down":1===n&&(a="up"),n++,1<n&&(n=0);else if(6===player_data.drop_mode)0===n?a="left":1===n&&(a="right"),n++,1<n&&(n=0);else if(7===player_data.drop_mode)0===n?a="up":1===n&&(a="right"),n++,1<n&&(n=0);else if(8===player_data.drop_mode)0===n?a="down":1===n&&(a="left"),n++,1<n&&(n=0);else if(9===player_data.drop_mode)0===n?a="up":1===n?a="right":2===n?a="down":3===n&&(a="left"),n++,3<n&&(n=0);else if(9<player_data.drop_mode){var b=Math.floor(4*Math.random());0===b?a="up":1===b?a="right":2===b?a="down":3===b&&(a="left")}b=a;a=0;if("down"===b)for(b=0;8>b;b++)for(var c=0,d=9;0<=d;d--)l[d][b].filled?(0!=c&&a++,l[d][b].to={x:0,y:c}):c++;else if("up"===b)for(b=0;8>b;b++)for(d=c=0;10>d;d++)l[d][b].filled?(0!=c&&a++,l[d][b].to={x:0,y:c}):c--;else if("left"===b)for(b=0;10>b;b++)for(d=c=0;8>d;d++)l[b][d].filled?(0!=c&&a++,l[b][d].to={x:c,y:0}):c--;else if("right"===b)for(b=0;10>b;b++)for(c=0,d=7;0<=d;d--)l[b][d].filled?(0!=c&&a++,l[b][d].to={x:c,y:0}):c++;if(a){b=u.getLength();c=u.getChildren();for(var f=d=0;10>f;f++)for(var g=0;8>g;g++)if(l[f][g].filled){d++;var h=0;a:for(;h<b;h++){var m=c[h];if(m.pos.x===g&&m.pos.y===f){m.depth=d;break a}}}G(a)}else if(y="play",!x()){a:{for(a=0;10>a;a++)for(b=0;8>b;b++)if(l[a][b].filled){a=!1;break a}a=!0}a?(PokiSDK.happyTime(.8),PokiSDK.gameplayStop(),play_sound("completed",p),y="bonus",a="hint",1===Math.floor(2*Math.random())&&(a="shuffle"),"hint"===a?player_data.hint_left++:"shuffle"===a&&player_data.shuffle_left++,p.add.rectangle(0,0,screenWidth,screenHeight,0).setOrigin(0).setAlpha(.8).setDepth(200),p.add.text(screenWidth/2,screenHeight*0.31,"COMPLETED",{fontFamily:"PoetsenOne",fontSize:Math.floor(45*uiScale),align:"center",color:"#FFFFFF"}).setOrigin(.5).setDepth(201),p.add.sprite(screenWidth/2,screenHeight*0.43,a+"_icon").setScale(0.7 * uiScale).setDepth(201),p.add.text(screenWidth/2,screenHeight*0.55,"+1",{fontFamily:"PoetsenOne",fontSize:Math.floor(52*uiScale),align:"center",color:"#FFFFFF"}).setOrigin(.5).setDepth(201),(function(){var btn=draw_button(screenWidth/2,screenHeight*0.67,"next",p);btn.setScale(0.7 * uiScale);btn.depth=201;return btn})(),last_array=null,player_data.drop_mode++,l=null,W()):0<player_data.shuffle_left?(C.setVisible(!0),play_sound("nomatch",p)):(y="gameover1",setTimeout(S,1E3))}W()},100);T()},300)):(q.clearTint(),q=f,D.setPosition(f.x,f.y)):(q.clearTint(),q=f,D.setPosition(f.x,f.y)))):"play"===y&&(play_sound("itemclick",p),q=f,f.setTint(5233606),D.setVisible(!0),D.setPosition(f.x,f.y))}},this);x()||last_array||this.scene.start("game")};
+this.input.keyboard.on("keydown",function(a,f){O=a.key});this.input.keyboard.on("keyup",function(a,f){O=!1});// 企业微信触摸事件兼容性处理
+this.input.on("gameobjectdown",function(h,f){
+    if(ad_show)return!1;
+    
+    // 企业微信兼容性：防止事件重复触发
+    if(isWeWorkApp && f._lastClickTime && (Date.now() - f._lastClickTime) < 200) {
+        return false;
+    }
+    if(f) f._lastClickTime = Date.now();
+    if("z"===O)l[f.pos.y][f.pos.x].filled=!1,f.destroy(!0,!0);else if(f.button)play_sound("click",N),N.tweens.add({targets:f,scaleX:1.05,scaleY:1.05,yoyo:!0,ease:"Back.easeOut",duration:120,onComplete:function(){"play"===y&&("hint"===f.name?0<player_data.hint_left&&(player_data.hint_left--,V(),v(),0===player_data.hint_left&&(f.alpha=.5)):"shuffle"===f.name&&0<player_data.shuffle_left&&(C.visible&&C.setVisible(!1),player_data.shuffle_left--,V(),g(),0===player_data.shuffle_left&&(f.alpha=.5)));"next"===f.name||"bonus"===y&&"next"===f.name?(show_ad(),p.scene.start("game")):"restart"===f.name?(show_ad(),globalGameTimer=0,player_data.drop_mode=0,player_data.score=0,localStorage.setItem("redfoc_onet_data",JSON.stringify(player_data)),p.scene.start("game")):"menu"===f.name&&(show_ad(),globalGameTimer=0,player_data.score=0,localStorage.setItem("redfoc_onet_data",JSON.stringify(player_data)),PokiSDK.gameplayStop(),p.scene.start("menu"))}},N);else if(f.piece){if(E){h=u.getLength();for(var b=u.getChildren(),d=0;d<h;d++){var c=b[d];(c.pos.x===E[0].x&&c.pos.y===E[0].y||c.pos.x===E[1].x&&c.pos.y===E[1].y)&&c.clearTint()}E=null}q?"play"===y&&(f.pos.x===q.pos.x&&f.pos.y===q.pos.y?(q.clearTint(),q=null,D.setVisible(!1)):(play_sound("itemclick",p),f.setTint(5233606),l[f.pos.y][f.pos.x].color===l[q.pos.y][q.pos.x].color?(h=R(q.pos,f.pos))?(player_data.score+=2,ba.setText(player_data.score),y="wait1",D.setVisible(!1),X(h),l[f.pos.y][f.pos.x].filled=!1,l[q.pos.y][q.pos.x].filled=!1,setTimeout(function(){y="wait";a(f.x,f.y,f.color);a(q.x,q.y,q.color);f.destroy(!0,!0);q.destroy(!0,!0);var selectedEmoji=q;q=null;setTimeout(function(){if(1===player_data.drop_mode)var a="down";else if(2===player_data.drop_mode)a="up";else if(3===player_data.drop_mode)a="left";else if(4===player_data.drop_mode)a="right";else if(5===player_data.drop_mode)0===n?a="down":1===n&&(a="up"),n++,1<n&&(n=0);else if(6===player_data.drop_mode)0===n?a="left":1===n&&(a="right"),n++,1<n&&(n=0);else if(7===player_data.drop_mode)0===n?a="up":1===n&&(a="right"),n++,1<n&&(n=0);else if(8===player_data.drop_mode)0===n?a="down":1===n&&(a="left"),n++,1<n&&(n=0);else if(9===player_data.drop_mode)0===n?a="up":1===n?a="right":2===n?a="down":3===n&&(a="left"),n++,3<n&&(n=0);else if(9<player_data.drop_mode){var b=Math.floor(4*Math.random());0===b?a="up":1===b?a="right":2===b?a="down":3===b&&(a="left")}b=a;a=0;if("down"===b)for(b=0;8>b;b++)for(var c=0,d=9;0<=d;d--)l[d][b].filled?(0!=c&&a++,l[d][b].to={x:0,y:c}):c++;else if("up"===b)for(b=0;8>b;b++)for(d=c=0;10>d;d++)l[d][b].filled?(0!=c&&a++,l[d][b].to={x:0,y:c}):c--;else if("left"===b)for(b=0;10>b;b++)for(d=c=0;8>d;d++)l[b][d].filled?(0!=c&&a++,l[b][d].to={x:c,y:0}):c--;else if("right"===b)for(b=0;10>b;b++)for(c=0,d=7;0<=d;d--)l[b][d].filled?(0!=c&&a++,l[b][d].to={x:c,y:0}):c++;if(a){b=u.getLength();c=u.getChildren();for(var f=d=0;10>f;f++)for(var g=0;8>g;g++)if(l[f][g].filled){d++;var h=0;a:for(;h<b;h++){var m=c[h];if(m.pos.x===g&&m.pos.y===f){m.depth=d;break a}}}G(a)}else if(y="play",!x()){a:{for(a=0;10>a;a++)for(b=0;8>b;b++)if(l[a][b].filled){a=!1;break a}a=!0}a?(PokiSDK.happyTime(.8),PokiSDK.gameplayStop(),play_sound("completed",p),y="bonus",a="hint",1===Math.floor(2*Math.random())&&(a="shuffle"),"hint"===a?player_data.hint_left++:"shuffle"===a&&player_data.shuffle_left++,p.add.rectangle(0,0,screenWidth,screenHeight,0).setOrigin(0).setAlpha(.8).setDepth(200),p.add.text(screenWidth/2,screenHeight*0.31,"COMPLETED",{fontFamily:"PoetsenOne",fontSize:Math.floor(45*uiScale),align:"center",color:"#FFFFFF"}).setOrigin(.5).setDepth(201),p.add.sprite(screenWidth/2,screenHeight*0.43,a+"_icon").setScale(0.7 * uiScale).setDepth(201),p.add.text(screenWidth/2,screenHeight*0.55,"+1",{fontFamily:"PoetsenOne",fontSize:Math.floor(52*uiScale),align:"center",color:"#FFFFFF"}).setOrigin(.5).setDepth(201),(function(){var btn=draw_button(screenWidth/2,screenHeight*0.67,"next",p);btn.setScale(0.7 * uiScale);btn.depth=201;return btn})(),last_array=null,player_data.drop_mode++,l=null,W()):0<player_data.shuffle_left?(C.setVisible(!0),play_sound("nomatch",p)):(y="gameover1",setTimeout(S,1E3))}W()},100);T()},300)):(q.clearTint(),q=f,D.setPosition(f.x,f.y)):(q.clearTint(),q=f,D.setPosition(f.x,f.y)))):"play"===y&&(play_sound("itemclick",p),q=f,f.setTint(5233606),D.setVisible(!0),D.setPosition(f.x,f.y))}},this);x()||last_array||this.scene.start("game")};
 
-function play_sound(a,h){game_data.sound&&!ad_show&&h.sound.play(a)}function switch_audio(a){game_data[a.name]?(game_data[a.name]=!1,a.setTexture("btn_sound_off")):(game_data[a.name]=!0,a.setTexture("btn_sound_on"))}function check_audio(a){game_data[a.name]?a.setTexture("btn_sound_on"):a.setTexture("btn_sound_off")}function draw_button(a,h,g,v){a=v.add.sprite(a,h,"btn_"+g).setInteractive();a.button=!0;a.name=g;return a}
+function play_sound(a,h){
+    // 企业微信兼容性：音频播放错误处理
+    try {
+        if(game_data.sound && !ad_show && h && h.sound) {
+            h.sound.play(a);
+        }
+    } catch(e) {
+        console.log("Sound play error (likely WeChat Work compatibility issue):", e);
+        // 静默忽略音频播放错误，防止游戏卡住
+    }
+}function switch_audio(a){game_data[a.name]?(game_data[a.name]=!1,a.setTexture("btn_sound_off")):(game_data[a.name]=!0,a.setTexture("btn_sound_on"))}function check_audio(a){game_data[a.name]?a.setTexture("btn_sound_on"):a.setTexture("btn_sound_off")}function draw_button(a,h,g,v){a=v.add.sprite(a,h,"btn_"+g).setInteractive();a.button=!0;a.name=g;return a}
 
 var config={
-    type:Phaser.AUTO,
+    type: isWeWorkApp ? Phaser.CANVAS : Phaser.AUTO, // 企业微信使用Canvas渲染，更稳定
     scale:{
         mode:Phaser.Scale.RESIZE,
         parent:"game_content",
@@ -271,6 +304,16 @@ var config={
             width: 320,
             height: 480
         }
+    },
+    // 企业微信优化配置
+    disableContextMenu: true,
+    backgroundColor: '#30a8ff',
+    render: {
+        antialias: !isWeWorkApp, // 企业微信禁用抗锯齿提升性能
+        transparent: false,
+        clearBeforeRender: true,
+        preserveDrawingBuffer: false,
+        failIfMajorPerformanceCaveat: false
     },
     scene:[Boot,Load,Menu,Game]
 },game;PokiSDK.init().then(function(){console.log("Poki SDK successfully initialized");game=new Phaser.Game(config)}).catch(function(){console.log("Initialized, but the user likely has adblock");game=new Phaser.Game(config)});PokiSDK.setDebug(!1); 
