@@ -23,20 +23,13 @@ var timeText;
 var gameTimeEvent;
 
 Game.prototype.create=function(){
-    // 企业微信兼容性检测和调试
+    // 企业微信兼容性检测
     var isWeWorkApp = /wxwork/i.test(navigator.userAgent) || /MicroMessenger/i.test(navigator.userAgent);
-    console.log("=== 企业微信兼容性检测 ===");
-    console.log("User Agent:", navigator.userAgent);
-    console.log("是否企业微信环境:", isWeWorkApp);
-    console.log("当前音效状态:", game_data.sound);
     
     if(isWeWorkApp) {
-        console.log("WeChat Work detected, applying compatibility fixes");
-        // 注释掉音频禁用，让用户自己选择是否需要音效
-        // game_data.sound = false;
-        console.log("企业微信兼容模式已启用，保持音效可用");
+        console.log("WeChat Work environment detected");
+        // 企业微信环境下保持音效可用，由用户控制
     }
-    console.log("========================");
     
     // 获取动态屏幕尺寸
     var screenWidth = this.scale.width;
@@ -162,27 +155,10 @@ var emojiGridStartY = headerHeight + (availableHeight - actualGridHeight) / 2;
 H = emojiGridStartX + z.width / 2;  // 第一个emoji的中心X坐标
 I = emojiGridStartY + z.height / 2; // 第一个emoji的中心Y坐标
 
-// 精确居中布局调试信息
+// 简化布局信息（企业微信兼容）
 var actualLeftMargin = emojiGridStartX;
 var actualRightMargin = screenWidth - emojiGridStartX - actualGridWidth;
-console.log("=== Emoji矩阵完美居中布局调试 ===");
-console.log("🌐 环境检测: " + (isWeWorkApp ? "企业微信环境" : "标准浏览器环境"));
-console.log("📱 屏幕尺寸: " + screenWidth + " x " + screenHeight);
-console.log("🎯 UI缩放比例: " + uiScale.toFixed(2));
-console.log("🧩 单个emoji尺寸: " + z.width + " x " + z.height);
-console.log("📐 矩阵实际尺寸: " + actualGridWidth + " x " + actualGridHeight);
-console.log("📍 矩阵起始坐标(左上角): (" + emojiGridStartX.toFixed(1) + ", " + emojiGridStartY.toFixed(1) + ")");
-console.log("🎪 第一个emoji中心点: (" + H.toFixed(1) + ", " + I.toFixed(1) + ")");
-console.log("===============================");
-console.log("🎯 居中效果验证:");
-console.log("- 🎨 目标边距: " + emojiSideMargin + "px (左右各" + emojiSideMargin + "px)");
-console.log("- ⬅️ 实际左边距: " + actualLeftMargin.toFixed(1) + "px");
-console.log("- ➡️ 实际右边距: " + actualRightMargin.toFixed(1) + "px");
-console.log("- 📏 边距差值: " + Math.abs(actualLeftMargin - actualRightMargin).toFixed(1) + "px");
-console.log("- ✅ 是否完美居中: " + (Math.abs(actualLeftMargin - actualRightMargin) < 1 ? "✅ 是" : "❌ 否"));
-console.log("- 📦 可用emoji宽度: " + availableEmojiWidth + "px");
-console.log("- 🔧 实际使用宽度: " + actualGridWidth + "px");
-console.log("===============================");
+console.log("Layout: " + screenWidth + "x" + screenHeight + " | Grid: " + actualGridWidth + "x" + actualGridHeight + " | Margins: L" + actualLeftMargin.toFixed(1) + " R" + actualRightMargin.toFixed(1));
 
 l=Array(10),r=[],m=1,maxType=18+player_data.drop_mode;22<maxType&&(maxType=22);console.log("Max: "+maxType);for(var A=0;40>A;A++)m>maxType&&(m=1),r.push(m),m++;r=r.concat(r);h(r);m=0;console.log("Total emoji types in array:", r.length);console.log("last_array status:", last_array ? "exists" : "null");
 // 强制重新生成emoji网格，不使用last_array
@@ -192,22 +168,14 @@ if(last_array)for(l=last_array,r=0;10>r;r++)for(m=0;8>m;m++)l[r][m].filled&&(max
 var emojiX = emojiGridStartX + z.width/2 + z.width * col;
 var emojiY = emojiGridStartY + z.height/2 + z.height * row;
 var M=this.add.sprite(emojiX, emojiY,"obj"+P).setInteractive();M.color=P;M.piece=!0;M.pos={x:col,y:row};M.setDisplaySize(z.width,z.height);u.add(M);m++;A.push(aa);emojiCount++;if(emojiCount <= 5 || emojiCount % 10 === 0) console.log("Created emoji", emojiCount, "at position ("+col+","+row+") with color obj"+P+" at coordinates ("+emojiX+","+emojiY+")")}l[row]=A}console.log("Total emojis created:", emojiCount);
-// 详细的边距验证计算
-var firstEmojiX = emojiGridStartX + z.width/2; // 第一个emoji中心X
-var lastEmojiX = emojiGridStartX + z.width/2 + z.width * 7; // 第8列emoji中心X
-var leftEdge = firstEmojiX - z.width/2; // 第一个emoji左边缘
-var rightEdge = lastEmojiX + z.width/2; // 最后一个emoji右边缘
-var finalLeftMargin = leftEdge; // 左边距
-var finalRightMargin = screenWidth - rightEdge; // 右边距
-
-console.log("=== 最终边距详细验证 ===");
-console.log("第一个emoji中心X: " + firstEmojiX.toFixed(1) + ", 左边缘: " + leftEdge.toFixed(1));
-console.log("最后一个emoji中心X: " + lastEmojiX.toFixed(1) + ", 右边缘: " + rightEdge.toFixed(1));
-console.log("最终左边距: " + finalLeftMargin.toFixed(1) + "px");
-console.log("最终右边距: " + finalRightMargin.toFixed(1) + "px");
-console.log("边距差值: " + Math.abs(finalLeftMargin - finalRightMargin).toFixed(1) + "px");
-console.log("边距是否接近25px: 左" + (Math.abs(finalLeftMargin - 25) < 2 ? "✅" : "❌") + " 右" + (Math.abs(finalRightMargin - 25) < 2 ? "✅" : "❌"));
-console.log("========================");
+// 边距验证（企业微信兼容）
+var firstEmojiX = emojiGridStartX + z.width/2;
+var lastEmojiX = emojiGridStartX + z.width/2 + z.width * 7;
+var leftEdge = firstEmojiX - z.width/2;
+var rightEdge = lastEmojiX + z.width/2;
+var finalLeftMargin = leftEdge;
+var finalRightMargin = screenWidth - rightEdge;
+console.log("Final margins: L" + finalLeftMargin.toFixed(1) + " R" + finalRightMargin.toFixed(1) + " (target: 25px)");
 // 重新设置全局H和I变量为第一个emoji的坐标，以保持兼容性
 H = emojiGridStartX + z.width/2;
 I = emojiGridStartY + z.height/2;}
@@ -335,28 +303,13 @@ this.input.on("gameobjectdown",function(h,f){
     if("z"===O)l[f.pos.y][f.pos.x].filled=!1,f.destroy(!0,!0);else if(f.button)play_sound("click",N),N.tweens.add({targets:f,scaleX:1.05,scaleY:1.05,yoyo:!0,ease:"Back.easeOut",duration:120,onComplete:function(){"play"===y&&("hint"===f.name?0<player_data.hint_left&&(player_data.hint_left--,V(),v(),0===player_data.hint_left&&(f.alpha=.5)):"shuffle"===f.name&&0<player_data.shuffle_left&&(C.visible&&C.setVisible(!1),player_data.shuffle_left--,V(),g(),0===player_data.shuffle_left&&(f.alpha=.5)));"next"===f.name||"bonus"===y&&"next"===f.name?(show_ad(),p.scene.start("game")):"restart"===f.name?(show_ad(),globalGameTimer=0,player_data.drop_mode=0,player_data.score=0,localStorage.setItem("redfoc_onet_data",JSON.stringify(player_data)),p.scene.start("game")):"menu"===f.name&&(show_ad(),globalGameTimer=0,player_data.score=0,localStorage.setItem("redfoc_onet_data",JSON.stringify(player_data)),PokiSDK.gameplayStop(),p.scene.start("menu"))}},N);else if(f.piece){if(E){h=u.getLength();for(var b=u.getChildren(),d=0;d<h;d++){var c=b[d];(c.pos.x===E[0].x&&c.pos.y===E[0].y||c.pos.x===E[1].x&&c.pos.y===E[1].y)&&c.clearTint()}E=null}q?"play"===y&&(f.pos.x===q.pos.x&&f.pos.y===q.pos.y?(q.clearTint(),q=null,D.setVisible(!1)):(play_sound("itemclick",p),f.setTint(5233606),l[f.pos.y][f.pos.x].color===l[q.pos.y][q.pos.x].color?(h=R(q.pos,f.pos))?(player_data.score+=2,ba.setText(player_data.score),y="wait1",D.setVisible(!1),X(h),l[f.pos.y][f.pos.x].filled=!1,l[q.pos.y][q.pos.x].filled=!1,setTimeout(function(){y="wait";a(f.x,f.y,f.color);a(q.x,q.y,q.color);f.destroy(!0,!0);q.destroy(!0,!0);var selectedEmoji=q;q=null;setTimeout(function(){if(1===player_data.drop_mode)var a="down";else if(2===player_data.drop_mode)a="up";else if(3===player_data.drop_mode)a="left";else if(4===player_data.drop_mode)a="right";else if(5===player_data.drop_mode)0===n?a="down":1===n&&(a="up"),n++,1<n&&(n=0);else if(6===player_data.drop_mode)0===n?a="left":1===n&&(a="right"),n++,1<n&&(n=0);else if(7===player_data.drop_mode)0===n?a="up":1===n&&(a="right"),n++,1<n&&(n=0);else if(8===player_data.drop_mode)0===n?a="down":1===n&&(a="left"),n++,1<n&&(n=0);else if(9===player_data.drop_mode)0===n?a="up":1===n?a="right":2===n?a="down":3===n&&(a="left"),n++,3<n&&(n=0);else if(9<player_data.drop_mode){var b=Math.floor(4*Math.random());0===b?a="up":1===b?a="right":2===b?a="down":3===b&&(a="left")}b=a;a=0;if("down"===b)for(b=0;8>b;b++)for(var c=0,d=9;0<=d;d--)l[d][b].filled?(0!=c&&a++,l[d][b].to={x:0,y:c}):c++;else if("up"===b)for(b=0;8>b;b++)for(d=c=0;10>d;d++)l[d][b].filled?(0!=c&&a++,l[d][b].to={x:0,y:c}):c--;else if("left"===b)for(b=0;10>b;b++)for(d=c=0;8>d;d++)l[b][d].filled?(0!=c&&a++,l[b][d].to={x:c,y:0}):c--;else if("right"===b)for(b=0;10>b;b++)for(c=0,d=7;0<=d;d--)l[b][d].filled?(0!=c&&a++,l[b][d].to={x:c,y:0}):c++;if(a){b=u.getLength();c=u.getChildren();for(var f=d=0;10>f;f++)for(var g=0;8>g;g++)if(l[f][g].filled){d++;var h=0;a:for(;h<b;h++){var m=c[h];if(m.pos.x===g&&m.pos.y===f){m.depth=d;break a}}}G(a)}else if(y="play",!x()){a:{for(a=0;10>a;a++)for(b=0;8>b;b++)if(l[a][b].filled){a=!1;break a}a=!0}a?(PokiSDK.happyTime(.8),PokiSDK.gameplayStop(),play_sound("completed",p),y="bonus",a="hint",1===Math.floor(2*Math.random())&&(a="shuffle"),"hint"===a?player_data.hint_left++:"shuffle"===a&&player_data.shuffle_left++,p.add.rectangle(0,0,screenWidth,screenHeight,0).setOrigin(0).setAlpha(.8).setDepth(200),p.add.text(screenWidth/2,screenHeight*0.31,"COMPLETED",{fontFamily:"PoetsenOne",fontSize:Math.floor(45*uiScale),align:"center",color:"#FFFFFF"}).setOrigin(.5).setDepth(201),p.add.sprite(screenWidth/2,screenHeight*0.43,a+"_icon").setScale(0.7 * uiScale).setDepth(201),p.add.text(screenWidth/2,screenHeight*0.55,"+1",{fontFamily:"PoetsenOne",fontSize:Math.floor(52*uiScale),align:"center",color:"#FFFFFF"}).setOrigin(.5).setDepth(201),(function(){var btn=draw_button(screenWidth/2,screenHeight*0.67,"next",p);btn.setScale(0.7 * uiScale);btn.depth=201;return btn})(),last_array=null,player_data.drop_mode++,l=null,W()):0<player_data.shuffle_left?(C.setVisible(!0),play_sound("nomatch",p)):(y="gameover1",setTimeout(S,1E3))}W()},100);T()},300)):(q.clearTint(),q=f,D.setPosition(f.x,f.y)):(q.clearTint(),q=f,D.setPosition(f.x,f.y)))):"play"===y&&(play_sound("itemclick",p),q=f,f.setTint(5233606),D.setVisible(!0),D.setPosition(f.x,f.y))}},this);x()||last_array||this.scene.start("game")};
 
 function play_sound(a,h){
-    console.log("🔊 尝试播放音效:", a, "音效开关:", game_data.sound, "广告状态:", ad_show, "场景实例:", h ? "存在" : "不存在");
-    if(h && h.sound) {
-        console.log("🎵 场景音频管理器存在，音频列表:", Object.keys(h.sound.sounds));
-        console.log("🎯 目标音频'" + a + "'是否存在:", h.sound.sounds.hasOwnProperty(a));
-    } else {
-        console.log("❌ 场景音频管理器不存在！");
-    }
-    
-    if(game_data.sound && !ad_show && h && h.sound) {
-        try {
+    // 企业微信兼容性：简化音效播放逻辑，避免复杂操作
+    try {
+        if(game_data.sound && !ad_show && h && h.sound) {
             h.sound.play(a);
-            console.log("✅ 音效播放成功:", a);
-        } catch(e) {
-            console.log("❌ 音效播放失败:", a, "错误:", e);
         }
-    } else {
-        console.log("⏹️ 音效被阻止播放 - 原因:", 
-            !game_data.sound ? "音效被关闭" : 
-            ad_show ? "广告模式" :
-            !h ? "场景不存在" :
-            !h.sound ? "音频管理器不存在" : "未知"
-        );
+    } catch(e) {
+        // 静默处理音效错误，确保游戏不被中断
     }
 }function switch_audio(a){game_data[a.name]?(game_data[a.name]=!1,a.setTexture("btn_sound_off")):(game_data[a.name]=!0,a.setTexture("btn_sound_on"))}function check_audio(a){game_data[a.name]?a.setTexture("btn_sound_on"):a.setTexture("btn_sound_off")}function draw_button(a,h,g,v){a=v.add.sprite(a,h,"btn_"+g).setInteractive();a.button=!0;a.name=g;return a}
 
