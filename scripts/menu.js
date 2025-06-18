@@ -112,7 +112,7 @@ Menu.prototype.create = function() {
     var uiScale = Math.min(config.width / 375, config.height / 812);
     
     // 添加纯色背景 - 响应式尺寸
-    this.add.rectangle(centerX, centerY, config.width + 50, config.height + 50, 0x73cdff);
+    this.add.rectangle(centerX, centerY, config.width + 50, config.height + 50, 0x30a8ff);
     
     // 添加响应式 header (顶部)
     var headerSprite = this.add.sprite(centerX, 0, "header").setOrigin(0.5, 0);

@@ -66,7 +66,7 @@ Load.prototype.preload = function() {
     var uiScale = Math.min(config.width / 375, config.height / 812);
     
     // 添加纯色背景 - 响应式尺寸
-    this.add.rectangle(centerX, centerY, config.width + 50, config.height + 50, 0x73cdff);
+    this.add.rectangle(centerX, centerY, config.width + 50, config.height + 50, 0x30a8ff);
     
     // 添加游戏标题 - 垂直居中偏上
     var titleSprite = this.add.sprite(centerX, centerY - 100 * uiScale, "game_title");
