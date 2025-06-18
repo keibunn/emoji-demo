@@ -132,17 +132,7 @@ Menu.prototype.create = function() {
     var availableHeight = screenHeight - headerHeight - footerHeight;
     var availableCenterY = headerHeight + availableHeight/2;
     
-    // 添加游戏标题并设置动画 - 在可用区域中心上方
-    var c = this.add.sprite(centerX, availableCenterY - availableHeight*0.2, "game_title");
-    c.setScale(0.6 * uiScale); // 响应式缩放
-    this.tweens.add({
-        targets: c,
-        y: c.y + 10 * uiScale,
-        duration: 1300,
-        ease: "Sine.easeInOut",
-        yoyo: !0,
-        repeat: -1
-    });
+
     
     // 显示最高分数 - 在可用区域中心
     this.add.text(centerX, availableCenterY + availableHeight*0.1, "BEST SCORE:", {
