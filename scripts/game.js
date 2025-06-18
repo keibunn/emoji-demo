@@ -48,8 +48,8 @@ Game.prototype.create=function(){
     // 确保在大屏幕设备上UI不会太大
     uiScale = Math.min(uiScale, 1.5);
 
-    function a(a,f,b){var B=p.add.sprite(a,f,"obj"+b);p.tweens.add({targets:B,scaleY:0,scaleX:0,duration:150,ease:"Linear",onComplete:function(){B.destroy(!0,!0)}})}function h(a){for(var B=a.length,b,d;B;)d=Math.floor(Math.random()*B--),b=a[B],a[B]=a[d],a[d]=b;return a}function g(){q&&(q.clearTint(),q=null);for(var a=[],f=u.getLength(),b=u.getChildren(),d=0;10>d;d++)for(var c=0;8>c;c++)l[d][c].filled&&a.push(l[d][c].color);h(a);for(d=0;d<f;d++)c=b[d],c.color=a[d],c.setTexture("obj"+
-    c.color);Q();x()?setTimeout(function(){play_sound("shuffle",p)},200):(console.log("not match"),g())}function v(){var a=u.getLength(),f=u.getChildren(),b=x();if(b){E=b;for(var d=0;d<a;d++){var c=f[d];(c.pos.x===b[0].x&&c.pos.y===b[0].y||c.pos.x===b[1].x&&c.pos.y===b[1].y)&&c.setTint(5233606)}}else alert("err");setTimeout(function(){play_sound("hint",p)},200)}function x(){for(var a=u.getLength(),f=u.getChildren(),b=0;b<a;b++){var d=f[b];a:{var c=d.pos;for(var e=l[c.y][c.x].color,g=0;10>g;g++)for(var k=
+    function a(a,f,b){var B=p.add.sprite(a,f,"obj"+b);p.tweens.add({targets:B,scaleY:0,scaleX:0,duration:150,ease:"Linear",onComplete:function(){B.destroy(!0,!0)}})}function h(a){for(var B=a.length,b,d;B;)d=Math.floor(Math.random()*B--),b=a[B],a[B]=a[d],a[d]=b;return a}function g(){if(q){removeSelectionEffect(q);q=null;}clearSelectionOverlays();for(var a=[],f=u.getLength(),b=u.getChildren(),d=0;10>d;d++)for(var c=0;8>c;c++)l[d][c].filled&&a.push(l[d][c].color);h(a);for(d=0;d<f;d++)c=b[d],c.color=a[d],c.setTexture("obj"+
+    c.color);Q();x()?setTimeout(function(){play_sound("shuffle",p)},200):(console.log("not match"),g())}function v(){var a=u.getLength(),f=u.getChildren(),b=x();if(b){E=b;clearSelectionOverlays();for(var d=0;d<a;d++){var c=f[d];if(c.pos.x===b[0].x&&c.pos.y===b[0].y||c.pos.x===b[1].x&&c.pos.y===b[1].y){addSelectionEffect(c,p)}}}else alert("err");setTimeout(function(){play_sound("hint",p)},200)}function x(){for(var a=u.getLength(),f=u.getChildren(),b=0;b<a;b++){var d=f[b];a:{var c=d.pos;for(var e=l[c.y][c.x].color,g=0;10>g;g++)for(var k=
     0;8>k;k++)if((g!==c.y||k!==c.x)&&l[g][k].filled&&l[g][k].color===e&&R(c,{x:k,y:g})){c={x:k,y:g};break a}c=!1}if(c)return[d.pos,c]}return!1}function G(a){y="drop";for(var B=u.getLength(),b=u.getChildren(),d=0;d<B;d++){var c=b[d],e=l[c.pos.y][c.pos.x];if(0!=e.to.x||0!=e.to.y)c.pos.x+=e.to.x,c.pos.y+=e.to.y,p.tweens.add({targets:c,x:H+z.width*c.pos.x,y:I+z.height*c.pos.y,duration:200,ease:"Linear",onComplete:function(){a--;0===a&&(y="play",Q(),x()||(0<player_data.shuffle_left?(C.setVisible(!0),play_sound("nomatch",
     p)):(y="gameover1",setTimeout(S,1E3))))}})}}function Q(){for(var a=0;10>a;a++)for(var f=0;8>f;f++)l[a][f].filled=!1,l[a][f].color=0,l[a][f].to=null;a=u.getLength();f=u.getChildren();for(var b=0;b<a;b++){var d=f[b];l[d.pos.y][d.pos.x].filled=!0;l[d.pos.y][d.pos.x].color=d.color}}function w(a){return Math.PI/180*a}function T(){for(var a=J.getChildren(),f=J.getLength(),b=0;b<f;b++)a[b].setVisible(!1)}function X(a){play_sound("connected",p);T();for(var f=J.getChildren(),b,d,c=0;c<a.length;c++){var e=f[c];e.setVisible(!0);e.setPosition(H+z.width*a[c].x,I+z.height*a[c].y);e.setDisplaySize(z.width * 0.8, z.height * 0.8);e.setDepth(100);0===c?d=a[c].x===a[c+1].x?a[c].y>a[c+1].y?"up":"down":a[c].x>a[c+1].x?"left":"right":c<a.length-1&&(a[c].x===a[c+1].x?a[c].y>a[c+1].y?(d="up","up"===b?e.setFrame(1):"down"!==b&&("left"===b?(e.setFrame(2),e.setRotation(w(180))):"right"===b&&(e.setFrame(2),e.setRotation(w(90))))):(d="down","up"!==b&&("down"===b?e.setFrame(1):"left"===b?(e.setFrame(2),e.setRotation(w(270))):"right"===b&&(e.setFrame(2),e.setRotation(w(0))))):a[c].x>a[c+1].x?(d="left","up"===b?(e.setFrame(2),e.setRotation(w(0))):"down"===b?(e.setFrame(2),e.setRotation(w(90))):"left"===b&&e.setFrame(1)):(d="right","up"===b?(e.setFrame(2),e.setRotation(w(270))):"down"===b?(e.setFrame(2),e.setRotation(w(180))):"left"!==b&&"right"===b&&e.setFrame(1)));c===a.length-1&&(d=a[c].x===a[c-1].x?a[c].y>a[c-1].y?"up":"down":a[c].x>a[c-1].x?"left":"right",e.setFrame(0));0===e.frame.name?"up"===d?e.setRotation(w(270)):"down"===d?e.setRotation(w(90)):"left"===d?e.setRotation(w(180)):"right"===d&&e.setRotation(w(0)):1===e.frame.name&&("up"===d||"down"===d?e.setRotation(w(90)):e.setRotation(w(0)));b=d}}function U(a,f){return 0<=a.x&&0<=a.y&&a.x<f[0].length&&a.y<f.length?!0:!1}function F(a,f,b,d,c){for(var e=[],g=1;10>g;g++){var k={x:f.x+a.x*g,y:f.y+a.y*g};if(U(k,d))if(d[k.y][k.x].filled){if(k.x===b.x&&k.y===b.y)return e.push(k),e;break}else if(e.push(k),c)if(1===a.x||-1===a.x){var h=F({x:0,y:-1},k,b,d);if(h){for(b=0;b<h.length;b++)e.push(h[b]);return e}if(k=F({x:0,y:1},k,b,d)){for(b=
     0;b<k.length;b++)e.push(k[b]);return e}}else{if(h=F({x:-1,y:0},k,b,d)){for(b=0;b<h.length;b++)e.push(h[b]);return e}if(k=F({x:1,y:0},k,b,d)){for(b=0;b<k.length;b++)e.push(k[b]);return e}}else if(1===a.x||-1===a.x){if(K({x:0,y:1},k,b,d)){for(a=k.y+1;a<b.y+1;a++)e.push({x:k.x,y:a});return e}if(K({x:0,y:-1},k,b,d)){for(a=k.y-1;a>b.y-1;a--)e.push({x:k.x,y:a});return e}}else{if(K({x:1,y:0},k,b,d)){for(a=k.x+1;a<b.x+1;a++)e.push({x:a,y:k.y});return e}if(K({x:-1,y:0},k,b,d)){for(a=k.x-1;a>b.x-1;a--)e.push({x:a,
@@ -302,7 +302,56 @@ this.input.on("gameobjectdown",function(h,f){
         return false;
     }
     if(f) f._lastClickTime = Date.now();
-    if("z"===O)l[f.pos.y][f.pos.x].filled=!1,f.destroy(!0,!0);else if(f.button)play_sound("click",N),N.tweens.add({targets:f,scaleX:1.05,scaleY:1.05,yoyo:!0,ease:"Back.easeOut",duration:120,onComplete:function(){"play"===y&&("hint"===f.name?0<player_data.hint_left&&(player_data.hint_left--,V(),v(),0===player_data.hint_left&&(f.alpha=.5)):"shuffle"===f.name&&0<player_data.shuffle_left&&(C.visible&&C.setVisible(!1),player_data.shuffle_left--,V(),g(),0===player_data.shuffle_left&&(f.alpha=.5)));"next"===f.name||"bonus"===y&&"next"===f.name?(show_ad(),p.scene.start("game")):"restart"===f.name?(show_ad(),globalGameTimer=0,player_data.drop_mode=0,player_data.score=0,localStorage.setItem("redfoc_onet_data",JSON.stringify(player_data)),p.scene.start("game")):"menu"===f.name&&(show_ad(),globalGameTimer=0,player_data.score=0,localStorage.setItem("redfoc_onet_data",JSON.stringify(player_data)),PokiSDK.gameplayStop(),p.scene.start("menu"))}},N);else if(f.piece){if(E){h=u.getLength();for(var b=u.getChildren(),d=0;d<h;d++){var c=b[d];(c.pos.x===E[0].x&&c.pos.y===E[0].y||c.pos.x===E[1].x&&c.pos.y===E[1].y)&&c.clearTint()}E=null}q?"play"===y&&(f.pos.x===q.pos.x&&f.pos.y===q.pos.y?(q.clearTint(),q=null,D.setVisible(!1)):(play_sound("itemclick",p),f.setTint(5233606),l[f.pos.y][f.pos.x].color===l[q.pos.y][q.pos.x].color?(h=R(q.pos,f.pos))?(player_data.score+=2,ba.setText(player_data.score),y="wait1",D.setVisible(!1),X(h),l[f.pos.y][f.pos.x].filled=!1,l[q.pos.y][q.pos.x].filled=!1,setTimeout(function(){y="wait";a(f.x,f.y,f.color);a(q.x,q.y,q.color);f.destroy(!0,!0);q.destroy(!0,!0);var selectedEmoji=q;q=null;setTimeout(function(){if(1===player_data.drop_mode)var a="down";else if(2===player_data.drop_mode)a="up";else if(3===player_data.drop_mode)a="left";else if(4===player_data.drop_mode)a="right";else if(5===player_data.drop_mode)0===n?a="down":1===n&&(a="up"),n++,1<n&&(n=0);else if(6===player_data.drop_mode)0===n?a="left":1===n&&(a="right"),n++,1<n&&(n=0);else if(7===player_data.drop_mode)0===n?a="up":1===n&&(a="right"),n++,1<n&&(n=0);else if(8===player_data.drop_mode)0===n?a="down":1===n&&(a="left"),n++,1<n&&(n=0);else if(9===player_data.drop_mode)0===n?a="up":1===n?a="right":2===n?a="down":3===n&&(a="left"),n++,3<n&&(n=0);else if(9<player_data.drop_mode){var b=Math.floor(4*Math.random());0===b?a="up":1===b?a="right":2===b?a="down":3===b&&(a="left")}b=a;a=0;if("down"===b)for(b=0;8>b;b++)for(var c=0,d=9;0<=d;d--)l[d][b].filled?(0!=c&&a++,l[d][b].to={x:0,y:c}):c++;else if("up"===b)for(b=0;8>b;b++)for(d=c=0;10>d;d++)l[d][b].filled?(0!=c&&a++,l[d][b].to={x:0,y:c}):c--;else if("left"===b)for(b=0;10>b;b++)for(d=c=0;8>d;d++)l[b][d].filled?(0!=c&&a++,l[b][d].to={x:c,y:0}):c--;else if("right"===b)for(b=0;10>b;b++)for(c=0,d=7;0<=d;d--)l[b][d].filled?(0!=c&&a++,l[b][d].to={x:c,y:0}):c++;if(a){b=u.getLength();c=u.getChildren();for(var f=d=0;10>f;f++)for(var g=0;8>g;g++)if(l[f][g].filled){d++;var h=0;a:for(;h<b;h++){var m=c[h];if(m.pos.x===g&&m.pos.y===f){m.depth=d;break a}}}G(a)}else if(y="play",!x()){a:{for(a=0;10>a;a++)for(b=0;8>b;b++)if(l[a][b].filled){a=!1;break a}a=!0}a?(PokiSDK.happyTime(.8),PokiSDK.gameplayStop(),play_sound("completed",p),y="bonus",a="hint",1===Math.floor(2*Math.random())&&(a="shuffle"),"hint"===a?player_data.hint_left++:"shuffle"===a&&player_data.shuffle_left++,p.add.rectangle(0,0,screenWidth,screenHeight,0).setOrigin(0).setAlpha(.8).setDepth(200),p.add.text(screenWidth/2,screenHeight*0.31,"COMPLETED",{fontFamily:"PoetsenOne",fontSize:Math.floor(45*uiScale),align:"center",color:"#FFFFFF"}).setOrigin(.5).setDepth(201),p.add.sprite(screenWidth/2,screenHeight*0.43,a+"_icon").setScale(0.7 * uiScale).setDepth(201),p.add.text(screenWidth/2,screenHeight*0.55,"+1",{fontFamily:"PoetsenOne",fontSize:Math.floor(52*uiScale),align:"center",color:"#FFFFFF"}).setOrigin(.5).setDepth(201),(function(){var btn=draw_button(screenWidth/2,screenHeight*0.67,"next",p);btn.setScale(0.7 * uiScale);btn.depth=201;return btn})(),last_array=null,player_data.drop_mode++,l=null,W()):0<player_data.shuffle_left?(C.setVisible(!0),play_sound("nomatch",p)):(y="gameover1",setTimeout(S,1E3))}W()},100);T()},300)):(q.clearTint(),q=f,D.setPosition(f.x,f.y)):(q.clearTint(),q=f,D.setPosition(f.x,f.y)))):"play"===y&&(play_sound("itemclick",p),q=f,f.setTint(5233606),D.setVisible(!0),D.setPosition(f.x,f.y))}},this);x()||last_array||this.scene.start("game")};
+    if("z"===O)l[f.pos.y][f.pos.x].filled=!1,f.destroy(!0,!0);else if(f.button)play_sound("click",N),N.tweens.add({targets:f,scaleX:1.05,scaleY:1.05,yoyo:!0,ease:"Back.easeOut",duration:120,onComplete:function(){"play"===y&&("hint"===f.name?0<player_data.hint_left&&(player_data.hint_left--,V(),v(),0===player_data.hint_left&&(f.alpha=.5)):"shuffle"===f.name&&0<player_data.shuffle_left&&(C.visible&&C.setVisible(!1),player_data.shuffle_left--,V(),g(),0===player_data.shuffle_left&&(f.alpha=.5)));"next"===f.name||"bonus"===y&&"next"===f.name?(show_ad(),p.scene.start("game")):"restart"===f.name?(show_ad(),globalGameTimer=0,player_data.drop_mode=0,player_data.score=0,localStorage.setItem("redfoc_onet_data",JSON.stringify(player_data)),p.scene.start("game")):"menu"===f.name&&(show_ad(),globalGameTimer=0,player_data.score=0,localStorage.setItem("redfoc_onet_data",JSON.stringify(player_data)),PokiSDK.gameplayStop(),p.scene.start("menu"))}},N);else if(f.piece){if(E){clearSelectionOverlays();E=null}q?"play"===y&&(f.pos.x===q.pos.x&&f.pos.y===q.pos.y?(removeSelectionEffect(q),clearSelectionOverlays(),q=null,D.setVisible(!1)):(play_sound("itemclick",p),clearSelectionOverlays(),addSelectionEffect(f,p),l[f.pos.y][f.pos.x].color===l[q.pos.y][q.pos.x].color?(h=R(q.pos,f.pos))?(player_data.score+=2,ba.setText(player_data.score),y="wait1",D.setVisible(!1),X(h),l[f.pos.y][f.pos.x].filled=!1,l[q.pos.y][q.pos.x].filled=!1,setTimeout(function(){y="wait";a(f.x,f.y,f.color);a(q.x,q.y,q.color);f.destroy(!0,!0);q.destroy(!0,!0);var selectedEmoji=q;q=null;setTimeout(function(){if(1===player_data.drop_mode)var a="down";else if(2===player_data.drop_mode)a="up";else if(3===player_data.drop_mode)a="left";else if(4===player_data.drop_mode)a="right";else if(5===player_data.drop_mode)0===n?a="down":1===n&&(a="up"),n++,1<n&&(n=0);else if(6===player_data.drop_mode)0===n?a="left":1===n&&(a="right"),n++,1<n&&(n=0);else if(7===player_data.drop_mode)0===n?a="up":1===n&&(a="right"),n++,1<n&&(n=0);else if(8===player_data.drop_mode)0===n?a="down":1===n&&(a="left"),n++,1<n&&(n=0);else if(9===player_data.drop_mode)0===n?a="up":1===n?a="right":2===n?a="down":3===n&&(a="left"),n++,3<n&&(n=0);else if(9<player_data.drop_mode){var b=Math.floor(4*Math.random());0===b?a="up":1===b?a="right":2===b?a="down":3===b&&(a="left")}b=a;a=0;if("down"===b)for(b=0;8>b;b++)for(var c=0,d=9;0<=d;d--)l[d][b].filled?(0!=c&&a++,l[d][b].to={x:0,y:c}):c++;else if("up"===b)for(b=0;8>b;b++)for(d=c=0;10>d;d++)l[d][b].filled?(0!=c&&a++,l[d][b].to={x:0,y:c}):c--;else if("left"===b)for(b=0;10>b;b++)for(d=c=0;8>d;d++)l[b][d].filled?(0!=c&&a++,l[b][d].to={x:c,y:0}):c--;else if("right"===b)for(b=0;10>b;b++)for(c=0,d=7;0<=d;d--)l[b][d].filled?(0!=c&&a++,l[b][d].to={x:c,y:0}):c++;if(a){b=u.getLength();c=u.getChildren();for(var f=d=0;10>f;f++)for(var g=0;8>g;g++)if(l[f][g].filled){d++;var h=0;a:for(;h<b;h++){var m=c[h];if(m.pos.x===g&&m.pos.y===f){m.depth=d;break a}}}G(a)}else if(y="play",!x()){a:{for(a=0;10>a;a++)for(b=0;8>b;b++)if(l[a][b].filled){a=!1;break a}a=!0}a?(PokiSDK.happyTime(.8),PokiSDK.gameplayStop(),play_sound("completed",p),y="bonus",a="hint",1===Math.floor(2*Math.random())&&(a="shuffle"),"hint"===a?player_data.hint_left++:"shuffle"===a&&player_data.shuffle_left++,p.add.rectangle(0,0,screenWidth,screenHeight,0).setOrigin(0).setAlpha(.8).setDepth(200),p.add.text(screenWidth/2,screenHeight*0.31,"COMPLETED",{fontFamily:"PoetsenOne",fontSize:Math.floor(45*uiScale),align:"center",color:"#FFFFFF"}).setOrigin(.5).setDepth(201),p.add.sprite(screenWidth/2,screenHeight*0.43,a+"_icon").setScale(0.7 * uiScale).setDepth(201),p.add.text(screenWidth/2,screenHeight*0.55,"+1",{fontFamily:"PoetsenOne",fontSize:Math.floor(52*uiScale),align:"center",color:"#FFFFFF"}).setOrigin(.5).setDepth(201),(function(){var btn=draw_button(screenWidth/2,screenHeight*0.67,"next",p);btn.setScale(0.7 * uiScale);btn.depth=201;return btn})(),last_array=null,player_data.drop_mode++,l=null,W()):0<player_data.shuffle_left?(C.setVisible(!0),play_sound("nomatch",p)):(y="gameover1",setTimeout(S,1E3))}W()},100);T()},300)):(removeSelectionEffect(q),clearSelectionOverlays(),q=f,addSelectionEffect(f,p),D.setPosition(f.x,f.y)):(removeSelectionEffect(q),clearSelectionOverlays(),q=f,addSelectionEffect(f,p),D.setPosition(f.x,f.y)))):"play"===y&&(play_sound("itemclick",p),q=f,clearSelectionOverlays(),addSelectionEffect(f,p),D.setVisible(!0),D.setPosition(f.x,f.y))}},this);x()||last_array||this.scene.start("game")};
+
+// 场景销毁时清理覆盖层
+Game.prototype.destroy = function() {
+    clearSelectionOverlays();
+    Phaser.Scene.prototype.destroy.call(this);
+};
+
+// 选中效果覆盖层管理
+var selectedOverlays = [];
+
+function createSelectionOverlay(x, y, width, height, scene) {
+    // 创建半透明的青绿色覆盖层
+    var overlay = scene.add.rectangle(x, y, width, height, 0x4fdbc6);
+    overlay.setAlpha(0.4); // 半透明效果
+    overlay.setDepth(99); // 确保在emoji之上，但在UI元素之下
+    console.log("Created selection overlay at", x, y, "with size", width, height);
+    return overlay;
+}
+
+function clearSelectionOverlays() {
+    // 清除所有选中覆盖层
+    selectedOverlays.forEach(function(overlay) {
+        if (overlay && overlay.destroy) {
+            overlay.destroy();
+        }
+    });
+    selectedOverlays = [];
+}
+
+function addSelectionEffect(emoji, scene) {
+    if (isMobileDevice) {
+        // 移动端使用覆盖层
+        console.log("Mobile device detected - using overlay for selection effect");
+        var overlay = createSelectionOverlay(emoji.x, emoji.y, emoji.displayWidth, emoji.displayHeight, scene);
+        selectedOverlays.push(overlay);
+    } else {
+        // 桌面端使用setTint
+        console.log("Desktop device detected - using setTint for selection effect");
+        emoji.setTint(5233606);
+    }
+}
+
+function removeSelectionEffect(emoji) {
+    if (!isMobileDevice && emoji && emoji.clearTint) {
+        // 桌面端清除tint
+        emoji.clearTint();
+    }
+    // 移动端的覆盖层会通过clearSelectionOverlays统一清除
+}
 
 function play_sound(a,h){
     // 企业微信兼容性：简化音效播放逻辑，避免复杂操作
@@ -319,6 +368,9 @@ function play_sound(a,h){
 var isDesktop = window.innerWidth >= 1025;
 var gameWidth = isDesktop ? 450 : window.innerWidth;
 var gameHeight = isDesktop ? 800 : window.innerHeight;
+
+// 检测移动端设备
+var isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
 var config={
     type: isWeWorkApp ? Phaser.CANVAS : Phaser.AUTO, // 企业微信使用Canvas渲染，更稳定
@@ -337,7 +389,7 @@ var config={
     disableContextMenu: true,
     backgroundColor: '#30a8ff',
     render: {
-        antialias: !isWeWorkApp, // 企业微信禁用抗锯齿提升性能
+        antialias: !isWeWorkApp && !isMobileDevice, // 移动端和企业微信都禁用抗锯齿
         transparent: false,
         clearBeforeRender: true,
         preserveDrawingBuffer: false,
