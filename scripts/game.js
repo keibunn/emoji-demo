@@ -246,38 +246,17 @@ this.input.keyboard.on("keydown",function(a,f){O=a.key});this.input.keyboard.on(
 
 function play_sound(a,h){game_data.sound&&!ad_show&&h.sound.play(a)}function switch_audio(a){game_data[a.name]?(game_data[a.name]=!1,a.setTexture("btn_sound_off")):(game_data[a.name]=!0,a.setTexture("btn_sound_on"))}function check_audio(a){game_data[a.name]?a.setTexture("btn_sound_on"):a.setTexture("btn_sound_off")}function draw_button(a,h,g,v){a=v.add.sprite(a,h,"btn_"+g).setInteractive();a.button=!0;a.name=g;return a}
 
-// 动态计算游戏尺寸以适配不同设备，网页端保持手机端比例
-var gameWidth = 375;
-var gameHeight = 812;
-
-// 移动端和桌面端统一使用手机竖屏比例
-if (window.innerWidth < window.innerHeight) {
-    // 竖屏模式：以宽度为基准
-    gameWidth = Math.min(window.innerWidth, 450);
-    gameHeight = Math.round(gameWidth * (812 / 375)); // 保持iPhone比例
-} else {
-    // 横屏或桌面端：强制使用手机竖屏比例，以高度为基准
-    gameHeight = Math.min(window.innerHeight, 800);
-    gameWidth = Math.round(gameHeight * (375 / 812)); // 保持iPhone比例
-}
-
 var config={
     type:Phaser.AUTO,
-    width:gameWidth,
-    height:gameHeight,
     scale:{
-        mode:Phaser.Scale.FIT,
+        mode:Phaser.Scale.RESIZE,
         parent:"game_content",
         autoCenter:Phaser.Scale.CENTER_BOTH,
-        width:gameWidth,
-        height:gameHeight,
+        width: window.innerWidth,
+        height: window.innerHeight,
         min: {
             width: 320,
-            height: 568
-        },
-        max: {
-            width: 450,
-            height: 900
+            height: 480
         }
     },
     scene:[Boot,Load,Menu,Game]
