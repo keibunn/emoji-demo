@@ -169,7 +169,26 @@ console.log("===============================");
 l=Array(10),r=[],m=1,maxType=18+player_data.drop_mode;22<maxType&&(maxType=22);console.log("Max: "+maxType);for(var A=0;40>A;A++)m>maxType&&(m=1),r.push(m),m++;r=r.concat(r);h(r);m=0;console.log("Total emoji types in array:", r.length);console.log("last_array status:", last_array ? "exists" : "null");
 // 强制重新生成emoji网格，不使用last_array
 last_array = null;
-if(last_array)for(l=last_array,r=0;10>r;r++)for(m=0;8>m;m++)l[r][m].filled&&(maxType=l[r][m].color,A=this.add.sprite(H+z.width*m,I+z.height*r,"obj"+maxType).setInteractive(),A.color=maxType,A.piece=!0,A.pos={x:m,y:r},u.add(A));else{console.log("Creating new emoji grid...");var emojiCount=0;for(var row=0;10>row;row++){A=[];for(var col=0;8>col;col++){var P=r[m],aa={color:P,filled:!0},M=this.add.sprite(H+z.width*col,I+z.height*row,"obj"+P).setInteractive();M.color=P;M.piece=!0;M.pos={x:col,y:row};M.setDisplaySize(z.width,z.height);u.add(M);m++;A.push(aa);emojiCount++;if(emojiCount <= 5 || emojiCount % 10 === 0) console.log("Created emoji", emojiCount, "at position ("+col+","+row+") with color obj"+P+" at coordinates ("+(H+z.width*col)+","+(I+z.height*row)+")")}l[row]=A}console.log("Total emojis created:", emojiCount)}
+if(last_array)for(l=last_array,r=0;10>r;r++)for(m=0;8>m;m++)l[r][m].filled&&(maxType=l[r][m].color,A=this.add.sprite(emojiGridStartX+z.width/2+z.width*m,emojiGridStartY+z.height/2+z.height*r,"obj"+maxType).setInteractive(),A.color=maxType,A.piece=!0,A.pos={x:m,y:r},u.add(A));else{console.log("Creating new emoji grid...");var emojiCount=0;for(var row=0;10>row;row++){A=[];for(var col=0;8>col;col++){var P=r[m],aa={color:P,filled:!0};
+// 正确的emoji坐标计算：基于网格起始点 + 单元格尺寸 * 索引 + 半个单元格尺寸作为中心点
+var emojiX = emojiGridStartX + z.width/2 + z.width * col;
+var emojiY = emojiGridStartY + z.height/2 + z.height * row;
+var M=this.add.sprite(emojiX, emojiY,"obj"+P).setInteractive();M.color=P;M.piece=!0;M.pos={x:col,y:row};M.setDisplaySize(z.width,z.height);u.add(M);m++;A.push(aa);emojiCount++;if(emojiCount <= 5 || emojiCount % 10 === 0) console.log("Created emoji", emojiCount, "at position ("+col+","+row+") with color obj"+P+" at coordinates ("+emojiX+","+emojiY+")")}l[row]=A}console.log("Total emojis created:", emojiCount);
+// 验证边距计算
+var firstEmojiX = emojiGridStartX + z.width/2;
+var lastEmojiX = emojiGridStartX + z.width/2 + z.width * 7; // 第8列（索引7）
+var actualLeftMargin = firstEmojiX - z.width/2; // 第一个emoji左边缘
+var actualRightMargin = screenWidth - (lastEmojiX + z.width/2); // 最后一个emoji右边缘
+console.log("=== 边距验证计算 ===");
+console.log("第一个emoji中心X: " + firstEmojiX + ", 左边缘: " + (firstEmojiX - z.width/2));
+console.log("最后一个emoji中心X: " + lastEmojiX + ", 右边缘: " + (lastEmojiX + z.width/2));
+console.log("实际左边距: " + actualLeftMargin + "px");
+console.log("实际右边距: " + actualRightMargin + "px");
+console.log("边距差值: " + Math.abs(actualLeftMargin - actualRightMargin) + "px");
+console.log("======================");
+// 重新设置全局H和I变量为第一个emoji的坐标，以保持兼容性
+H = emojiGridStartX + z.width/2;
+I = emojiGridStartY + z.height/2;}
 // 响应式header和footer
 var headerSprite = this.add.sprite(0,0,"header").setOrigin(0);
 headerSprite.setDisplaySize(screenWidth, headerHeight);
