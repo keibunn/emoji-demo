@@ -134,17 +134,21 @@ Menu.prototype.create = function() {
     
 
     
-    // 显示最高分数 - 在可用区域中心
-    this.add.text(centerX, availableCenterY + availableHeight*0.1, "BEST SCORE:", {
+    // 显示最高分数 - 分开显示，避免重叠
+    this.add.text(centerX, screenHeight * 0.25, "BEST SCORE:", {
         fontFamily: "PoetsenOne",
-        fontSize: Math.floor(22 * uiScale),
+        fontSize: Math.floor(32 * uiScale),  // 从22增加到32，放大约45%
         align: "center",
         color: "#FFFFFF"
     }).setOrigin(.5);
     
-    this.add.text(centerX, availableCenterY + availableHeight*0.17, String(best_score), {
+    // 添加装饰元素 - 位于BEST SCORE文本和数字之间
+    var xingxingSprite = this.add.sprite(centerX, screenHeight * 0.375, "xingxing");
+    xingxingSprite.setScale(0.8 * uiScale); // 响应式缩放
+    
+    this.add.text(centerX, screenHeight * 0.5, String(best_score), {
         fontFamily: "PoetsenOne",
-        fontSize: Math.floor(18 * uiScale),
+        fontSize: Math.floor(150 * uiScale),  // 数字字体大小设为150
         align: "center",
         color: "#FFFFFF"
     }).setOrigin(.5);

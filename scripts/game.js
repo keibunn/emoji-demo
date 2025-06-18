@@ -79,21 +79,23 @@ function timeUpGameOver(){
     overlay.depth = 300; // 更高的depth确保在COMPLETED界面之上
     
     // 显示时间到结算信息，使用响应式居中布局
-    var timeUpText = p.add.text(screenWidth/2,screenHeight*0.25,"TIME'S UP!",{fontFamily:"PoetsenOne",fontSize:Math.floor(36*uiScale),align:"center",color:"#FF6B6B"}).setOrigin(.5);
+    var timeUpText = p.add.text(screenWidth/2,screenHeight*0.25,"TIME'S UP!",{fontFamily:"PoetsenOne",fontSize:Math.floor(35*uiScale),align:"center",color:"#FF6B6B"}).setOrigin(.5);
     timeUpText.depth = 301; // 确保文字在最上层
     
-    var finalScoreLabel = p.add.text(screenWidth/2,screenHeight*0.35,"FINAL SCORE",{fontFamily:"PoetsenOne",fontSize:Math.floor(28*uiScale),align:"center",color:"#FFFFFF"}).setOrigin(.5);
-    finalScoreLabel.depth = 301;
+    // 添加装饰元素 - 位于TIME'S UP和分数之间
+    var xingxingSprite = p.add.sprite(screenWidth/2, screenHeight*0.375, "xingxing");
+    xingxingSprite.setScale(0.8 * uiScale); // 响应式缩放
+    xingxingSprite.depth = 301;
     
-    var scoreText = p.add.text(screenWidth/2,screenHeight*0.42,String(finalScore),{fontFamily:"PoetsenOne",fontSize:Math.floor(56*uiScale),align:"center",color:"#FFD93D"}).setOrigin(.5);
+    var scoreText = p.add.text(screenWidth/2,screenHeight*0.5,String(finalScore),{fontFamily:"PoetsenOne",fontSize:Math.floor(150*uiScale),align:"center",color:"#FFD93D"}).setOrigin(.5);
     scoreText.depth = 301;
     
-    var againBtn = draw_button(screenWidth/2,screenHeight*0.52,"restart",p);
-    againBtn.setScale(0.7 * uiScale); // 统一按钮大小
+    var againBtn = draw_button(screenWidth/2,screenHeight*0.62,"restart",p);
+    againBtn.setScale(0.6 * uiScale); // 调整按钮大小
     againBtn.depth = 301; // 按钮也要在最上层
     
-    var menuBtn = draw_button(screenWidth/2,screenHeight*0.62,"menu",p);
-    menuBtn.setScale(0.7 * uiScale); // 统一按钮大小
+    var menuBtn = draw_button(screenWidth/2,screenHeight*0.72,"menu",p);
+    menuBtn.setScale(0.6 * uiScale); // 调整按钮大小
     menuBtn.depth = 301;
     
     localStorage.removeItem("redfoc_onet_array");
@@ -313,14 +315,19 @@ function play_sound(a,h){
     }
 }function switch_audio(a){game_data[a.name]?(game_data[a.name]=!1,a.setTexture("btn_sound_off")):(game_data[a.name]=!0,a.setTexture("btn_sound_on"))}function check_audio(a){game_data[a.name]?a.setTexture("btn_sound_on"):a.setTexture("btn_sound_off")}function draw_button(a,h,g,v){a=v.add.sprite(a,h,"btn_"+g).setInteractive();a.button=!0;a.name=g;return a}
 
+// 检测设备类型，为桌面端设置固定竖屏尺寸
+var isDesktop = window.innerWidth >= 1025;
+var gameWidth = isDesktop ? 450 : window.innerWidth;
+var gameHeight = isDesktop ? 800 : window.innerHeight;
+
 var config={
     type: isWeWorkApp ? Phaser.CANVAS : Phaser.AUTO, // 企业微信使用Canvas渲染，更稳定
     scale:{
-        mode:Phaser.Scale.RESIZE,
+        mode: isDesktop ? Phaser.Scale.FIT : Phaser.Scale.RESIZE,
         parent:"game_content",
         autoCenter:Phaser.Scale.CENTER_BOTH,
-        width: window.innerWidth,
-        height: window.innerHeight,
+        width: gameWidth,
+        height: gameHeight,
         min: {
             width: 320,
             height: 480

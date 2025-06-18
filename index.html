@@ -107,10 +107,18 @@
 			#game_content {
 				padding: 10px;
 				background-color: #30a8ff;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+			canvas {
+				/* 平板端尺寸限制 */
+				max-width: 400px;
+				max-height: 85vh;
 			}
 		}
 		
-		/* 桌面端优化 - 竖屏比例显示 */
+		/* 桌面端优化 - 竖屏布局 */
 		@media (min-width: 1025px) {
 			#game_content {
 				padding: 20px;
@@ -125,13 +133,9 @@
 			canvas {
 				border-radius: 12px;
 				box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-				/* 竖屏比例，合理的最大尺寸 */
-				max-width: 500px !important;
-				max-height: 90vh !important;
-				/* 确保竖屏比例 */
-				width: auto !important;
-				height: auto !important;
-				object-fit: contain;
+				/* 让Phaser处理尺寸，只设置最大限制 */
+				max-width: 450px;
+				max-height: 90vh;
 			}
 		}
 		

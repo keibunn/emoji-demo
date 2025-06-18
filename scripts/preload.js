@@ -107,6 +107,7 @@ Load.prototype.preload = function() {
     this.load.image("sign", "img/sign.png");
     this.load.image("header", "img/header.png");
     this.load.image("footer", "img/footer.png");
+    this.load.image("xingxing", "img/xingxing.png");
     
     // 按钮资源
     this.load.image("btn_shuffle", "img/btn_shuffle.png");
