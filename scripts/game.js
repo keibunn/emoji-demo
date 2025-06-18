@@ -118,8 +118,8 @@ function updateTimeDisplay(){
 }
 
 var N=this;PokiSDK.gameplayStart();this.add.sprite(0,0,"background").setOrigin(0);var y="play",n=0,p=this,E,O=!1,u=this.add.group();this.add.group();var J=this.add.group();
-// emoji矩阵严格30px左右边距设计
-var emojiSideMargin = 30; // 严格左右边距30px
+// emoji矩阵严格25px左右边距设计
+var emojiSideMargin = 25; // 严格左右边距25px
 var availableEmojiWidth = screenWidth - (emojiSideMargin * 2); // 可用于emoji矩阵的宽度
 
 // 计算emoji单元格尺寸 - 基于8列布局
@@ -141,8 +141,8 @@ var headerHeight = Math.floor(screenHeight * 0.12);
 var footerHeight = Math.floor(screenHeight * 0.15);
 var availableHeight = screenHeight - headerHeight - footerHeight;
 
-// emoji矩阵精确定位 - 确保严格30px左边距
-var emojiGridStartX = emojiSideMargin; // 矩阵左边距严格30px
+// emoji矩阵精确定位 - 确保严格25px左边距
+var emojiGridStartX = emojiSideMargin; // 矩阵左边距严格25px
 var emojiGridStartY = headerHeight + (availableHeight - actualGridHeight) / 2;
 
 // emoji中心点计算 - 基于左上角起始点
@@ -202,7 +202,7 @@ var elementHeight = 64; // 统一高度基准
 
 // 计算合适的缩放比例，确保所有元素都能放下
 var totalWidth = 152 + 230 + 79 + 79; // 所有元素的原始宽度：540像素
-var sideMargin = 30; // 左右边距各30像素
+var sideMargin = 25; // 左右边距各25像素
 var availableWidth = screenWidth - (sideMargin * 2); // 可用宽度
 
 // 预留间距空间：3个间距
