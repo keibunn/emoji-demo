@@ -102,19 +102,15 @@ Load.prototype.preload = function() {
     // ===================================
     
     // UI元素
-    this.load.image("shadow", "img/shadow.png");
     this.load.image("sign", "img/sign.png");
     this.load.image("header", "img/header.png");
     this.load.image("footer", "img/footer.png");
     
     // 按钮资源
-    this.load.image("btn_home", "img/btn_home.png");
     this.load.image("btn_shuffle", "img/btn_shuffle.png");
     this.load.image("btn_hint", "img/btn_hint.png");
     this.load.image("btn_play", "img/btn_play.png");
     this.load.image("btn_next", "img/btn_next.png");
-    this.load.image("btn_sound_on", "img/btn_sound_on.png");
-    this.load.image("btn_sound_off", "img/btn_sound_off.png");
     this.load.image("btn_restart", "img/btn_restart.png");
     this.load.image("btn_menu", "img/btn_menu.png");
     this.load.image("btn_start", "img/btn_start.png");
@@ -128,7 +124,7 @@ Load.prototype.preload = function() {
     this.load.image("time_limit", "img/time-limit.png");
     
     // 背景图片
-    this.load.image("background2", "img/background2.png");
+    this.load.image("background", "img/background.png");
     
     // 连线动画精灵表
     this.load.spritesheet("lines", "img/lines.png", {
