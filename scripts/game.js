@@ -23,13 +23,20 @@ var timeText;
 var gameTimeEvent;
 
 Game.prototype.create=function(){
-    // 企业微信兼容性检测
+    // 企业微信兼容性检测和调试
     var isWeWorkApp = /wxwork/i.test(navigator.userAgent) || /MicroMessenger/i.test(navigator.userAgent);
+    console.log("=== 企业微信兼容性检测 ===");
+    console.log("User Agent:", navigator.userAgent);
+    console.log("是否企业微信环境:", isWeWorkApp);
+    console.log("当前音效状态:", game_data.sound);
+    
     if(isWeWorkApp) {
         console.log("WeChat Work detected, applying compatibility fixes");
-        // 企业微信环境下禁用音频，防止卡住
-        game_data.sound = false;
+        // 注释掉音频禁用，让用户自己选择是否需要音效
+        // game_data.sound = false;
+        console.log("企业微信兼容模式已启用，保持音效可用");
     }
+    console.log("========================");
     
     // 获取动态屏幕尺寸
     var screenWidth = this.scale.width;
@@ -159,20 +166,22 @@ I = emojiGridStartY + z.height / 2; // 第一个emoji的中心Y坐标
 var actualLeftMargin = emojiGridStartX;
 var actualRightMargin = screenWidth - emojiGridStartX - actualGridWidth;
 console.log("=== Emoji矩阵完美居中布局调试 ===");
-console.log("屏幕尺寸: " + screenWidth + " x " + screenHeight);
-console.log("单个emoji尺寸: " + z.width + " x " + z.height);
-console.log("矩阵实际尺寸: " + actualGridWidth + " x " + actualGridHeight);
-console.log("矩阵起始坐标(左上角): (" + emojiGridStartX + ", " + emojiGridStartY + ")");
-console.log("第一个emoji中心点: (" + H + ", " + I + ")");
+console.log("🌐 环境检测: " + (isWeWorkApp ? "企业微信环境" : "标准浏览器环境"));
+console.log("📱 屏幕尺寸: " + screenWidth + " x " + screenHeight);
+console.log("🎯 UI缩放比例: " + uiScale.toFixed(2));
+console.log("🧩 单个emoji尺寸: " + z.width + " x " + z.height);
+console.log("📐 矩阵实际尺寸: " + actualGridWidth + " x " + actualGridHeight);
+console.log("📍 矩阵起始坐标(左上角): (" + emojiGridStartX.toFixed(1) + ", " + emojiGridStartY.toFixed(1) + ")");
+console.log("🎪 第一个emoji中心点: (" + H.toFixed(1) + ", " + I.toFixed(1) + ")");
 console.log("===============================");
-console.log("居中效果验证:");
-console.log("- 目标边距: " + emojiSideMargin + "px (左右各" + emojiSideMargin + "px)");
-console.log("- 实际左边距: " + actualLeftMargin.toFixed(1) + "px");
-console.log("- 实际右边距: " + actualRightMargin.toFixed(1) + "px");
-console.log("- 边距差值: " + Math.abs(actualLeftMargin - actualRightMargin).toFixed(1) + "px");
-console.log("- 是否完美居中: " + (Math.abs(actualLeftMargin - actualRightMargin) < 1 ? "✅ 是" : "❌ 否"));
-console.log("- 可用emoji宽度: " + availableEmojiWidth + "px");
-console.log("- 实际使用宽度: " + actualGridWidth + "px");
+console.log("🎯 居中效果验证:");
+console.log("- 🎨 目标边距: " + emojiSideMargin + "px (左右各" + emojiSideMargin + "px)");
+console.log("- ⬅️ 实际左边距: " + actualLeftMargin.toFixed(1) + "px");
+console.log("- ➡️ 实际右边距: " + actualRightMargin.toFixed(1) + "px");
+console.log("- 📏 边距差值: " + Math.abs(actualLeftMargin - actualRightMargin).toFixed(1) + "px");
+console.log("- ✅ 是否完美居中: " + (Math.abs(actualLeftMargin - actualRightMargin) < 1 ? "✅ 是" : "❌ 否"));
+console.log("- 📦 可用emoji宽度: " + availableEmojiWidth + "px");
+console.log("- 🔧 实际使用宽度: " + actualGridWidth + "px");
 console.log("===============================");
 
 l=Array(10),r=[],m=1,maxType=18+player_data.drop_mode;22<maxType&&(maxType=22);console.log("Max: "+maxType);for(var A=0;40>A;A++)m>maxType&&(m=1),r.push(m),m++;r=r.concat(r);h(r);m=0;console.log("Total emoji types in array:", r.length);console.log("last_array status:", last_array ? "exists" : "null");
