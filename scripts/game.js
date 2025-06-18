@@ -105,7 +105,7 @@ function updateTimeDisplay(){
 
 var N=this;PokiSDK.gameplayStart();this.add.sprite(0,0,"background").setOrigin(0);var y="play",n=0,p=this,E,O=!1,u=this.add.group();this.add.group();var J=this.add.group();
 // 响应式emoji网格大小计算
-var cellWidth = Math.floor((screenWidth * 0.85) / 8);
+var cellWidth = Math.floor((screenWidth * 0.80) / 8);
 var cellHeight = Math.floor(cellWidth * 0.97);
 
 // 确保emoji大小在合理范围内
