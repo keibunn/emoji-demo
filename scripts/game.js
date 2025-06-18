@@ -104,9 +104,9 @@ function updateTimeDisplay(){
 }
 
 var N=this;PokiSDK.gameplayStart();this.add.sprite(0,0,"background").setOrigin(0);var y="play",n=0,p=this,E,O=!1,u=this.add.group();this.add.group();var J=this.add.group();
-// 响应式emoji网格大小计算 - 改为基于可用空间的80%
-var desiredMarginPercent = 0.10; // 左右各10%边距，总共20%边距
-var availableGridWidth = screenWidth * (1 - desiredMarginPercent * 2);
+// emoji矩阵边距与上方UI元素对齐 - 使用固定30px边距
+var emojiSideMargin = 30; // 与上方UI元素相同的边距
+var availableGridWidth = screenWidth - (emojiSideMargin * 2);
 var cellWidth = Math.floor(availableGridWidth / 8);
 var cellHeight = Math.floor(cellWidth * 0.97);
 
@@ -123,8 +123,8 @@ var headerHeight = Math.floor(screenHeight * 0.12);
 var footerHeight = Math.floor(screenHeight * 0.15);
 var availableHeight = screenHeight - headerHeight - footerHeight;
 
-// 计算emoji网格的起始位置 - 完全居中
-H = (screenWidth - gridWidth) / 2 + z.width / 2;
+// 计算emoji网格的起始位置 - 使用固定边距，确保与UI元素对齐
+H = emojiSideMargin + z.width / 2;
 I = headerHeight + (availableHeight - gridHeight) / 2 + z.height / 2;
 
 // 调试信息输出
@@ -134,8 +134,9 @@ console.log("单个emoji尺寸: " + z.width + " x " + z.height);
 console.log("矩阵总尺寸: " + gridWidth + " x " + gridHeight);
 console.log("矩阵起始坐标: (" + (H - z.width/2) + ", " + (I - z.height/2) + ")");
 console.log("矩阵中心点: (" + H + ", " + I + ")");
-console.log("左边距: " + (H - z.width/2) + "px");
-console.log("右边距: " + (screenWidth - (H - z.width/2) - gridWidth) + "px");
+console.log("左边距: " + emojiSideMargin + "px (与UI元素一致)");
+console.log("右边距: " + (screenWidth - emojiSideMargin - gridWidth) + "px");
+console.log("可用宽度: " + availableGridWidth + "px");
 console.log("================================");
 
 l=Array(10),r=[],m=1,maxType=18+player_data.drop_mode;22<maxType&&(maxType=22);console.log("Max: "+maxType);for(var A=0;40>A;A++)m>maxType&&(m=1),r.push(m),m++;r=r.concat(r);h(r);m=0;console.log("Total emoji types in array:", r.length);console.log("last_array status:", last_array ? "exists" : "null");
