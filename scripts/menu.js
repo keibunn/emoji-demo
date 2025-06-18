@@ -107,27 +107,29 @@ Menu.prototype.create = function() {
     var a = this, b = this;
     
     // 响应式尺寸计算
-    var centerX = config.width / 2;
-    var centerY = config.height / 2;
-    var uiScale = Math.min(config.width / 375, config.height / 812);
+    var screenWidth = this.scale.width;
+    var screenHeight = this.scale.height;
+    var centerX = screenWidth / 2;
+    var centerY = screenHeight / 2;
+    var uiScale = Math.min(screenWidth / 375, screenHeight / 812);
     
     // 添加纯色背景 - 响应式尺寸
-    this.add.rectangle(centerX, centerY, config.width + 50, config.height + 50, 0x30a8ff);
+    this.add.rectangle(centerX, centerY, screenWidth + 50, screenHeight + 50, 0x30a8ff);
     
     // 添加响应式 header (顶部)
     var headerSprite = this.add.sprite(centerX, 0, "header").setOrigin(0.5, 0);
-    headerSprite.setDisplaySize(config.width, headerSprite.height * (config.width / headerSprite.width));
+    headerSprite.setDisplaySize(screenWidth, headerSprite.height * (screenWidth / headerSprite.width));
     headerSprite.setDepth(1);
     
     // 添加响应式 footer (底部)  
-    var footerSprite = this.add.sprite(centerX, config.height, "footer").setOrigin(0.5, 1);
-    footerSprite.setDisplaySize(config.width, footerSprite.height * (config.width / footerSprite.width));
+    var footerSprite = this.add.sprite(centerX, screenHeight, "footer").setOrigin(0.5, 1);
+    footerSprite.setDisplaySize(screenWidth, footerSprite.height * (screenWidth / footerSprite.width));
     footerSprite.setDepth(1);
     
     // 计算可用区域
     var headerHeight = headerSprite.displayHeight;
     var footerHeight = footerSprite.displayHeight;
-    var availableHeight = config.height - headerHeight - footerHeight;
+    var availableHeight = screenHeight - headerHeight - footerHeight;
     var availableCenterY = headerHeight + availableHeight/2;
     
     // 添加游戏标题并设置动画 - 在可用区域中心上方

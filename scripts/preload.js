@@ -61,12 +61,14 @@ Load.prototype.preload = function() {
     PokiSDK.gameLoadingStart();
     
     // 响应式尺寸计算
-    var centerX = config.width / 2;
-    var centerY = config.height / 2;
-    var uiScale = Math.min(config.width / 375, config.height / 812);
+    var screenWidth = this.scale.width;
+    var screenHeight = this.scale.height;
+    var centerX = screenWidth / 2;
+    var centerY = screenHeight / 2;
+    var uiScale = Math.min(screenWidth / 375, screenHeight / 812);
     
     // 添加纯色背景 - 响应式尺寸
-    this.add.rectangle(centerX, centerY, config.width + 50, config.height + 50, 0x30a8ff);
+    this.add.rectangle(centerX, centerY, screenWidth + 50, screenHeight + 50, 0x30a8ff);
     
     // 添加游戏标题 - 垂直居中偏上
     var titleSprite = this.add.sprite(centerX, centerY - 100 * uiScale, "game_title");
@@ -77,7 +79,7 @@ Load.prototype.preload = function() {
         PokiSDK.gameLoadingFinished();
         
         // 创建开始按钮 - 在底部20%位置
-        var d = draw_button(centerX, config.height * 0.8, "start", a);
+        var d = draw_button(centerX, screenHeight * 0.8, "start", a);
         d.setScale(0.5 * uiScale); // 缩放至85%
         
         // 简单的按钮脉冲动画

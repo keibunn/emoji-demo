@@ -17,13 +17,17 @@ var timeText;
 var gameTimeEvent;
 
 Game.prototype.create=function(){
+    // 获取动态屏幕尺寸
+    var screenWidth = this.scale.width;
+    var screenHeight = this.scale.height;
+    
     // 移动端优化的UI缩放计算
     var baseWidth = 375;
     var baseHeight = 812;
-    var uiScale = Math.min(config.width / baseWidth, config.height / baseHeight);
+    var uiScale = Math.min(screenWidth / baseWidth, screenHeight / baseHeight);
 
     // 确保在小屏幕设备上UI不会太小
-    if (config.width <= 375 || config.height <= 667) {
+    if (screenWidth <= 375 || screenHeight <= 667) {
         uiScale = Math.max(uiScale, 0.8);
     }
 
@@ -37,7 +41,7 @@ Game.prototype.create=function(){
     0;b<k.length;b++)e.push(k[b]);return e}}else{if(h=F({x:-1,y:0},k,b,d)){for(b=0;b<h.length;b++)e.push(h[b]);return e}if(k=F({x:1,y:0},k,b,d)){for(b=0;b<k.length;b++)e.push(k[b]);return e}}else if(1===a.x||-1===a.x){if(K({x:0,y:1},k,b,d)){for(a=k.y+1;a<b.y+1;a++)e.push({x:k.x,y:a});return e}if(K({x:0,y:-1},k,b,d)){for(a=k.y-1;a>b.y-1;a--)e.push({x:k.x,y:a});return e}}else{if(K({x:1,y:0},k,b,d)){for(a=k.x+1;a<b.x+1;a++)e.push({x:a,y:k.y});return e}if(K({x:-1,y:0},k,b,d)){for(a=k.x-1;a>b.x-1;a--)e.push({x:a,
     y:k.y});return e}}}return!1}function K(a,f,b,d){for(var c=1;10>c;c++){var e={x:f.x+a.x*c,y:f.y+a.y*c};if(U(e,d)){if(d[e.y][e.x].filled)return e.x===b.x&&e.y===b.y?!0:!1}else return!1}}function R(a,f){for(var b=JSON.parse(JSON.stringify(l)),d=0;10>d;d++)b[d].unshift({filled:!1}),b[d].push({filled:!1});d=[];for(var c=0;10>c;c++)d.push({filled:!1});b.push(d);b.unshift(d);a.x++;a.y++;f.x++;f.y++;d=[];for(c=0;4>c;c++){var e={x:-1,y:0};1===c?e={x:1,y:0}:2===c?e={x:0,y:-1}:3===c&&(e={x:0,y:1});if(e=F(e,
     a,f,b,!0)){var g=[];e.unshift(a);for(var k=0;k<e.length;k++)g.push({x:e[k].x-1,y:e[k].y-1});d.push(g)}}b=null;c=999;for(e=0;e<d.length;e++)d[e].length<c&&(c=d[e].length,b=d[e]);a.x--;a.y--;f.x--;f.y--;return b}function V(){Y.setText(player_data.shuffle_left);Z.setText(player_data.hint_left)}function S(){PokiSDK.gameplayStop();play_sound("gameover",p);player_data.score>best_score&&(best_score=player_data.score,localStorage.setItem("redfoc_onet_best",best_score));for(var a=u.getLength(),f=u.getChildren(),
-    b=0;10>b;b++)for(var d=0;8>d;d++)if(l[b][d].filled){var c=0;a:for(;c<a;c++){var e=f[c];if(e.pos.x===d&&e.pos.y===b){e.depth=0;break a}}}y="gameover";var overlay=p.add.rectangle(0,0,config.width,config.height,0).setOrigin(0);overlay.alpha=.8;overlay.depth=200;p.add.text(config.width/2,config.height*0.37,"GAMEOVER",{fontFamily:"PoetsenOne",fontSize:Math.floor(45*uiScale),align:"center",color:"#FFFFFF"}).setOrigin(.5).setDepth(201);p.add.text(config.width/2,config.height*0.44,"SCORE: "+player_data.score,{fontFamily:"PoetsenOne",fontSize:Math.floor(32*uiScale),align:"center",color:"#FFFFFF"}).setOrigin(.5).setDepth(201);var restartBtn=draw_button(config.width/2,config.height*0.55,"restart",p);restartBtn.setScale(0.7 * uiScale);restartBtn.depth=201;var menuBtn=draw_button(config.width/2,config.height*0.64,"menu",p);menuBtn.setScale(0.7 * uiScale);menuBtn.depth=201;localStorage.removeItem("redfoc_onet_array");player_data.drop_mode=0;player_data.score=0;last_array=null;localStorage.setItem("redfoc_onet_data",JSON.stringify(player_data))}function W(){var a={arr:l,data:player_data};last_array=JSON.parse(JSON.stringify(l));localStorage.setItem("redfoc_onet_array",JSON.stringify(a))}
+    b=0;10>b;b++)for(var d=0;8>d;d++)if(l[b][d].filled){var c=0;a:for(;c<a;c++){var e=f[c];if(e.pos.x===d&&e.pos.y===b){e.depth=0;break a}}}y="gameover";var overlay=p.add.rectangle(0,0,screenWidth,screenHeight,0).setOrigin(0);overlay.alpha=.8;overlay.depth=200;p.add.text(screenWidth/2,screenHeight*0.37,"GAMEOVER",{fontFamily:"PoetsenOne",fontSize:Math.floor(45*uiScale),align:"center",color:"#FFFFFF"}).setOrigin(.5).setDepth(201);p.add.text(screenWidth/2,screenHeight*0.44,"SCORE: "+player_data.score,{fontFamily:"PoetsenOne",fontSize:Math.floor(32*uiScale),align:"center",color:"#FFFFFF"}).setOrigin(.5).setDepth(201);var restartBtn=draw_button(screenWidth/2,screenHeight*0.55,"restart",p);restartBtn.setScale(0.7 * uiScale);restartBtn.depth=201;var menuBtn=draw_button(screenWidth/2,screenHeight*0.64,"menu",p);menuBtn.setScale(0.7 * uiScale);menuBtn.depth=201;localStorage.removeItem("redfoc_onet_array");player_data.drop_mode=0;player_data.score=0;last_array=null;localStorage.setItem("redfoc_onet_data",JSON.stringify(player_data))}function W(){var a={arr:l,data:player_data};last_array=JSON.parse(JSON.stringify(l));localStorage.setItem("redfoc_onet_array",JSON.stringify(a))}
 
 // 时间到时的游戏结束函数
 function timeUpGameOver(){
@@ -56,25 +60,25 @@ function timeUpGameOver(){
     player_data.score>best_score&&(best_score=player_data.score,localStorage.setItem("redfoc_onet_best",best_score));
     
     // 添加半透明黑屏遮罩 - 使用更高的depth确保在所有界面之上
-    var overlay = p.add.rectangle(0,0,config.width,config.height,0).setOrigin(0);
+    var overlay = p.add.rectangle(0,0,screenWidth,screenHeight,0).setOrigin(0);
     overlay.alpha = 0.8;
     overlay.depth = 300; // 更高的depth确保在COMPLETED界面之上
     
     // 显示时间到结算信息，使用响应式居中布局
-    var timeUpText = p.add.text(config.width/2,config.height*0.25,"TIME'S UP!",{fontFamily:"PoetsenOne",fontSize:Math.floor(36*uiScale),align:"center",color:"#FF6B6B"}).setOrigin(.5);
+    var timeUpText = p.add.text(screenWidth/2,screenHeight*0.25,"TIME'S UP!",{fontFamily:"PoetsenOne",fontSize:Math.floor(36*uiScale),align:"center",color:"#FF6B6B"}).setOrigin(.5);
     timeUpText.depth = 301; // 确保文字在最上层
     
-    var finalScoreLabel = p.add.text(config.width/2,config.height*0.35,"FINAL SCORE",{fontFamily:"PoetsenOne",fontSize:Math.floor(28*uiScale),align:"center",color:"#FFFFFF"}).setOrigin(.5);
+    var finalScoreLabel = p.add.text(screenWidth/2,screenHeight*0.35,"FINAL SCORE",{fontFamily:"PoetsenOne",fontSize:Math.floor(28*uiScale),align:"center",color:"#FFFFFF"}).setOrigin(.5);
     finalScoreLabel.depth = 301;
     
-    var scoreText = p.add.text(config.width/2,config.height*0.42,String(finalScore),{fontFamily:"PoetsenOne",fontSize:Math.floor(56*uiScale),align:"center",color:"#FFD93D"}).setOrigin(.5);
+    var scoreText = p.add.text(screenWidth/2,screenHeight*0.42,String(finalScore),{fontFamily:"PoetsenOne",fontSize:Math.floor(56*uiScale),align:"center",color:"#FFD93D"}).setOrigin(.5);
     scoreText.depth = 301;
     
-    var againBtn = draw_button(config.width/2,config.height*0.52,"restart",p);
+    var againBtn = draw_button(screenWidth/2,screenHeight*0.52,"restart",p);
     againBtn.setScale(0.7 * uiScale); // 统一按钮大小
     againBtn.depth = 301; // 按钮也要在最上层
     
-    var menuBtn = draw_button(config.width/2,config.height*0.62,"menu",p);
+    var menuBtn = draw_button(screenWidth/2,screenHeight*0.62,"menu",p);
     menuBtn.setScale(0.7 * uiScale); // 统一按钮大小
     menuBtn.depth = 301;
     
@@ -101,7 +105,7 @@ function updateTimeDisplay(){
 
 var N=this;PokiSDK.gameplayStart();this.add.sprite(0,0,"background").setOrigin(0);var y="play",n=0,p=this,E,O=!1,u=this.add.group();this.add.group();var J=this.add.group();
 // 响应式emoji网格大小计算
-var cellWidth = Math.floor((config.width * 0.85) / 8);
+var cellWidth = Math.floor((screenWidth * 0.85) / 8);
 var cellHeight = Math.floor(cellWidth * 0.97);
 
 // 确保emoji大小在合理范围内
@@ -113,11 +117,11 @@ q=0,z={width:cellWidth,height:cellHeight};
 // 响应式布局计算
 var gridWidth = 8 * z.width;
 var gridHeight = 10 * z.height;
-var headerHeight = Math.floor(config.height * 0.12);
-var footerHeight = Math.floor(config.height * 0.15);
-var availableHeight = config.height - headerHeight - footerHeight;
+var headerHeight = Math.floor(screenHeight * 0.12);
+var footerHeight = Math.floor(screenHeight * 0.15);
+var availableHeight = screenHeight - headerHeight - footerHeight;
 
-H=(config.width-gridWidth)/2+z.width/2;
+H=(screenWidth-gridWidth)/2+z.width/2;
 I=headerHeight+(availableHeight-gridHeight)/2+z.height/2;
 
 l=Array(10),r=[],m=1,maxType=18+player_data.drop_mode;22<maxType&&(maxType=22);console.log("Max: "+maxType);for(var A=0;40>A;A++)m>maxType&&(m=1),r.push(m),m++;r=r.concat(r);h(r);m=0;console.log("Total emoji types in array:", r.length);console.log("last_array status:", last_array ? "exists" : "null");
@@ -126,10 +130,10 @@ last_array = null;
 if(last_array)for(l=last_array,r=0;10>r;r++)for(m=0;8>m;m++)l[r][m].filled&&(maxType=l[r][m].color,A=this.add.sprite(H+z.width*m,I+z.height*r,"obj"+maxType).setInteractive(),A.color=maxType,A.piece=!0,A.pos={x:m,y:r},u.add(A));else{console.log("Creating new emoji grid...");var emojiCount=0;for(var row=0;10>row;row++){A=[];for(var col=0;8>col;col++){var P=r[m],aa={color:P,filled:!0},M=this.add.sprite(H+z.width*col,I+z.height*row,"obj"+P).setInteractive();M.color=P;M.piece=!0;M.pos={x:col,y:row};M.setDisplaySize(z.width,z.height);u.add(M);m++;A.push(aa);emojiCount++;if(emojiCount <= 5 || emojiCount % 10 === 0) console.log("Created emoji", emojiCount, "at position ("+col+","+row+") with color obj"+P+" at coordinates ("+(H+z.width*col)+","+(I+z.height*row)+")")}l[row]=A}console.log("Total emojis created:", emojiCount)}
 // 响应式header和footer
 var headerSprite = this.add.sprite(0,0,"header").setOrigin(0);
-headerSprite.setDisplaySize(config.width, headerHeight);
+headerSprite.setDisplaySize(screenWidth, headerHeight);
 
-var footerSprite = this.add.sprite(0,config.height,"footer").setOrigin(0,1);
-footerSprite.setDisplaySize(config.width, footerHeight);
+var footerSprite = this.add.sprite(0,screenHeight,"footer").setOrigin(0,1);
+footerSprite.setDisplaySize(screenWidth, footerHeight);
 
 // 统一UI元素布局 - 距离顶部60像素，整齐并列
 var topUIY = 60;
@@ -138,7 +142,7 @@ var elementHeight = 64; // 统一高度基准
 // 计算合适的缩放比例，确保所有元素都能放下
 var totalWidth = 152 + 230 + 79 + 79; // 所有元素的原始宽度：540像素
 var sideMargin = 30; // 左右边距各30像素
-var availableWidth = config.width - (sideMargin * 2); // 可用宽度
+var availableWidth = screenWidth - (sideMargin * 2); // 可用宽度
 
 // 预留间距空间：3个间距
 var minSpacing = 8; // 最小间距8像素
@@ -236,44 +240,25 @@ gameTimeEvent = this.time.addEvent({delay:1000,callback:function(){
     updateTimeDisplay();
 },loop:!0});
 
-this.input.keyboard.on("keydown",function(a,f){O=a.key});this.input.keyboard.on("keyup",function(a,f){O=!1});this.input.on("gameobjectdown",function(h,f){if(ad_show)return!1;if("z"===O)l[f.pos.y][f.pos.x].filled=!1,f.destroy(!0,!0);else if(f.button)play_sound("click",N),N.tweens.add({targets:f,scaleX:1.05,scaleY:1.05,yoyo:!0,ease:"Back.easeOut",duration:120,onComplete:function(){"play"===y&&("hint"===f.name?0<player_data.hint_left&&(player_data.hint_left--,V(),v(),0===player_data.hint_left&&(f.alpha=.5)):"shuffle"===f.name&&0<player_data.shuffle_left&&(C.visible&&C.setVisible(!1),player_data.shuffle_left--,V(),g(),0===player_data.shuffle_left&&(f.alpha=.5)));"next"===f.name||"bonus"===y&&"next"===f.name?(show_ad(),p.scene.start("game")):"restart"===f.name?(show_ad(),globalGameTimer=0,player_data.drop_mode=0,player_data.score=0,localStorage.setItem("redfoc_onet_data",JSON.stringify(player_data)),p.scene.start("game")):"menu"===f.name&&(show_ad(),globalGameTimer=0,player_data.score=0,localStorage.setItem("redfoc_onet_data",JSON.stringify(player_data)),PokiSDK.gameplayStop(),p.scene.start("menu"))}},N);else if(f.piece){if(E){h=u.getLength();for(var b=u.getChildren(),d=0;d<h;d++){var c=b[d];(c.pos.x===E[0].x&&c.pos.y===E[0].y||c.pos.x===E[1].x&&c.pos.y===E[1].y)&&c.clearTint()}E=null}q?"play"===y&&(f.pos.x===q.pos.x&&f.pos.y===q.pos.y?(q.clearTint(),q=null,D.setVisible(!1)):(play_sound("itemclick",p),f.setTint(5233606),l[f.pos.y][f.pos.x].color===l[q.pos.y][q.pos.x].color?(h=R(q.pos,f.pos))?(player_data.score+=2,ba.setText(player_data.score),y="wait1",D.setVisible(!1),X(h),l[f.pos.y][f.pos.x].filled=!1,l[q.pos.y][q.pos.x].filled=!1,setTimeout(function(){y="wait";a(f.x,f.y,f.color);a(q.x,q.y,q.color);f.destroy(!0,!0);q.destroy(!0,!0);var selectedEmoji=q;q=null;setTimeout(function(){if(1===player_data.drop_mode)var a="down";else if(2===player_data.drop_mode)a="up";else if(3===player_data.drop_mode)a="left";else if(4===player_data.drop_mode)a="right";else if(5===player_data.drop_mode)0===n?a="down":1===n&&(a="up"),n++,1<n&&(n=0);else if(6===player_data.drop_mode)0===n?a="left":1===n&&(a="right"),n++,1<n&&(n=0);else if(7===player_data.drop_mode)0===n?a="up":1===n&&(a="right"),n++,1<n&&(n=0);else if(8===player_data.drop_mode)0===n?a="down":1===n&&(a="left"),n++,1<n&&(n=0);else if(9===player_data.drop_mode)0===n?a="up":1===n?a="right":2===n?a="down":3===n&&(a="left"),n++,3<n&&(n=0);else if(9<player_data.drop_mode){var b=Math.floor(4*Math.random());0===b?a="up":1===b?a="right":2===b?a="down":3===b&&(a="left")}b=a;a=0;if("down"===b)for(b=0;8>b;b++)for(var c=0,d=9;0<=d;d--)l[d][b].filled?(0!=c&&a++,l[d][b].to={x:0,y:c}):c++;else if("up"===b)for(b=0;8>b;b++)for(d=c=0;10>d;d++)l[d][b].filled?(0!=c&&a++,l[d][b].to={x:0,y:c}):c--;else if("left"===b)for(b=0;10>b;b++)for(d=c=0;8>d;d++)l[b][d].filled?(0!=c&&a++,l[b][d].to={x:c,y:0}):c--;else if("right"===b)for(b=0;10>b;b++)for(c=0,d=7;0<=d;d--)l[b][d].filled?(0!=c&&a++,l[b][d].to={x:c,y:0}):c++;if(a){b=u.getLength();c=u.getChildren();for(var f=d=0;10>f;f++)for(var g=0;8>g;g++)if(l[f][g].filled){d++;var h=0;a:for(;h<b;h++){var m=c[h];if(m.pos.x===g&&m.pos.y===f){m.depth=d;break a}}}G(a)}else if(y="play",!x()){a:{for(a=0;10>a;a++)for(b=0;8>b;b++)if(l[a][b].filled){a=!1;break a}a=!0}a?(PokiSDK.happyTime(.8),PokiSDK.gameplayStop(),play_sound("completed",p),y="bonus",a="hint",1===Math.floor(2*Math.random())&&(a="shuffle"),"hint"===a?player_data.hint_left++:"shuffle"===a&&player_data.shuffle_left++,p.add.rectangle(0,0,config.width,config.height,0).setOrigin(0).setAlpha(.8).setDepth(200),p.add.text(config.width/2,config.height*0.31,"COMPLETED",{fontFamily:"PoetsenOne",fontSize:Math.floor(45*uiScale),align:"center",color:"#FFFFFF"}).setOrigin(.5).setDepth(201),p.add.sprite(config.width/2,config.height*0.43,a+"_icon").setScale(0.7 * uiScale).setDepth(201),p.add.text(config.width/2,config.height*0.55,"+1",{fontFamily:"PoetsenOne",fontSize:Math.floor(52*uiScale),align:"center",color:"#FFFFFF"}).setOrigin(.5).setDepth(201),(function(){var btn=draw_button(config.width/2,config.height*0.67,"next",p);btn.setScale(0.7 * uiScale);btn.depth=201;return btn})(),last_array=null,player_data.drop_mode++,l=null,W()):0<player_data.shuffle_left?(C.setVisible(!0),play_sound("nomatch",p)):(y="gameover1",setTimeout(S,1E3))}W()},100);T()},300)):(q.clearTint(),q=f,D.setPosition(f.x,f.y)):(q.clearTint(),q=f,D.setPosition(f.x,f.y)))):"play"===y&&(play_sound("itemclick",p),q=f,f.setTint(5233606),D.setVisible(!0),D.setPosition(f.x,f.y))}},this);x()||last_array||this.scene.start("game")};
+this.input.keyboard.on("keydown",function(a,f){O=a.key});this.input.keyboard.on("keyup",function(a,f){O=!1});this.input.on("gameobjectdown",function(h,f){if(ad_show)return!1;if("z"===O)l[f.pos.y][f.pos.x].filled=!1,f.destroy(!0,!0);else if(f.button)play_sound("click",N),N.tweens.add({targets:f,scaleX:1.05,scaleY:1.05,yoyo:!0,ease:"Back.easeOut",duration:120,onComplete:function(){"play"===y&&("hint"===f.name?0<player_data.hint_left&&(player_data.hint_left--,V(),v(),0===player_data.hint_left&&(f.alpha=.5)):"shuffle"===f.name&&0<player_data.shuffle_left&&(C.visible&&C.setVisible(!1),player_data.shuffle_left--,V(),g(),0===player_data.shuffle_left&&(f.alpha=.5)));"next"===f.name||"bonus"===y&&"next"===f.name?(show_ad(),p.scene.start("game")):"restart"===f.name?(show_ad(),globalGameTimer=0,player_data.drop_mode=0,player_data.score=0,localStorage.setItem("redfoc_onet_data",JSON.stringify(player_data)),p.scene.start("game")):"menu"===f.name&&(show_ad(),globalGameTimer=0,player_data.score=0,localStorage.setItem("redfoc_onet_data",JSON.stringify(player_data)),PokiSDK.gameplayStop(),p.scene.start("menu"))}},N);else if(f.piece){if(E){h=u.getLength();for(var b=u.getChildren(),d=0;d<h;d++){var c=b[d];(c.pos.x===E[0].x&&c.pos.y===E[0].y||c.pos.x===E[1].x&&c.pos.y===E[1].y)&&c.clearTint()}E=null}q?"play"===y&&(f.pos.x===q.pos.x&&f.pos.y===q.pos.y?(q.clearTint(),q=null,D.setVisible(!1)):(play_sound("itemclick",p),f.setTint(5233606),l[f.pos.y][f.pos.x].color===l[q.pos.y][q.pos.x].color?(h=R(q.pos,f.pos))?(player_data.score+=2,ba.setText(player_data.score),y="wait1",D.setVisible(!1),X(h),l[f.pos.y][f.pos.x].filled=!1,l[q.pos.y][q.pos.x].filled=!1,setTimeout(function(){y="wait";a(f.x,f.y,f.color);a(q.x,q.y,q.color);f.destroy(!0,!0);q.destroy(!0,!0);var selectedEmoji=q;q=null;setTimeout(function(){if(1===player_data.drop_mode)var a="down";else if(2===player_data.drop_mode)a="up";else if(3===player_data.drop_mode)a="left";else if(4===player_data.drop_mode)a="right";else if(5===player_data.drop_mode)0===n?a="down":1===n&&(a="up"),n++,1<n&&(n=0);else if(6===player_data.drop_mode)0===n?a="left":1===n&&(a="right"),n++,1<n&&(n=0);else if(7===player_data.drop_mode)0===n?a="up":1===n&&(a="right"),n++,1<n&&(n=0);else if(8===player_data.drop_mode)0===n?a="down":1===n&&(a="left"),n++,1<n&&(n=0);else if(9===player_data.drop_mode)0===n?a="up":1===n?a="right":2===n?a="down":3===n&&(a="left"),n++,3<n&&(n=0);else if(9<player_data.drop_mode){var b=Math.floor(4*Math.random());0===b?a="up":1===b?a="right":2===b?a="down":3===b&&(a="left")}b=a;a=0;if("down"===b)for(b=0;8>b;b++)for(var c=0,d=9;0<=d;d--)l[d][b].filled?(0!=c&&a++,l[d][b].to={x:0,y:c}):c++;else if("up"===b)for(b=0;8>b;b++)for(d=c=0;10>d;d++)l[d][b].filled?(0!=c&&a++,l[d][b].to={x:0,y:c}):c--;else if("left"===b)for(b=0;10>b;b++)for(d=c=0;8>d;d++)l[b][d].filled?(0!=c&&a++,l[b][d].to={x:c,y:0}):c--;else if("right"===b)for(b=0;10>b;b++)for(c=0,d=7;0<=d;d--)l[b][d].filled?(0!=c&&a++,l[b][d].to={x:c,y:0}):c++;if(a){b=u.getLength();c=u.getChildren();for(var f=d=0;10>f;f++)for(var g=0;8>g;g++)if(l[f][g].filled){d++;var h=0;a:for(;h<b;h++){var m=c[h];if(m.pos.x===g&&m.pos.y===f){m.depth=d;break a}}}G(a)}else if(y="play",!x()){a:{for(a=0;10>a;a++)for(b=0;8>b;b++)if(l[a][b].filled){a=!1;break a}a=!0}a?(PokiSDK.happyTime(.8),PokiSDK.gameplayStop(),play_sound("completed",p),y="bonus",a="hint",1===Math.floor(2*Math.random())&&(a="shuffle"),"hint"===a?player_data.hint_left++:"shuffle"===a&&player_data.shuffle_left++,p.add.rectangle(0,0,screenWidth,screenHeight,0).setOrigin(0).setAlpha(.8).setDepth(200),p.add.text(screenWidth/2,screenHeight*0.31,"COMPLETED",{fontFamily:"PoetsenOne",fontSize:Math.floor(45*uiScale),align:"center",color:"#FFFFFF"}).setOrigin(.5).setDepth(201),p.add.sprite(screenWidth/2,screenHeight*0.43,a+"_icon").setScale(0.7 * uiScale).setDepth(201),p.add.text(screenWidth/2,screenHeight*0.55,"+1",{fontFamily:"PoetsenOne",fontSize:Math.floor(52*uiScale),align:"center",color:"#FFFFFF"}).setOrigin(.5).setDepth(201),(function(){var btn=draw_button(screenWidth/2,screenHeight*0.67,"next",p);btn.setScale(0.7 * uiScale);btn.depth=201;return btn})(),last_array=null,player_data.drop_mode++,l=null,W()):0<player_data.shuffle_left?(C.setVisible(!0),play_sound("nomatch",p)):(y="gameover1",setTimeout(S,1E3))}W()},100);T()},300)):(q.clearTint(),q=f,D.setPosition(f.x,f.y)):(q.clearTint(),q=f,D.setPosition(f.x,f.y)))):"play"===y&&(play_sound("itemclick",p),q=f,f.setTint(5233606),D.setVisible(!0),D.setPosition(f.x,f.y))}},this);x()||last_array||this.scene.start("game")};
 
 function play_sound(a,h){game_data.sound&&!ad_show&&h.sound.play(a)}function switch_audio(a){game_data[a.name]?(game_data[a.name]=!1,a.setTexture("btn_sound_off")):(game_data[a.name]=!0,a.setTexture("btn_sound_on"))}function check_audio(a){game_data[a.name]?a.setTexture("btn_sound_on"):a.setTexture("btn_sound_off")}function draw_button(a,h,g,v){a=v.add.sprite(a,h,"btn_"+g).setInteractive();a.button=!0;a.name=g;return a}
 
-// 动态计算游戏尺寸以适配不同设备
-var gameWidth = 720;
-var gameHeight = 1080;
-
-// 移动端优化配置
-if (window.innerWidth < window.innerHeight) {
-    // 竖屏模式：以宽度为基准
-    var aspectRatio = gameHeight / gameWidth;
-    gameWidth = Math.min(window.innerWidth, 720);
-    gameHeight = Math.min(window.innerHeight, gameWidth * aspectRatio);
-} else {
-    // 横屏模式：以高度为基准
-    var aspectRatio = gameWidth / gameHeight;
-    gameHeight = Math.min(window.innerHeight, 1080);
-    gameWidth = Math.min(window.innerWidth, gameHeight * aspectRatio);
-}
-
 var config={
     type:Phaser.AUTO,
-    width:gameWidth,
-    height:gameHeight,
     scale:{
-        mode:Phaser.Scale.FIT,
+        mode:Phaser.Scale.RESIZE,
         parent:"game_content",
         autoCenter:Phaser.Scale.CENTER_BOTH,
-        width:gameWidth,
-        height:gameHeight,
+        width: window.innerWidth,
+        height: window.innerHeight,
         min: {
             width: 320,
-            height: 568
+            height: 480
         },
         max: {
-            width: 1024,
-            height: 1366
+            width: 1920,
+            height: 1080
         }
     },
     scene:[Boot,Load,Menu,Game]
