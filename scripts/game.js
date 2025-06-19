@@ -314,12 +314,22 @@ Game.prototype.destroy = function() {
 var selectedOverlays = [];
 
 function createSelectionOverlay(x, y, width, height, scene) {
-    // 创建半透明的青绿色覆盖层
-    var overlay = scene.add.rectangle(x, y, width, height, 0x4fdbc6);
-    overlay.setAlpha(0.4); // 半透明效果
+    // 创建半透明的金黄色覆盖层，带圆角效果
+    var overlay = scene.add.rectangle(x, y, width, height, 0xf9be19);
+    overlay.setAlpha(0.5); // 50%透明度
     overlay.setDepth(99); // 确保在emoji之上，但在UI元素之下
-    console.log("Created selection overlay at", x, y, "with size", width, height);
-    return overlay;
+    
+    // 添加圆角效果 - 使用Graphics来创建圆角矩形
+    var cornerRadius = Math.min(width, height) * 0.15; // 圆角半径为最小边长的15%
+    var graphics = scene.add.graphics();
+    graphics.fillStyle(0xf9be19, 0.5); // 金黄色，50%透明度
+    graphics.fillRoundedRect(x - width/2, y - height/2, width, height, cornerRadius);
+    graphics.setDepth(99);
+    
+    // 销毁原来的rectangle，返回graphics
+    overlay.destroy();
+    console.log("Created selection overlay at", x, y, "with size", width, height, "and corner radius", cornerRadius);
+    return graphics;
 }
 
 function clearSelectionOverlays() {
