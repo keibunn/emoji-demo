@@ -71,27 +71,31 @@ Load.prototype.preload = function() {
     this.add.rectangle(centerX, centerY, screenWidth + 50, screenHeight + 50, 0x30a8ff);
     
     // 添加游戏标题 - 垂直居中偏上
-    var titleSprite = this.add.sprite(centerX, centerY - 100 * uiScale, "game_title");
-    titleSprite.setScale(0.6 * uiScale); // 响应式缩放
+    var titleSprite = this.add.sprite(centerX, centerY - 56 * uiScale, "game_title");
+    titleSprite.setScale(0.7 * uiScale); // 响应式缩放
     
     // 加载完成处理
     this.load.on("complete", function() {
         PokiSDK.gameLoadingFinished();
         
-        // 创建开始按钮 - 在底部20%位置
-        var d = draw_button(centerX, screenHeight * 0.8, "start", a);
-        d.setScale(0.5 * uiScale); // 缩放至85%
+        // 创建开始按钮 - 在屏幕72%位置
+        var d = draw_button(centerX, screenHeight * 0.72, "start", a);
+        d.setScale(0.6 * uiScale); // 缩放至60%
         
         // 简单的按钮脉冲动画
         a.tweens.add({
             targets: d,
-            scaleX: .55 * uiScale,
-            scaleY: .55 * uiScale,
+            scaleX: .65 * uiScale,
+            scaleY: .65 * uiScale,
             yoyo: !0,
             ease: "Linear",
             duration: 800,
             repeat: -1
-        })
+        });
+        
+        // 添加底部text1图片
+        var text1Sprite = a.add.sprite(centerX, screenHeight * 0.9, "text1");
+        text1Sprite.setScale(0.6 * uiScale); // 响应式缩放
     }, this);
     
     // 点击开始游戏
@@ -108,6 +112,7 @@ Load.prototype.preload = function() {
     this.load.image("header", "img/header.png");
     this.load.image("footer", "img/footer.png");
     this.load.image("xingxing", "img/xingxing.png");
+    this.load.image("text1", "img/text1.png");
     
     // 按钮资源
     this.load.image("btn_shuffle", "img/btn_shuffle.png");
