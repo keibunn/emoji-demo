@@ -319,17 +319,21 @@ this.input.on("gameobjectdown",function(h,f){
     if("z"===O)l[f.pos.y][f.pos.x].filled=!1,f.destroy(!0,!0);else if(f.button){
         play_sound("click",N);
         
-        // 结算画面按钮使用特殊的动效参数 (原始大小0.6，动效到0.65)
+        // 结算画面按钮使用play按钮同样的动效参数 (从60%缩小到45%)
         var isGameOverButton = (y === "gameover" && (f.name === "restart" || f.name === "menu"));
-        var scaleTarget = isGameOverButton ? 0.65 * uiScale : 1.05;
+        var isBonusButton = (y === "bonus" && f.name === "next");
+        var isSpecialButton = isGameOverButton || isBonusButton;
+        var scaleTarget = isSpecialButton ? 0.45 * uiScale : 0.75;
+        var animationEase = isSpecialButton ? "Linear" : "Back.easeOut";
+        var animationDuration = isSpecialButton ? 100 : 120;
         
         N.tweens.add({
             targets:f,
             scaleX:scaleTarget,
             scaleY:scaleTarget,
             yoyo:!0,
-            ease:"Back.easeOut",
-            duration:120,
+            ease:animationEase,
+            duration:animationDuration,
             onComplete:function(){
                 "play"===y&&("hint"===f.name?0<player_data.hint_left&&(player_data.hint_left--,V(),v(),0===player_data.hint_left&&(f.alpha=.5)):"shuffle"===f.name&&0<player_data.shuffle_left&&(C.visible&&C.setVisible(!1),player_data.shuffle_left--,V(),g(),0===player_data.shuffle_left&&(f.alpha=.5)));
                 "next"===f.name||"bonus"===y&&"next"===f.name?(show_ad(),p.scene.start("game")):"restart"===f.name?(show_ad(),globalGameTimer=0,player_data.drop_mode=0,player_data.score=0,localStorage.setItem("redfoc_onet_data",JSON.stringify(player_data)),p.scene.start("game")):"menu"===f.name&&(show_ad(),globalGameTimer=0,player_data.score=0,localStorage.setItem("redfoc_onet_data",JSON.stringify(player_data)),PokiSDK.gameplayStop(),p.scene.start("menu"))
