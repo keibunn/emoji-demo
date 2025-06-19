@@ -71,15 +71,15 @@ Load.prototype.preload = function() {
     this.add.rectangle(centerX, centerY, screenWidth + 50, screenHeight + 50, 0x30a8ff);
     
     // 添加游戏标题 - 垂直居中偏上
-    var titleSprite = this.add.sprite(centerX, centerY - 70 * uiScale, "game_title");
+    var titleSprite = this.add.sprite(centerX, centerY - 105 * uiScale, "game_title");
     titleSprite.setScale(0.7 * uiScale); // 响应式缩放
     
     // 加载完成处理
     this.load.on("complete", function() {
         PokiSDK.gameLoadingFinished();
         
-        // 创建开始按钮 - 在屏幕70%位置
-        var d = draw_button(centerX, screenHeight * 0.7, "start", a);
+        // 创建开始按钮 - 在屏幕65%位置
+        var d = draw_button(centerX, screenHeight * 0.65, "start", a);
         d.setScale(0.6 * uiScale); // 缩放至60%
         
         // 简单的按钮脉冲动画
