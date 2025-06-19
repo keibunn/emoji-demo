@@ -229,7 +229,7 @@ var minutes = Math.floor(remainingTime / 60);
 var seconds = remainingTime % 60;
 timeText = this.add.text(timeX, topUIY, (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds), {
     fontFamily: "robotomono", 
-    fontSize: Math.floor(24 * uiElementScale), 
+    fontSize: Math.floor(38 * uiElementScale), 
     align: "center", 
     color: "#FFFFFF"
 }).setOrigin(0.5);
@@ -239,7 +239,7 @@ var scoreSprite = this.add.sprite(scoreX, topUIY, "score_bar");
 scoreSprite.setScale(uiElementScale);
 var ba = this.add.text(scoreX, topUIY, String(player_data.score), {
     fontFamily: "robotomono", 
-    fontSize: Math.floor(32 * uiElementScale), 
+    fontSize: Math.floor(38 * uiElementScale), 
     align: "center", 
     color: "#FFFFFF"
 }).setOrigin(0.5);
@@ -255,8 +255,8 @@ hintBtn.setScale(uiElementScale);
 0 === player_data.hint_left && (hintBtn.alpha = 0.5);
 
 // 添加按钮上的数字圆圈和文字 - 优化位置计算
-var circleOffsetX = scaledBtnWidth * 0.32; // 按钮宽度的32%位置
-var circleOffsetY = scaledBtnWidth * 0.25; // 按钮高度的25%位置
+var circleOffsetX = scaledBtnWidth * 0.35; // 按钮宽度的35%位置
+var circleOffsetY = scaledBtnWidth * 0.35; // 按钮高度的35%位置
 var shuffleCircle = this.add.sprite(shuffleX + circleOffsetX, topUIY + circleOffsetY, "circle");
 shuffleCircle.setScale(uiElementScale);
 var hintCircle = this.add.sprite(hintX + circleOffsetX, topUIY + circleOffsetY, "circle");
@@ -280,8 +280,8 @@ var Z = this.add.text(hintCircle.x, hintCircle.y, String(player_data.hint_left),
 var D = this.add.sprite(180, 180, "sign");
 D.setDepth(100);D.setVisible(!1);D.setScale(uiScale);
 
-var C=this.add.sprite(shuffleX,140,"arrow");
-C.setDepth(100);C.setVisible(!1);C.setScale(uiScale);
+var C=this.add.sprite(shuffleX,100,"arrow");
+C.setDepth(100);C.setVisible(!1);C.setScale(0.8 * uiScale);
 
 this.tweens.add({targets:D,scaleX:1.1*uiScale,scaleY:1.1*uiScale,ease:"Linear",duration:250,yoyo:!0,repeat:-1});this.tweens.add({targets:C,y:C.y+20,ease:"Linear",duration:250,yoyo:!0,repeat:-1});
 
