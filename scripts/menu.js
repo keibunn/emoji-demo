@@ -76,19 +76,21 @@ function load_data() {
     var a = localStorage.getItem("redfoc_onet_best");
     a && (best_score = a);
     
-    // 加载玩家数据
-    (a = localStorage.getItem("redfoc_onet_data")) && (player_data = JSON.parse(a));
+    // 始终重置游戏状态，防止中途退出后保留分数
+    // 清除任何未完成的游戏状态
+    localStorage.removeItem("redfoc_onet_array");
+    last_array = null;
     
-    // 加载游戏状态
-    if (a = localStorage.getItem("redfoc_onet_array")) {
-        a = JSON.parse(a);
-        last_array = a.arr;
-        player_data = a.data;
-    }
+    // 重置玩家数据为初始状态
+    player_data = {
+        drop_mode: 0,
+        hint_left: 5,
+        shuffle_left: 5,
+        score: 0
+    };
     
-    // 重置提示和洗牌次数
-    player_data.hint_left = 5;
-    player_data.shuffle_left = 5;
+    // 保存重置后的数据
+    localStorage.setItem("redfoc_onet_data", JSON.stringify(player_data));
 }
 
 // ===================================
