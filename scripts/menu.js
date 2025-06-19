@@ -135,27 +135,27 @@ Menu.prototype.create = function() {
 
     
     // 显示最高分数 - 分开显示，避免重叠
-    this.add.text(centerX, screenHeight * 0.25, "BEST SCORE:", {
+    this.add.text(centerX, screenHeight * 0.25, "BEST SCORE", {
         fontFamily: "PoetsenOne",
-        fontSize: Math.floor(32 * uiScale),  // 从22增加到32，放大约45%
+        fontSize: Math.floor(34 * uiScale),  // 调整为34
         align: "center",
         color: "#FFFFFF"
     }).setOrigin(.5);
     
     // 添加装饰元素 - 位于BEST SCORE文本和数字之间
-    var xingxingSprite = this.add.sprite(centerX, screenHeight * 0.375, "xingxing");
-    xingxingSprite.setScale(0.8 * uiScale); // 响应式缩放
+    var xingxingSprite = this.add.sprite(centerX, screenHeight * 0.32, "xingxing");
+    xingxingSprite.setScale(0.7 * uiScale); // 响应式缩放
     
-    this.add.text(centerX, screenHeight * 0.5, String(best_score), {
+    this.add.text(centerX, screenHeight * 0.43, String(best_score), {
         fontFamily: "PoetsenOne",
-        fontSize: Math.floor(150 * uiScale),  // 数字字体大小设为150
+        fontSize: Math.floor(130 * uiScale),  // 数字字体大小设为130
         align: "center",
         color: "#FFFFFF"
     }).setOrigin(.5);
     
     // 添加开始游戏按钮 - 在可用区域下方
-    var playBtn = draw_button(centerX, availableCenterY + availableHeight*0.35, "play", this);
-    playBtn.setScale(0.5 * uiScale); // 缩放至85%
+    var playBtn = draw_button(centerX, availableCenterY + availableHeight*0.25, "play", this);
+    playBtn.setScale(0.6 * uiScale); // 缩放至60%
     
     // 处理按钮点击事件
     this.input.on("gameobjectdown", function(c, d) {
