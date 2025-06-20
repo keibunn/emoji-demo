@@ -100,7 +100,15 @@ Load.prototype.preload = function() {
     
     // 点击开始游戏
     this.input.on("gameobjectdown", function() {
-        a.scene.start("menu")
+        // 检查用户是否已设置过昵称
+        var hasSetName = localStorage.getItem('emoji_game_name_set');
+        if (hasSetName === 'true') {
+            // 已设置昵称，直接进入菜单
+            a.scene.start("menu");
+        } else {
+            // 首次访问，进入昵称设置页面
+            a.scene.start("name");
+        }
     }, this);
     
     // ===================================

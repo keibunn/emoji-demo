@@ -499,5 +499,5 @@ var config={
         preserveDrawingBuffer: false,
         failIfMajorPerformanceCaveat: false
     },
-    scene:[Boot,Load,Menu,Game]
+    scene:[Boot,Load,Name,Menu,Game]
 },game;PokiSDK.init().then(function(){console.log("Poki SDK successfully initialized");game=new Phaser.Game(config)}).catch(function(){console.log("Initialized, but the user likely has adblock");game=new Phaser.Game(config)});PokiSDK.setDebug(!1); 
