@@ -28,7 +28,7 @@ Name.prototype.create = function() {
     
     // 使用name-field.png作为输入框背景
     var inputBg = this.add.sprite(centerX, inputY, "name-field");
-    inputBg.setScale(uiScale);
+    inputBg.setScale(0.6 * uiScale);
     inputBg.setInteractive();
     
     // 输入框提示文本 - "点击输入薯名"
@@ -60,15 +60,14 @@ Name.prototype.create = function() {
             placeholderText.setVisible(false);
             
             // 启用OK按钮
-            okBtn.setAlpha(1);
             okBtn.setInteractive();
         }
     });
     
     // 使用btn_ok.png作为确认按钮
     var okBtn = this.add.sprite(centerX, inputY + 80 * uiScale, "btn_ok");
-    okBtn.setScale(uiScale);
-    okBtn.setAlpha(0.5); // 初始状态为半透明（未激活）
+    okBtn.setScale(0.6 * uiScale);
+    okBtn.setAlpha(1.0); // 100%不透明
     
     // 初始状态下OK按钮不可交互
     
