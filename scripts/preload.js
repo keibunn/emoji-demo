@@ -130,6 +130,10 @@ Load.prototype.preload = function() {
     this.load.image("btn_restart", "img/btn_restart.png");
     this.load.image("btn_menu", "img/btn_menu.png");
     this.load.image("btn_start", "img/btn_start.png");
+    this.load.image("btn_ok", "img/btn_ok.png");
+    
+    // 昵称设置页面资源
+    this.load.image("name-field", "img/name-field.png");
     
     // 游戏界面元素
     this.load.image("circle", "img/circle.png");

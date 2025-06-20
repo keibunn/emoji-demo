@@ -23,44 +23,16 @@ Name.prototype.create = function() {
     // 添加蓝色背景
     this.add.rectangle(centerX, centerY, screenWidth + 50, screenHeight + 50, 0x30a8ff);
     
-    // 添加响应式 header (顶部)
-    var headerSprite = this.add.sprite(centerX, 0, "header").setOrigin(0.5, 0);
-    headerSprite.setDisplaySize(screenWidth, headerSprite.height * (screenWidth / headerSprite.width));
-    headerSprite.setDepth(1);
-    
-    // 添加响应式 footer (底部)  
-    var footerSprite = this.add.sprite(centerX, screenHeight, "footer").setOrigin(0.5, 1);
-    footerSprite.setDisplaySize(screenWidth, footerSprite.height * (screenWidth / footerSprite.width));
-    footerSprite.setDepth(1);
-    
-    // 欢迎标题
-    this.add.text(centerX, screenHeight * 0.2, "欢迎来到表情消消乐！", {
-        fontFamily: "PoetsenOne",
-        fontSize: Math.floor(32 * uiScale),
-        align: "center",
-        color: "#FFFFFF",
-        stroke: "#2c3e50",
-        strokeThickness: 2
-    }).setOrigin(0.5);
-    
-    // 副标题
-    this.add.text(centerX, screenHeight * 0.27, "请设置你的游戏昵称", {
-        fontFamily: "PoetsenOne",
-        fontSize: Math.floor(20 * uiScale),
-        align: "center",
-        color: "#FFD93D"
-    }).setOrigin(0.5);
-    
     // 在屏幕35%位置创建输入区域
     var inputY = screenHeight * 0.35;
     
-    // 输入框背景（长的白色矩形）
-    var inputBg = this.add.rectangle(centerX, inputY, screenWidth * 0.7, 50 * uiScale, 0xffffff);
-    inputBg.setStrokeStyle(3, 0x2c3e50);
-    inputBg.setAlpha(0.95);
+    // 使用name-field.png作为输入框背景
+    var inputBg = this.add.sprite(centerX, inputY, "name-field");
+    inputBg.setScale(uiScale);
+    inputBg.setInteractive();
     
-    // 输入框提示文本
-    var placeholderText = this.add.text(centerX, inputY, "点击输入昵称（最多12个字符）", {
+    // 输入框提示文本 - "点击输入薯名"
+    var placeholderText = this.add.text(centerX, inputY, "点击输入薯名", {
         fontFamily: "PoetsenOne",
         fontSize: Math.floor(16 * uiScale),
         align: "center",
@@ -79,7 +51,6 @@ Name.prototype.create = function() {
     var currentName = "";
     
     // 使输入框可交互
-    inputBg.setInteractive();
     inputBg.on('pointerdown', function() {
         // 使用浏览器原生输入框
         var inputName = prompt("请输入你的游戏昵称（最多12个字符）:", currentName);
@@ -90,22 +61,14 @@ Name.prototype.create = function() {
             
             // 启用OK按钮
             okBtn.setAlpha(1);
-            okBtnText.setColor("#FFFFFF");
             okBtn.setInteractive();
         }
     });
     
-    // OK按钮（短的矩形）
-    var okBtn = this.add.rectangle(centerX, inputY + 80 * uiScale, 120 * uiScale, 45 * uiScale, 0x27ae60);
-    okBtn.setStrokeStyle(3, 0x2c3e50);
+    // 使用btn_ok.png作为确认按钮
+    var okBtn = this.add.sprite(centerX, inputY + 80 * uiScale, "btn_ok");
+    okBtn.setScale(uiScale);
     okBtn.setAlpha(0.5); // 初始状态为半透明（未激活）
-    
-    var okBtnText = this.add.text(centerX, inputY + 80 * uiScale, "确认", {
-        fontFamily: "PoetsenOne",
-        fontSize: Math.floor(20 * uiScale),
-        align: "center",
-        color: "#95a5a6"
-    }).setOrigin(0.5);
     
     // 初始状态下OK按钮不可交互
     
@@ -133,39 +96,17 @@ Name.prototype.create = function() {
     // 悬停效果
     okBtn.on('pointerover', function() {
         if (currentName) {
-            okBtn.setFillStyle(0x2ecc71);
+            okBtn.setTint(0xcccccc); // 浅灰色悬停效果
         }
     });
     
     okBtn.on('pointerout', function() {
         if (currentName) {
-            okBtn.setFillStyle(0x27ae60);
+            okBtn.clearTint(); // 清除悬停效果
         }
     });
     
     okBtn.on('pointerdown', okButtonHandler);
-    
-    // 添加装饰元素
-    var decorSprite = this.add.sprite(centerX, screenHeight * 0.6, "xingxing");
-    decorSprite.setScale(0.8 * uiScale);
-    decorSprite.setAlpha(0.7);
-    
-    // 添加提示文本
-    this.add.text(centerX, screenHeight * 0.75, "💡 昵称将显示在排行榜中", {
-        fontFamily: "PoetsenOne",
-        fontSize: Math.floor(14 * uiScale),
-        align: "center",
-        color: "#FFFFFF",
-        alpha: 0.8
-    }).setOrigin(0.5);
-    
-    this.add.text(centerX, screenHeight * 0.8, "🎮 设置完成后即可开始游戏", {
-        fontFamily: "PoetsenOne",
-        fontSize: Math.floor(14 * uiScale),
-        align: "center",
-        color: "#FFD93D",
-        alpha: 0.8
-    }).setOrigin(0.5);
     
     // 跳过按钮（使用随机昵称）
     var skipBtn = this.add.text(screenWidth - 20, screenHeight - 30, "跳过 >", {
