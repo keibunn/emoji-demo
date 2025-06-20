@@ -61,6 +61,31 @@ Game.prototype.create=function(){
     // 正常结束游戏时才更新最高分数
     player_data.score>best_score&&(best_score=player_data.score,localStorage.setItem("redfoc_onet_best",best_score));
     
+    // 提交分数到排行榜
+    console.log("🎯 正常游戏结束 - 准备提交分数:", finalScore, "关卡:", player_data.drop_mode + 1);
+    console.log("🔍 检查状态 - finalScore > 0:", finalScore > 0, "window.leaderboard存在:", !!window.leaderboard);
+    
+    if(finalScore > 0) {
+        if(window.leaderboard) {
+            console.log("✅ 开始提交分数到排行榜...");
+            window.leaderboard.submitScore(finalScore, player_data.drop_mode + 1).then(function(success) {
+                if(success) {
+                    console.log("🎉 分数提交成功! 分数:", finalScore);
+                } else {
+                    console.error("❌ 分数提交失败 - submitScore返回false");
+                }
+            }).catch(function(error) {
+                console.error("❌ 提交分数出错:", error);
+                console.error("错误详情:", error.message);
+            });
+        } else {
+            console.error("❌ window.leaderboard 未定义 - Firebase可能未正确初始化");
+            console.log("当前window对象包含的Firebase相关属性:", Object.keys(window).filter(key => key.includes('firebase') || key.includes('leader')));
+        }
+    } else {
+        console.log("⚠️ 分数为0，跳过提交");
+    }
+    
     for(var a=u.getLength(),f=u.getChildren(),
     b=0;gridRows>b;b++)for(var d=0;gridCols>d;d++)if(l[b][d].filled){var c=0;a:for(;c<a;c++){var e=f[c];if(e.pos.x===d&&e.pos.y===b){e.depth=0;break a}}}y="gameover";var overlay=p.add.rectangle(0,0,screenWidth,screenHeight,0).setOrigin(0);overlay.alpha=.8;overlay.depth=200;p.add.text(screenWidth/2,screenHeight*0.25,"GAMEOVER",{fontFamily:"PoetsenOne",fontSize:Math.floor(35*uiScale),align:"center",color:"#FFFFFF"}).setOrigin(.5).setDepth(201);var xingxingSprite=p.add.sprite(screenWidth/2,screenHeight*0.32,"xingxing");xingxingSprite.setScale(0.7*uiScale);xingxingSprite.depth=201;p.add.text(screenWidth/2,screenHeight*0.43,String(finalScore),{fontFamily:"PoetsenOne",fontSize:Math.floor(130*uiScale),align:"center",color:"#FFD93D"}).setOrigin(.5).setDepth(201);var restartBtn=draw_button(screenWidth/2,screenHeight*0.62,"restart",p);restartBtn.setScale(0.6 * uiScale);restartBtn.depth=201;var menuBtn=draw_button(screenWidth/2,screenHeight*0.72,"menu",p);menuBtn.setScale(0.6 * uiScale);menuBtn.depth=201;
     
@@ -109,6 +134,31 @@ function timeUpGameOver(){
     var menuBtn = draw_button(screenWidth/2,screenHeight*0.72,"menu",p);
     menuBtn.setScale(0.6 * uiScale); // 调整按钮大小
     menuBtn.depth = 301;
+    
+    // 提交分数到排行榜
+    console.log("⏰ 时间到游戏结束 - 准备提交分数:", finalScore, "关卡:", player_data.drop_mode + 1);
+    console.log("🔍 检查状态 - finalScore > 0:", finalScore > 0, "window.leaderboard存在:", !!window.leaderboard);
+    
+    if(finalScore > 0) {
+        if(window.leaderboard) {
+            console.log("✅ 开始提交分数到排行榜...");
+            window.leaderboard.submitScore(finalScore, player_data.drop_mode + 1).then(function(success) {
+                if(success) {
+                    console.log("🎉 分数提交成功! 分数:", finalScore);
+                } else {
+                    console.error("❌ 分数提交失败 - submitScore返回false");
+                }
+            }).catch(function(error) {
+                console.error("❌ 提交分数出错:", error);
+                console.error("错误详情:", error.message);
+            });
+        } else {
+            console.error("❌ window.leaderboard 未定义 - Firebase可能未正确初始化");
+            console.log("当前window对象包含的Firebase相关属性:", Object.keys(window).filter(key => key.includes('firebase') || key.includes('leader')));
+        }
+    } else {
+        console.log("⚠️ 分数为0，跳过提交");
+    }
     
     // 正常结束游戏时清除游戏状态
     localStorage.removeItem("redfoc_onet_array");
