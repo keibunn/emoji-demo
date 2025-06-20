@@ -278,6 +278,72 @@ function showLeaderboard(scene) {
     titleContainer.add([titleBg, title]);
     titleContainer.setDepth(102);
     
+    // 添加当前玩家昵称显示和修改功能
+    var playerInfoContainer = scene.add.container(centerX, centerY - screenHeight * 0.2);
+    
+    // 玩家信息背景
+    var playerInfoBg = scene.add.rectangle(0, 0, screenWidth * 0.7, 50 * uiScale, 0x34495e);
+    playerInfoBg.setStrokeStyle(2, 0x95a5a6);
+    playerInfoBg.setAlpha(0.8);
+    
+    // 当前昵称文本
+    var currentPlayerName = window.leaderboard ? window.leaderboard.getPlayerName() : "神秘玩家";
+    var playerNameText = scene.add.text(0, -8, "👤 " + currentPlayerName, {
+        fontFamily: "PoetsenOne",
+        fontSize: Math.floor(18 * uiScale),
+        align: "center",
+        color: "#FFD93D"
+    }).setOrigin(0.5);
+    
+    // 修改提示文本
+    var editHintText = scene.add.text(0, 12, "点击修改昵称", {
+        fontFamily: "PoetsenOne",
+        fontSize: Math.floor(12 * uiScale),
+        align: "center",
+        color: "#95a5a6"
+    }).setOrigin(0.5);
+    
+    playerInfoContainer.add([playerInfoBg, playerNameText, editHintText]);
+    playerInfoContainer.setSize(screenWidth * 0.7, 50 * uiScale);
+    playerInfoContainer.setInteractive();
+    playerInfoContainer.setDepth(102);
+    
+    // 添加悬停效果
+    playerInfoContainer.on('pointerover', function() {
+        playerInfoBg.setFillStyle(0x3498db);
+        editHintText.setColor("#FFFFFF");
+    });
+    playerInfoContainer.on('pointerout', function() {
+        playerInfoBg.setFillStyle(0x34495e);
+        editHintText.setColor("#95a5a6");
+    });
+    
+    // 点击修改昵称
+    playerInfoContainer.on('pointerdown', function() {
+        var newName = prompt("请输入新的昵称（最多12个字符）:", currentPlayerName);
+        if (newName && newName.trim() && newName.trim() !== currentPlayerName) {
+            var trimmedName = newName.trim().substring(0, 12);
+            if (window.leaderboard) {
+                window.leaderboard.setPlayerName(trimmedName);
+                playerNameText.setText("👤 " + trimmedName);
+                currentPlayerName = trimmedName;
+                
+                // 显示成功提示
+                var successText = scene.add.text(centerX, centerY + screenHeight * 0.3, "昵称修改成功！", {
+                    fontFamily: "PoetsenOne",
+                    fontSize: Math.floor(16 * uiScale),
+                    align: "center",
+                    color: "#2ecc71"
+                }).setOrigin(0.5).setDepth(103);
+                
+                // 3秒后消失
+                scene.time.delayedCall(3000, function() {
+                    if (successText) successText.destroy();
+                });
+            }
+        }
+    });
+    
     // 加载中提示
     var loadingText = scene.add.text(centerX, centerY, "正在加载排行榜...", {
         fontFamily: "PoetsenOne",
@@ -321,6 +387,7 @@ function showLeaderboard(scene) {
         leaderboardBg.destroy();
         decorBorder.destroy();
         titleContainer.destroy();
+        playerInfoContainer.destroy();
         loadingText.destroy();
         closeBtn.destroy();
     });
