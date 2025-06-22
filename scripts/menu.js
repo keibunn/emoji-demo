@@ -391,7 +391,7 @@ function showLeaderboard(scene) {
                 
                 var rankText = scene.add.text(rankBoxX, 0, rankIcon, {
                     fontFamily: "fzltjh",
-                    fontSize: Math.floor(25 * uiScale), // 25px字体
+                    fontSize: Math.floor(23 * uiScale), // 23px字体
                     align: "center",
                     color: rankColor
                 }).setOrigin(0.5);
@@ -416,7 +416,7 @@ function showLeaderboard(scene) {
                 // 玩家昵称 - 左侧
                 var nameText = scene.add.text(infoBoxX - infoBoxWidth / 2 + textPadding, 0, playerName, {
                     fontFamily: "fzltjh",
-                    fontSize: Math.floor(25 * uiScale), // 25px字体
+                    fontSize: Math.floor(23 * uiScale), // 23px字体
                     align: "left",
                     color: "#FFFFFF"
                 }).setOrigin(0, 0.5);
@@ -424,7 +424,7 @@ function showLeaderboard(scene) {
                 // 分数 - 右侧
                 var scoreText = scene.add.text(infoBoxX + infoBoxWidth / 2 - textPadding, 0, entry.score.toString() + " 分", {
                     fontFamily: "fzltjh",
-                    fontSize: Math.floor(25 * uiScale), // 25px字体
+                    fontSize: Math.floor(23 * uiScale), // 23px字体
                     align: "right",
                     color: "#FFD93D"
                 }).setOrigin(1, 0.5);
