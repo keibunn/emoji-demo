@@ -93,9 +93,33 @@ Load.prototype.preload = function() {
             repeat: -1
         });
         
-        // 添加底部text1图片
-        var text1Sprite = a.add.sprite(centerX, screenHeight * 0.9, "text1");
-        text1Sprite.setScale(0.6 * uiScale); // 响应式缩放
+        // 添加底部三排文字，替换原有的text1图片
+        var textY = screenHeight * 0.85; // 底部15%位置
+        var lineSpacing = 22 * uiScale; // 行间距22px
+        
+        // 第1排：设计友好报VOL.09
+        var line1 = a.add.text(centerX + 3 * uiScale, textY, "设计友好报VOL.09", {
+            fontFamily: "fzltjh",
+            fontSize: Math.floor(17 * uiScale) + "px",
+            color: "#FFFFFF",
+            align: "center"
+        }).setOrigin(0.5);
+        
+        // 第2排：《暑假特辑——设计友好赛》正式开始！
+        var line2 = a.add.text(centerX + 3 * uiScale, textY + lineSpacing, "《暑假特辑——设计友好赛》正式开始！", {
+            fontFamily: "fzltjh",
+            fontSize: Math.floor(17 * uiScale) + "px",
+            color: "#FFFFFF",
+            align: "center"
+        }).setOrigin(0.5);
+        
+        // 第3排：给自己放个5分钟连连看暑假，有机会获得特别奖品哦！
+        var line3 = a.add.text(centerX + 3 * uiScale, textY + lineSpacing * 2, "给自己放个5分钟连连看暑假，有机会获得特别奖品哦！", {
+            fontFamily: "fzltjh",
+            fontSize: Math.floor(17 * uiScale) + "px",
+            color: "#FFFFFF",
+            align: "center"
+        }).setOrigin(0.5);
     }, this);
     
     // 点击开始游戏
@@ -120,7 +144,6 @@ Load.prototype.preload = function() {
     this.load.image("header", "img/header.png");
     this.load.image("footer", "img/footer.png");
     this.load.image("xingxing", "img/xingxing.png");
-    this.load.image("text1", "img/text1.png");
     
     // 按钮资源
     this.load.image("btn_shuffle", "img/btn_shuffle.png");
