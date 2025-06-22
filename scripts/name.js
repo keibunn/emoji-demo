@@ -23,6 +23,18 @@ Name.prototype.create = function() {
     // 添加蓝色背景
     this.add.rectangle(centerX, centerY, screenWidth + 50, screenHeight + 50, 0x30a8ff);
     
+    // 添加header（顶部装饰）
+    var header = this.add.sprite(centerX, 0, "header");
+    header.setOrigin(0.5, 0);
+    header.displayWidth = screenWidth;
+    header.scaleY = header.scaleX;
+    
+    // 添加footer（底部装饰）
+    var footer = this.add.sprite(centerX, screenHeight, "footer");
+    footer.setOrigin(0.5, 1);
+    footer.displayWidth = screenWidth;
+    footer.scaleY = footer.scaleX;
+    
     // 在屏幕35%位置创建输入区域
     var inputY = screenHeight * 0.35;
     
@@ -106,35 +118,4 @@ Name.prototype.create = function() {
     });
     
     okBtn.on('pointerdown', okButtonHandler);
-    
-    // 跳过按钮（使用随机昵称）
-    var skipBtn = this.add.text(screenWidth - 20, screenHeight - 30, "跳过 >", {
-        fontFamily: "PoetsenOne",
-        fontSize: Math.floor(14 * uiScale),
-        align: "right",
-        color: "#95a5a6",
-        alpha: 0.7
-    }).setOrigin(1);
-    
-    skipBtn.setInteractive();
-    skipBtn.on('pointerover', function() {
-        skipBtn.setColor("#FFFFFF");
-        skipBtn.setAlpha(1);
-    });
-    skipBtn.on('pointerout', function() {
-        skipBtn.setColor("#95a5a6");
-        skipBtn.setAlpha(0.7);
-    });
-    skipBtn.on('pointerdown', function() {
-        // 使用随机生成的昵称
-        localStorage.setItem('emoji_game_name_set', 'true');
-        
-        // 播放点击音效
-        if (game_data.sound) {
-            scene.sound.play("click");
-        }
-        
-        // 切换到菜单场景
-        scene.scene.start("menu");
-    });
 }; 

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>清除昵称记录</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 400px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .info {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        button {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #ff3742;
+        }
+        .success {
+            color: #27ae60;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .link {
+            margin-top: 20px;
+        }
+        .link a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        .link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>清除昵称记录</h1>
+        <div class="info">
+            点击下面的按钮将清除本地存储的昵称记录，<br>
+            这样重新进入游戏时会显示昵称设置界面。
+        </div>
+        <button onclick="clearNameRecord()">清除昵称记录</button>
+        <div id="result"></div>
+        <div class="link">
+            <a href="index.html">返回游戏</a>
+        </div>
+    </div>
+
+    <script>
+        function clearNameRecord() {
+            try {
+                // 清除昵称设置标记
+                localStorage.removeItem('emoji_game_name_set');
+                
+                // 清除可能存储的昵称
+                localStorage.removeItem('emoji_game_player_name');
+                
+                // 清除其他相关记录
+                localStorage.removeItem('playerName');
+                
+                // 显示成功消息
+                document.getElementById('result').innerHTML = 
+                    '<div class="success">昵称记录已清除！<br>现在可以重新进入游戏查看name界面了。</div>';
+                
+                console.log('昵称记录已清除');
+                
+            } catch (error) {
+                document.getElementById('result').innerHTML = 
+                    '<div style="color: red;">清除失败: ' + error.message + '</div>';
+            }
+        }
+    </script>
+</body>
+</html> 
