@@ -131,6 +131,12 @@ Load.prototype.preload = function() {
     this.load.image("btn_menu", "img/btn_menu.png");
     this.load.image("btn_start", "img/btn_start.png");
     this.load.image("btn_ok", "img/btn_ok.png");
+    this.load.image("btn_rink", "img/btn_rink.png");
+    this.load.image("btn_close", "img/btn_close.png");
+    
+    // 排行榜界面资源
+    this.load.image("leaderboard_bg", "img/leaderboard_bg.png");
+    this.load.image("leaderboard_title", "img/leaderboard_title.png");
     
     // 昵称设置页面资源
     this.load.image("name-field", "img/name-field.png");
