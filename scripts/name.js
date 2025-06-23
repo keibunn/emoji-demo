@@ -46,7 +46,7 @@ Name.prototype.create = function() {
     // 输入框提示文本 - "点击输入薯名"
     var placeholderText = this.add.text(centerX, inputY, "点击输入薯名", {
         fontFamily: "PoetsenOne",
-        fontSize: Math.floor(16 * uiScale),
+        fontSize: Math.floor(20 * uiScale),
         align: "center",
         color: "#95a5a6"
     }).setOrigin(0.5);
