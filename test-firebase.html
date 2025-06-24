@@ -74,6 +74,7 @@
         <div>
             <h3>🧪 测试功能</h3>
             <button onclick="testSubmitScore()">提交测试分数</button>
+            <button onclick="testMultipleScores()">测试多次提交（验证去重）</button>
             <button onclick="loadLeaderboard()">加载排行榜</button>
             <button onclick="clearResults()">清除结果</button>
         </div>
@@ -161,6 +162,44 @@
             } catch (error) {
                 addResult(`❌ 提交错误: ${error.message}`);
                 updateStatus('提交出现错误', 'error');
+            }
+        }
+
+        async function testMultipleScores() {
+            if (!window.leaderboard) {
+                addResult('❌ 排行榜功能未初始化');
+                return;
+            }
+            
+            addResult('🧪 开始测试多次提交（验证去重逻辑）...');
+            
+            const testScores = [150, 200, 175, 250, 180]; // 模拟多次游戏分数
+            
+            try {
+                for (let i = 0; i < testScores.length; i++) {
+                    const score = testScores[i];
+                    addResult(`📤 提交第${i+1}次分数: ${score}`);
+                    
+                    const success = await window.leaderboard.submitScore(score, 1);
+                    if (success) {
+                        addResult(`✅ 第${i+1}次提交成功`);
+                    } else {
+                        addResult(`❌ 第${i+1}次提交失败`);
+                    }
+                    
+                    // 短暂延迟，避免提交太快
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                }
+                
+                addResult('🎯 多次提交完成！现在加载排行榜查看去重效果...');
+                updateStatus('多次提交测试完成！', 'success');
+                
+                // 自动加载排行榜查看效果
+                setTimeout(loadLeaderboard, 1000);
+                
+            } catch (error) {
+                addResult(`❌ 多次提交测试出错: ${error.message}`);
+                updateStatus('多次提交测试失败', 'error');
             }
         }
         

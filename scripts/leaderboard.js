@@ -89,9 +89,9 @@ class Leaderboard {
         try {
             console.log('正在获取排行榜数据...');
             
+            // 获取所有记录以确保准确的去重处理
             const snapshot = await this.leaderboardRef
                 .orderByChild('score')
-                .limitToLast(limit)
                 .once('value');
             
             const data = snapshot.val();
@@ -100,16 +100,37 @@ class Leaderboard {
                 return [];
             }
 
-            // 转换为数组并按分数降序排序
-            const leaderboard = Object.keys(data)
+            // 转换为数组
+            const allRecords = Object.keys(data)
                 .map(key => ({
                     id: key,
                     ...data[key]
-                }))
-                .sort((a, b) => b.score - a.score)
-                .slice(0, limit); // 确保不超过限制数量
+                }));
 
-            console.log('获取到排行榜数据:', leaderboard);
+            // 按玩家ID分组，只保留每个玩家的最高分记录
+            const playerBestScores = {};
+            
+            allRecords.forEach(record => {
+                const playerId = record.playerId;
+                
+                // 如果该玩家还没有记录，或者当前分数更高，则更新记录
+                if (!playerBestScores[playerId] || record.score > playerBestScores[playerId].score) {
+                    playerBestScores[playerId] = record;
+                }
+            });
+
+            // 转换为数组并按分数降序排序，只取前limit名
+            const leaderboard = Object.values(playerBestScores)
+                .sort((a, b) => {
+                    if (b.score !== a.score) {
+                        return b.score - a.score; // 分数不同时按分数排序
+                    }
+                    return a.timestamp - b.timestamp; // 分数相同时按时间先后排序（先达到的排名更高）
+                })
+                .slice(0, limit);
+
+            console.log('获取到排行榜数据（仅历史最高分）:', leaderboard);
+            console.log(`从 ${allRecords.length} 条记录中筛选出 ${Object.keys(playerBestScores).length} 名玩家的最高分，显示前 ${leaderboard.length} 名`);
             return leaderboard;
         } catch (error) {
             console.error('获取排行榜失败:', error);
@@ -147,9 +168,9 @@ class Leaderboard {
     listenToLeaderboard(callback, limit = 10) {
         console.log('开始监听排行榜变化...');
         
+        // 获取所有记录以确保准确的去重处理
         this.leaderboardRef
             .orderByChild('score')
-            .limitToLast(limit)
             .on('value', (snapshot) => {
                 const data = snapshot.val();
                 if (!data) {
@@ -157,12 +178,33 @@ class Leaderboard {
                     return;
                 }
 
-                const leaderboard = Object.keys(data)
+                // 转换为数组
+                const allRecords = Object.keys(data)
                     .map(key => ({
                         id: key,
                         ...data[key]
-                    }))
-                    .sort((a, b) => b.score - a.score)
+                    }));
+
+                // 按玩家ID分组，只保留每个玩家的最高分记录
+                const playerBestScores = {};
+                
+                allRecords.forEach(record => {
+                    const playerId = record.playerId;
+                    
+                    // 如果该玩家还没有记录，或者当前分数更高，则更新记录
+                    if (!playerBestScores[playerId] || record.score > playerBestScores[playerId].score) {
+                        playerBestScores[playerId] = record;
+                    }
+                });
+
+                // 转换为数组并按分数降序排序，只取前limit名
+                const leaderboard = Object.values(playerBestScores)
+                    .sort((a, b) => {
+                        if (b.score !== a.score) {
+                            return b.score - a.score; // 分数不同时按分数排序
+                        }
+                        return a.timestamp - b.timestamp; // 分数相同时按时间先后排序（先达到的排名更高）
+                    })
                     .slice(0, limit);
 
                 callback(leaderboard);
@@ -219,7 +261,7 @@ class Leaderboard {
         }
 
         try {
-            const leaderboard = await this.getLeaderboard(100); // 获取更多数据来计算排名
+            const leaderboard = await this.getLeaderboard(100); // 获取更多数据来计算排名（现在已经是去重后的数据）
             const playerEntry = leaderboard.find(entry => entry.playerId === playerId);
             
             if (!playerEntry) {
