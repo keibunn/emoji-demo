@@ -163,6 +163,7 @@ Load.prototype.preload = function() {
     
     // 昵称设置页面资源
     this.load.image("name-field", "img/name-field.png");
+    this.load.image("tips", "img/tips.png");
     
     // 游戏界面元素
     this.load.image("circle", "img/circle.png");

@@ -23,20 +23,22 @@ Name.prototype.create = function() {
     // 添加蓝色背景
     this.add.rectangle(centerX, centerY, screenWidth + 50, screenHeight + 50, 0x30a8ff);
     
-    // 添加header（顶部装饰）
-    var header = this.add.sprite(centerX, 0, "header");
-    header.setOrigin(0.5, 0);
-    header.displayWidth = screenWidth;
-    header.scaleY = header.scaleX;
-    
     // 添加footer（底部装饰）
     var footer = this.add.sprite(centerX, screenHeight, "footer");
     footer.setOrigin(0.5, 1);
     footer.displayWidth = screenWidth;
     footer.scaleY = footer.scaleX;
     
-    // 在屏幕35%位置创建输入区域
-    var inputY = screenHeight * 0.35;
+    // 添加tips.png - 位于距屏幕顶部10%的位置，居中，宽度为屏幕85%
+    var tipsY = screenHeight * 0.1;
+    var tips = this.add.sprite(centerX, tipsY, "tips");
+    tips.setOrigin(0.5, 0); // 设置锚点为顶部中心
+    tips.displayWidth = screenWidth * 0.85; // 宽度为屏幕宽度的85%
+    tips.scaleY = tips.scaleX; // 保持比例
+    
+    // 计算输入框位置 - 位于tips.png内部，距离tips.png底部20%的位置
+    var tipsHeight = tips.displayHeight;
+    var inputY = tipsY + tipsHeight * 0.8; // tips顶部 + tips高度的80%
     
     // 使用name-field.png作为输入框背景
     var inputBg = this.add.sprite(centerX, inputY, "name-field");
@@ -76,10 +78,14 @@ Name.prototype.create = function() {
         }
     });
     
-    // 使用btn_ok.png作为确认按钮
-    var okBtn = this.add.sprite(centerX, inputY + 80 * uiScale, "btn_ok");
+    // 使用btn_ok.png作为确认按钮 - 位于tips.png下方
+    var okBtn = this.add.sprite(centerX, 0, "btn_ok"); // 先创建在临时位置
     okBtn.setScale(0.6 * uiScale);
     okBtn.setAlpha(1.0); // 100%不透明
+    
+    // 重新计算位置 - tips底部 + 0.9个OK按钮高度的距离
+    var okBtnY = tipsY + tipsHeight + (okBtn.displayHeight * 0.9);
+    okBtn.y = okBtnY;
     
     // 初始状态下OK按钮不可交互
     
