@@ -161,6 +161,18 @@ Load.prototype.preload = function() {
     this.load.image("leaderboard_bg", "img/leaderboard_bg.png");
     this.load.image("leaderboard_title", "img/leaderboard_title.png");
     
+    // 排行榜排名方块素材
+    this.load.image("rank_block1", "img/rank-block1.png");
+    this.load.image("rank_block2", "img/rank-block2.png");
+    this.load.image("rank_block3", "img/rank-block3.png");
+    this.load.image("rank_block4", "img/rank-block4.png");
+    
+    // 排行榜信息条目素材
+    this.load.image("information_item1", "img/information-item1.png");
+    this.load.image("information_item2", "img/information-item2.png");
+    this.load.image("information_item3", "img/information-item3.png");
+    this.load.image("information_item4", "img/information-item4.png");
+    
     // 昵称设置页面资源
     this.load.image("name-field", "img/name-field.png");
     this.load.image("tips", "img/tips.png");

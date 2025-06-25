@@ -217,10 +217,10 @@ function showLeaderboard(scene) {
     overlay.setInteractive(); // 防止点击穿透
     leaderboardElements.push(overlay);
     
-    // 使用新的弹窗背景图片 - 位于屏幕15%的位置，左右间距约5%
-    var bgWidth = screenWidth * 0.9; // 左右间距5%
-    var bgHeight = screenHeight * 0.7; // 调整高度适应15%位置
-    var bgY = screenHeight * 0.15 + bgHeight / 2; // 位于屏幕15%的位置
+    // 使用新的弹窗背景图片 - 位于屏幕10%的位置，宽度85%
+    var bgWidth = screenWidth * 0.85; // 宽度85%
+    var bgHeight = screenHeight * 0.7; // 调整高度适应10%位置
+    var bgY = screenHeight * 0.1 + bgHeight / 2; // 位于屏幕10%的位置
     
     var leaderboardBg = scene.add.sprite(centerX, bgY, "leaderboard_bg");
     leaderboardBg.setDisplaySize(bgWidth, bgHeight);
@@ -245,9 +245,12 @@ function showLeaderboard(scene) {
     }).setOrigin(0.5).setDepth(102);
     leaderboardElements.push(loadingText);
     
-    // 使用新的关闭按钮图片 - 位于leaderboard_bg.png右上角
-    var closeBtnX = centerX + bgWidth / 2 - 20 * uiScale; // 背景右上角，向内偏移减少为20px
-    var closeBtnY = bgY - bgHeight / 2 + 20 * uiScale; // 背景顶部，向下偏移减少为20px
+    // 使用新的关闭按钮图片 - 位于leaderboard_bg.png下方居中
+    var closeBtnX = centerX; // 屏幕水平居中
+    // 获取关闭按钮的原始高度并计算缩放后的高度
+    var closeBtnOriginalHeight = scene.textures.get("btn_close").source[0].height;
+    var closeBtnScaledHeight = closeBtnOriginalHeight * uiScale * 0.7;
+    var closeBtnY = bgY + bgHeight / 2 + closeBtnScaledHeight * 0.9; // 背景底部 + 0.9个按钮高度的间距
     
     var closeBtn = scene.add.sprite(closeBtnX, closeBtnY, "btn_close");
     closeBtn.setScale(uiScale * 0.7); // 缩小至0.7
@@ -257,7 +260,7 @@ function showLeaderboard(scene) {
     
     // 悬停效果
     closeBtn.on('pointerover', function() {
-        closeBtn.setScale(1.1 * uiScale);
+        closeBtn.setScale(1.1 * uiScale * 0.7);
     });
     closeBtn.on('pointerout', function() {
         closeBtn.setScale(uiScale * 0.7);
@@ -349,32 +352,35 @@ function showLeaderboard(scene) {
                 // 创建排行榜条目容器
                 var entryContainer = scene.add.container(0, y);
                 
-                // 新的固定尺寸设计
-                var rankBoxSize = 40 * uiScale; // 40*40px
-                var infoBoxWidth = 300 * uiScale; // 300*40px
-                var infoBoxHeight = 40 * uiScale; // 40px高度
+                // 新的响应式尺寸设计 - 适应85%宽度的背景
+                var rankBoxSize = 40 * uiScale; // 40*40px，大小保持不变
                 var gap = 5 * uiScale; // 5px间距
+                var contentPadding = 20 * uiScale; // 内容区域左右边距各20px
                 
-                // 计算总宽度和边距，确保居中
-                var totalWidth = rankBoxSize + gap + infoBoxWidth;
-                var sideMargin = (bgWidth - totalWidth) / 2;
+                // 计算信息条目的可用宽度：背景宽度 - 左右边距 - 排名方块宽度 - 间距
+                var availableInfoWidth = bgWidth - (contentPadding * 2) - rankBoxSize - gap;
+                var infoBoxWidth = Math.max(200 * uiScale, availableInfoWidth); // 最小200px宽度
+                var infoBoxHeight = 40 * uiScale; // 40px高度
+                
+                // 重新计算实际总宽度
+                var actualTotalWidth = rankBoxSize + gap + infoBoxWidth;
+                var sideMargin = (bgWidth - actualTotalWidth) / 2;
                 
                 // 排名方块位置
                 var rankBoxX = -bgWidth / 2 + sideMargin + rankBoxSize / 2;
                 
-                // 排名方块 (40*40 圆角矩形) - 根据排名设置不同颜色
-                var rankBox = scene.add.graphics();
-                var boxColor = 0x1552b5; // 默认颜色
+                // 排名方块 - 使用对应的图片素材
+                var rankBlockName = "rank_block4"; // 默认第4名及以后
                 if (rank === 1) {
-                    boxColor = 0xf4c914; // 第1名金色
+                    rankBlockName = "rank_block1";
                 } else if (rank === 2) {
-                    boxColor = 0xcecece; // 第2名银色
+                    rankBlockName = "rank_block2";
                 } else if (rank === 3) {
-                    boxColor = 0xf29816; // 第3名铜色
+                    rankBlockName = "rank_block3";
                 }
-                rankBox.fillStyle(boxColor);
-                rankBox.fillRoundedRect(-rankBoxSize / 2, -rankBoxSize / 2, rankBoxSize, rankBoxSize, 7 * uiScale);
-                rankBox.setPosition(rankBoxX, 0);
+                
+                var rankBox = scene.add.sprite(rankBoxX, 0, rankBlockName);
+                rankBox.setDisplaySize(rankBoxSize, rankBoxSize); // 缩放到40×40px规范
                 
                 // 排名文字 - 根据排名设置不同颜色，全部使用数字
                 var rankIcon = rank.toString(); // 统一使用数字
@@ -391,7 +397,7 @@ function showLeaderboard(scene) {
                 
                 var rankText = scene.add.text(rankBoxX, 1 * uiScale, rankIcon, {
                     fontFamily: "fzltjh",
-                    fontSize: Math.floor(23 * uiScale), // 23px字体
+                    fontSize: Math.floor(22 * uiScale), // 22px字体
                     align: "center",
                     color: rankColor
                 }).setOrigin(0.5);
@@ -399,35 +405,49 @@ function showLeaderboard(scene) {
                 // 信息条目位置
                 var infoBoxX = rankBoxX + rankBoxSize / 2 + gap + infoBoxWidth / 2;
                 
-                // 信息条目 (300*40 圆角矩形)
-                var infoBox = scene.add.graphics();
-                infoBox.fillStyle(0x1552b5);
-                infoBox.fillRoundedRect(-infoBoxWidth / 2, -infoBoxHeight / 2, infoBoxWidth, infoBoxHeight, 7 * uiScale);
-                infoBox.setPosition(infoBoxX, 0);
-                
-                // 玩家昵称、分数、等级 - 全部并列在一排，25px字体
-                var playerName = entry.playerName || "神秘玩家";
-                if (playerName.length > 8) {
-                    playerName = playerName.substring(0, 8) + "...";
+                // 信息条目 - 使用对应的图片素材
+                var infoItemName = "information_item4"; // 默认第4名及以后
+                if (rank === 1) {
+                    infoItemName = "information_item1";
+                } else if (rank === 2) {
+                    infoItemName = "information_item2";
+                } else if (rank === 3) {
+                    infoItemName = "information_item3";
                 }
                 
-                var textPadding = 15 * uiScale; // 内边距
+                var infoBox = scene.add.sprite(infoBoxX, 0, infoItemName);
+                infoBox.setDisplaySize(infoBoxWidth, infoBoxHeight); // 缩放到计算出的宽度×40px规范
+                
+                // 玩家昵称、分数 - 响应式文字布局
+                var playerName = entry.playerName || "神秘玩家";
+                
+                // 根据信息框宽度动态调整昵称长度限制
+                var maxNameLength = Math.floor(infoBoxWidth / (15 * uiScale)); // 根据宽度估算字符数
+                maxNameLength = Math.max(4, Math.min(maxNameLength, 10)); // 限制在4-10个字符之间
+                
+                if (playerName.length > maxNameLength) {
+                    playerName = playerName.substring(0, maxNameLength - 1) + "...";
+                }
+                
+                var textPadding = Math.max(10 * uiScale, 15 * uiScale); // 内边距，最小10px
                 
                 // 玩家昵称 - 左侧
                 var nameText = scene.add.text(infoBoxX - infoBoxWidth / 2 + textPadding, 1 * uiScale, playerName, {
                     fontFamily: "fzltjh",
-                    fontSize: Math.floor(23 * uiScale), // 23px字体
+                    fontSize: Math.floor(Math.min(22, infoBoxWidth / 12) * uiScale), // 响应式字体大小，最大22px
                     align: "left",
                     color: "#FFFFFF"
                 }).setOrigin(0, 0.5);
                 
-                // 分数 - 右侧
-                var scoreText = scene.add.text(infoBoxX + infoBoxWidth / 2 - textPadding, 1 * uiScale, entry.score.toString() + " 分", {
+                // 分数 - 在胶囊型区域内完全居中，垂直居中，颜色与排名数字统一
+                // 胶囊型区域的中心大约在信息框右侧的30px区域内
+                var capsuleAreaX = infoBoxX + infoBoxWidth / 2 - 30 * uiScale; // 胶囊区域中心
+                var scoreText = scene.add.text(capsuleAreaX, 1 * uiScale, entry.score.toString(), {
                     fontFamily: "fzltjh",
-                    fontSize: Math.floor(23 * uiScale), // 23px字体
-                    align: "right",
-                    color: "#FFD93D"
-                }).setOrigin(1, 0.5);
+                    fontSize: Math.floor(Math.min(22, infoBoxWidth / 12) * uiScale), // 响应式字体大小，最大22px
+                    align: "center",
+                    color: rankColor
+                }).setOrigin(0.5, 0.5);
                 
                 // 删除等级信息
                 
