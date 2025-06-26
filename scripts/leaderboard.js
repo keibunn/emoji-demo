@@ -51,6 +51,23 @@ class Leaderboard {
         this.isSubmitting = true;
 
         try {
+            // 等待Firebase认证完成
+            if (window.firebaseAuth && window.firebaseAuth.currentUser === null) {
+                await new Promise((resolve, reject) => {
+                    const unsubscribe = window.firebaseAuth.onAuthStateChanged((user) => {
+                        if (user) {
+                            unsubscribe();
+                            resolve();
+                        }
+                    });
+                    // 5秒超时
+                    setTimeout(() => {
+                        unsubscribe();
+                        reject(new Error('认证超时'));
+                    }, 5000);
+                });
+            }
+
             const playerId = this.generatePlayerId();
             const playerName = this.generatePlayerName();
             const timestamp = Date.now();
@@ -65,12 +82,8 @@ class Leaderboard {
                 date: new Date().toLocaleDateString('zh-CN')
             };
 
-            console.log('正在提交分数到排行榜:', scoreData);
-
             // 提交到Firebase
             await this.leaderboardRef.push(scoreData);
-            
-            console.log('分数提交成功！');
             
             // 清理旧记录（保持数据库整洁）
             this.cleanupOldEntries();
@@ -87,8 +100,6 @@ class Leaderboard {
     // 获取排行榜数据
     async getLeaderboard(limit = 10) {
         try {
-            console.log('正在获取排行榜数据...');
-            
             // 获取所有记录以确保准确的去重处理
             const snapshot = await this.leaderboardRef
                 .orderByChild('score')
@@ -96,7 +107,6 @@ class Leaderboard {
             
             const data = snapshot.val();
             if (!data) {
-                console.log('排行榜暂无数据');
                 return [];
             }
 
@@ -129,8 +139,6 @@ class Leaderboard {
                 })
                 .slice(0, limit);
 
-            console.log('获取到排行榜数据（仅历史最高分）:', leaderboard);
-            console.log(`从 ${allRecords.length} 条记录中筛选出 ${Object.keys(playerBestScores).length} 名玩家的最高分，显示前 ${leaderboard.length} 名`);
             return leaderboard;
         } catch (error) {
             console.error('获取排行榜失败:', error);
@@ -166,8 +174,6 @@ class Leaderboard {
 
     // 实时监听排行榜变化
     listenToLeaderboard(callback, limit = 10) {
-        console.log('开始监听排行榜变化...');
-        
         // 获取所有记录以确保准确的去重处理
         this.leaderboardRef
             .orderByChild('score')
@@ -213,7 +219,6 @@ class Leaderboard {
 
     // 停止监听排行榜
     stopListening() {
-        console.log('停止监听排行榜变化');
         this.leaderboardRef.off();
     }
 
@@ -240,8 +245,6 @@ class Leaderboard {
                 for (const entry of toDelete) {
                     await this.leaderboardRef.child(entry.key).remove();
                 }
-                
-                console.log(`清理了 ${toDelete.length} 条旧记录`);
             }
         } catch (error) {
             console.error('清理旧记录失败:', error);
