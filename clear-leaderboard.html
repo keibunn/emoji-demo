@@ -154,6 +154,7 @@
         <div>
             <button onclick="loadRecords()" class="success-btn">🔄 刷新数据</button>
             <button onclick="showPreview()" id="previewBtn" disabled>👀 预览记录</button>
+            <button onclick="showPlayerStats()" id="statsBtn" disabled>📊 玩家统计</button>
             <button onclick="clearAllRecords()" class="danger-btn" id="clearBtn" disabled>🗑️ 清空排行榜</button>
         </div>
         
@@ -195,6 +196,7 @@
                 updateStatus('✅ Firebase连接成功', 'success');
                 document.getElementById('clearBtn').disabled = false;
                 document.getElementById('previewBtn').disabled = false;
+                document.getElementById('statsBtn').disabled = false;
                 
                 // 自动加载数据
                 await loadRecords();
@@ -368,6 +370,139 @@
             } catch (error) {
                 updateStatus('❌ 清理失败: ' + error.message, 'error');
             }
+        }
+        
+        function showPlayerStats() {
+            const previewEl = document.getElementById('recordsPreview');
+            
+            if (currentRecords.length === 0) {
+                previewEl.innerHTML = '<p style="text-align: center; color: #666;">暂无记录用于统计</p>';
+                previewEl.style.display = 'block';
+                return;
+            }
+            
+            // 按玩家ID分组统计
+            const playerStats = {};
+            
+            currentRecords.forEach(record => {
+                const playerId = record.playerId || '未知ID';
+                const playerName = record.playerName || '未知玩家';
+                const score = record.score || 0;
+                const date = record.date || '未知';
+                
+                if (!playerStats[playerId]) {
+                    playerStats[playerId] = {
+                        playerName: playerName,
+                        scores: [],
+                        dates: [],
+                        totalGames: 0,
+                        highestScore: 0,
+                        lowestScore: Infinity,
+                        totalScore: 0
+                    };
+                }
+                
+                const player = playerStats[playerId];
+                player.scores.push(score);
+                player.dates.push(date);
+                player.totalGames++;
+                player.totalScore += score;
+                player.highestScore = Math.max(player.highestScore, score);
+                player.lowestScore = Math.min(player.lowestScore, score);
+            });
+            
+            // 转换为数组并排序（按游戏次数降序）
+            const playersArray = Object.keys(playerStats).map(playerId => ({
+                playerId,
+                ...playerStats[playerId],
+                averageScore: Math.round(playerStats[playerId].totalScore / playerStats[playerId].totalGames)
+            })).sort((a, b) => b.totalGames - a.totalGames);
+            
+            // 生成统计报告HTML
+            const totalPlayers = playersArray.length;
+            const totalGames = currentRecords.length;
+            const averageGamesPerPlayer = Math.round(totalGames / totalPlayers);
+            
+            let statsHtml = `
+                <div style="background: #e8f5e8; padding: 20px; border-radius: 10px; margin: 15px 0; border-left: 5px solid #28a745;">
+                    <h3>📊 游戏统计总览</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-top: 15px;">
+                        <div style="text-align: center; background: white; padding: 15px; border-radius: 8px;">
+                            <div style="font-size: 2em; font-weight: bold; color: #007bff;">${totalPlayers}</div>
+                            <div style="color: #666;">总玩家数</div>
+                        </div>
+                        <div style="text-align: center; background: white; padding: 15px; border-radius: 8px;">
+                            <div style="font-size: 2em; font-weight: bold; color: #28a745;">${totalGames}</div>
+                            <div style="color: #666;">总游戏次数</div>
+                        </div>
+                        <div style="text-align: center; background: white; padding: 15px; border-radius: 8px;">
+                            <div style="font-size: 2em; font-weight: bold; color: #ffc107;">${averageGamesPerPlayer}</div>
+                            <div style="color: #666;">平均游戏次数</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h4>👥 玩家详细统计（按游戏次数排序）：</h4>
+            `;
+            
+            // 显示前20名最活跃玩家
+            playersArray.slice(0, 20).forEach((player, index) => {
+                const isHighFrequencyPlayer = player.totalGames >= 5;
+                const recentScores = player.scores.slice(-5).reverse(); // 最近5次分数
+                
+                statsHtml += `
+                    <div style="background: ${isHighFrequencyPlayer ? '#fff3cd' : 'white'}; margin: 10px 0; padding: 15px; border-radius: 10px; border-left: 4px solid ${isHighFrequencyPlayer ? '#ffc107' : '#17a2b8'};">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <div>
+                                <strong>${player.playerName}</strong> ${isHighFrequencyPlayer ? '🔥' : ''}
+                                <br>
+                                <small style="color: #666;">ID: ${player.playerId.substring(0, 12)}...</small>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="font-size: 1.5em; font-weight: bold; color: #007bff;">${player.totalGames}</div>
+                                <div style="color: #666; font-size: 0.9em;">游戏次数</div>
+                            </div>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; margin: 10px 0;">
+                            <div style="text-align: center; background: rgba(40, 167, 69, 0.1); padding: 8px; border-radius: 5px;">
+                                <div style="font-weight: bold; color: #28a745;">${player.highestScore}</div>
+                                <div style="font-size: 0.8em; color: #666;">最高分</div>
+                            </div>
+                            <div style="text-align: center; background: rgba(255, 193, 7, 0.1); padding: 8px; border-radius: 5px;">
+                                <div style="font-weight: bold; color: #ffc107;">${player.averageScore}</div>
+                                <div style="font-size: 0.8em; color: #666;">平均分</div>
+                            </div>
+                            <div style="text-align: center; background: rgba(108, 117, 125, 0.1); padding: 8px; border-radius: 5px;">
+                                <div style="font-weight: bold; color: #6c757d;">${player.lowestScore}</div>
+                                <div style="font-size: 0.8em; color: #666;">最低分</div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 10px;">
+                            <div style="font-size: 0.9em; color: #666; margin-bottom: 5px;">最近5次分数：</div>
+                            <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+                                ${recentScores.map(score => 
+                                    `<span style="background: #e9ecef; padding: 3px 8px; border-radius: 15px; font-size: 0.8em;">${score}</span>`
+                                ).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            if (playersArray.length > 20) {
+                statsHtml += `
+                    <div style="text-align: center; color: #666; margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                        ... 还有 ${playersArray.length - 20} 名玩家未显示
+                        <br>
+                        <small>按游戏次数排序，仅显示前20名最活跃玩家</small>
+                    </div>
+                `;
+            }
+            
+            previewEl.innerHTML = statsHtml;
+            previewEl.style.display = 'block';
         }
         
         function goToGame() {
