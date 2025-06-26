@@ -97,24 +97,16 @@ Load.prototype.preload = function() {
         var textY = screenHeight * 0.85; // 底部15%位置
         var lineSpacing = 22 * uiScale; // 行间距22px
         
-        // 第1排：设计友好报VOL.09
-        var line1 = a.add.text(centerX + 3 * uiScale, textY, "设计友好报VOL.09", {
+        // 第1排：《暑假特辑——设计友好赛》正式开始！
+        var line1 = a.add.text(centerX + 3 * uiScale, textY, "《暑假特辑——设计友好赛》正式开始！", {
             fontFamily: "fzltjh",
             fontSize: Math.floor(17 * uiScale) + "px",
             color: "#FFFFFF",
             align: "center"
         }).setOrigin(0.5);
         
-        // 第2排：《暑假特辑——设计友好赛》正式开始！
-        var line2 = a.add.text(centerX + 3 * uiScale, textY + lineSpacing, "《暑假特辑——设计友好赛》正式开始！", {
-            fontFamily: "fzltjh",
-            fontSize: Math.floor(17 * uiScale) + "px",
-            color: "#FFFFFF",
-            align: "center"
-        }).setOrigin(0.5);
-        
-        // 第3排：给自己放个5分钟连连看暑假，有机会获得特别奖品哦！
-        var line3 = a.add.text(centerX + 3 * uiScale, textY + lineSpacing * 2, "给自己放个5分钟连连看暑假，有机会获得特别奖品哦！", {
+        // 第2排：给自己放个5分钟连连看暑假，有机会获得特别奖品哦！
+        var line2 = a.add.text(centerX + 3 * uiScale, textY + lineSpacing, "给自己放个5分钟连连看暑假，有机会获得特别奖品哦！", {
             fontFamily: "fzltjh",
             fontSize: Math.floor(17 * uiScale) + "px",
             color: "#FFFFFF",
