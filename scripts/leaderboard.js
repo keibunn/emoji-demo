@@ -85,7 +85,7 @@ class Leaderboard {
     }
 
     // 获取排行榜数据
-    async getLeaderboard(limit = 10) {
+    async getLeaderboard(limit = 30) {
         try {
             console.log('正在获取排行榜数据...');
             
@@ -165,7 +165,7 @@ class Leaderboard {
     }
 
     // 实时监听排行榜变化
-    listenToLeaderboard(callback, limit = 10) {
+    listenToLeaderboard(callback, limit = 30) {
         console.log('开始监听排行榜变化...');
         
         // 获取所有记录以确保准确的去重处理

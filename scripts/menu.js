@@ -301,7 +301,7 @@ function showLeaderboard(scene) {
     
     // 获取排行榜数据
     if (window.leaderboard) {
-        window.leaderboard.getLeaderboard(10).then(function(data) {
+        window.leaderboard.getLeaderboard(30).then(function(data) {
             loadingText.destroy(); // 删除加载提示
             
             if (data.length === 0) {
@@ -344,7 +344,7 @@ function showLeaderboard(scene) {
             var entriesContainer = scene.add.container(0, 0);
             scrollArea.add(entriesContainer);
             
-            for (var i = 0; i < Math.min(data.length, 10); i++) {
+            for (var i = 0; i < Math.min(data.length, 30); i++) {
                 var rank = i + 1;
                 var entry = data[i];
                 var y = startY + i * lineHeight - bgY; // 相对于scrollArea的位置
