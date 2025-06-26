@@ -1,0 +1,18 @@
+# Development tools (not for production)
+reset-name.html
+cleanup-test-records.html
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db 

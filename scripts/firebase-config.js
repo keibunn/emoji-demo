@@ -14,24 +14,12 @@ const firebaseConfig = {
 // 初始化Firebase应用
 let firebaseApp;
 let database;
-let auth;
 
 try {
     // 初始化Firebase
     firebaseApp = firebase.initializeApp(firebaseConfig);
     database = firebase.database();
-    auth = firebase.auth();
-    
-    // 自动进行匿名认证
-    auth.signInAnonymously()
-        .then(() => {
-            // Firebase匿名认证成功 - 生产环境移除日志
-        })
-        .catch((error) => {
-            console.error("Firebase匿名认证失败:", error);
-        });
-    
-    // Firebase初始化成功 - 生产环境移除日志
+    console.log("Firebase初始化成功");
 } catch (error) {
     console.error("Firebase初始化失败:", error);
     // 创建一个模拟的database对象，防止游戏崩溃
@@ -51,5 +39,4 @@ try {
 }
 
 // 全局变量，供其他脚本使用
-window.firebaseDatabase = database;
-window.firebaseAuth = auth; 
+window.firebaseDatabase = database; 
