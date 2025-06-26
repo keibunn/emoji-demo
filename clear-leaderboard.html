@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>清理排行榜数据</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 700px;
+            margin: 30px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+            width: 100%;
+            max-width: 600px;
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+        }
+        .stats-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border-left: 5px solid #3498db;
+        }
+        .record-count {
+            font-size: 2em;
+            font-weight: bold;
+            color: #e74c3c;
+            margin: 10px 0;
+        }
+        button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            margin: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        button:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .danger-btn {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+        }
+        .danger-btn:hover {
+            background: linear-gradient(45deg, #c0392b, #a93226);
+        }
+        .success-btn {
+            background: linear-gradient(45deg, #27ae60, #229954);
+        }
+        .status {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+        }
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 2px solid #bee5eb;
+        }
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 2px solid #ffeaa7;
+        }
+        .records-preview {
+            max-height: 300px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        .record-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🗑️ 排行榜清理工具</h1>
+        
+        <div class="stats-box">
+            <h3>📊 数据统计</h3>
+            <div>当前记录总数：<span class="record-count" id="recordCount">加载中...</span></div>
+            <div id="lastUpdate">最后更新：加载中...</div>
+        </div>
+        
+        <div id="status" class="status info">
+            正在连接Firebase...
+        </div>
+        
+        <div>
+            <button onclick="loadRecords()" class="success-btn">🔄 刷新数据</button>
+            <button onclick="showPreview()" id="previewBtn" disabled>👀 预览记录</button>
+            <button onclick="clearAllRecords()" class="danger-btn" id="clearBtn" disabled>🗑️ 清空排行榜</button>
+        </div>
+        
+        <div id="recordsPreview" class="records-preview" style="display: none;"></div>
+        
+        <div style="margin-top: 30px;">
+            <button onclick="goToGame()" class="success-btn">🎮 返回游戏</button>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    
+    <!-- Firebase 配置 -->
+    <script src="scripts/firebase-config.js"></script>
+    
+    <script>
+        let currentRecords = [];
+        let leaderboardDatabase = null;
+        
+        function updateStatus(message, type = 'info', showLoading = false) {
+            const statusEl = document.getElementById('status');
+            statusEl.innerHTML = showLoading ? 
+                `<span class="loading"></span> ${message}` : message;
+            statusEl.className = `status ${type}`;
+        }
+        
+        function updateRecordCount(count) {
+            document.getElementById('recordCount').textContent = count;
+            document.getElementById('lastUpdate').textContent = 
+                `最后更新：${new Date().toLocaleString()}`;
+        }
+        
+        // 等待Firebase初始化
+        setTimeout(async () => {
+            if (window.firebaseDatabase) {
+                leaderboardDatabase = window.firebaseDatabase;
+                updateStatus('✅ Firebase连接成功', 'success');
+                document.getElementById('clearBtn').disabled = false;
+                document.getElementById('previewBtn').disabled = false;
+                
+                // 自动加载数据
+                await loadRecords();
+            } else {
+                updateStatus('❌ Firebase连接失败，请刷新页面重试', 'error');
+            }
+        }, 1500);
+        
+        async function loadRecords() {
+            try {
+                updateStatus('📋 正在加载排行榜数据...', 'info', true);
+                
+                const snapshot = await database.ref('leaderboard').once('value');
+                const data = snapshot.val();
+                
+                if (!data) {
+                    currentRecords = [];
+                    updateRecordCount(0);
+                    updateStatus('📭 排行榜暂无数据', 'info');
+                    document.getElementById('recordsPreview').style.display = 'none';
+                    return;
+                }
+                
+                currentRecords = Object.keys(data).map(key => ({
+                    id: key,
+                    ...data[key]
+                }));
+                
+                // 按分数排序
+                currentRecords.sort((a, b) => b.score - a.score);
+                
+                updateRecordCount(currentRecords.length);
+                updateStatus('📊 数据加载完成', 'success');
+                
+            } catch (error) {
+                updateStatus('❌ 加载失败: ' + error.message, 'error');
+            }
+        }
+        
+        function showPreview() {
+            const previewEl = document.getElementById('recordsPreview');
+            
+            if (currentRecords.length === 0) {
+                previewEl.innerHTML = '<p style="text-align: center; color: #666;">暂无记录</p>';
+                previewEl.style.display = 'block';
+                return;
+            }
+            
+            // 搜索包含"田中"的记录
+            const tanakaRecords = currentRecords.filter(record => 
+                record.playerName && record.playerName.includes('田中')
+            );
+            
+            // 搜索高分记录（>=120分）
+            const highScoreRecords = currentRecords.filter(record => 
+                record.score >= 120
+            );
+            
+            let searchResultHtml = '';
+            if (tanakaRecords.length > 0) {
+                searchResultHtml = `
+                    <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin: 10px 0; border-left: 4px solid #ffc107;">
+                        <h4>🔍 搜索结果 - 包含"田中"的记录（${tanakaRecords.length}条）：</h4>
+                        ${tanakaRecords.map((record, index) => {
+                            const rankInAll = currentRecords.findIndex(r => r.id === record.id) + 1;
+                            return `
+                                <div style="background: white; margin: 5px 0; padding: 10px; border-radius: 5px;">
+                                    <strong>排名: #${rankInAll}</strong> ${record.playerName}
+                                    <br>
+                                    <small>分数: ${record.score} | 日期: ${record.date || '未知'} | 玩家ID: ${record.playerId ? record.playerId.substring(0, 12) + '...' : '未知'}</small>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+            } else {
+                searchResultHtml = `
+                    <div style="background: #f8d7da; padding: 15px; border-radius: 8px; margin: 10px 0; border-left: 4px solid #dc3545;">
+                        <h4>❌ 未找到包含"田中"的记录</h4>
+                        <p>在当前的 ${currentRecords.length} 条记录中没有找到昵称包含"田中"的玩家</p>
+                    </div>
+                `;
+            }
+            
+            // 添加高分记录显示
+            let highScoreHtml = '';
+            if (highScoreRecords.length > 0) {
+                highScoreHtml = `
+                    <div style="background: #d1ecf1; padding: 15px; border-radius: 8px; margin: 10px 0; border-left: 4px solid #17a2b8;">
+                        <h4>🏆 高分记录 - 分数≥120分（${highScoreRecords.length}条）：</h4>
+                        ${highScoreRecords.map((record, index) => {
+                            const rankInAll = currentRecords.findIndex(r => r.id === record.id) + 1;
+                            return `
+                                <div style="background: white; margin: 5px 0; padding: 10px; border-radius: 5px;">
+                                    <strong>排名: #${rankInAll}</strong> ${record.playerName || '未知玩家'} - <strong>${record.score}分</strong>
+                                    <br>
+                                    <small>日期: ${record.date || '未知'} | 玩家ID: ${record.playerId ? record.playerId.substring(0, 12) + '...' : '未知'}</small>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+            } else {
+                highScoreHtml = `
+                    <div style="background: #f8d7da; padding: 15px; border-radius: 8px; margin: 10px 0; border-left: 4px solid #dc3545;">
+                        <h4>📊 没有找到120分以上的高分记录</h4>
+                        <p>当前最高分：${currentRecords.length > 0 ? currentRecords[0].score : 0}分</p>
+                    </div>
+                `;
+            }
+            
+            const recordsHtml = '<h4>📋 排行榜记录预览（按分数排序）：</h4>' + 
+                currentRecords.slice(0, 20).map((record, index) => {
+                    return `
+                        <div class="record-item">
+                            <div>
+                                <strong>#${index + 1}</strong> 
+                                ${record.playerName || '未知玩家'}
+                                <br>
+                                <small>分数: ${record.score} | 日期: ${record.date || '未知'}</small>
+                            </div>
+                            <div>
+                                <small>ID: ${record.playerId ? record.playerId.substring(0, 8) + '...' : '未知'}</small>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            
+            if (currentRecords.length > 20) {
+                previewEl.innerHTML = searchResultHtml + highScoreHtml + recordsHtml + `<p style="text-align: center; color: #666; margin-top: 15px;">... 还有 ${currentRecords.length - 20} 条记录未显示</p>`;
+            } else {
+                previewEl.innerHTML = searchResultHtml + highScoreHtml + recordsHtml;
+            }
+            
+            previewEl.style.display = 'block';
+        }
+        
+        async function clearAllRecords() {
+            if (currentRecords.length === 0) {
+                updateStatus('ℹ️ 排行榜已经是空的，无需清理', 'info');
+                return;
+            }
+            
+            const confirmMsg = `⚠️ 确定要删除所有 ${currentRecords.length} 条排行榜记录吗？\n\n此操作无法撤销！`;
+            if (!confirm(confirmMsg)) {
+                return;
+            }
+            
+            const doubleConfirm = '🚨 最后确认：这将永久删除所有玩家的所有分数记录！\n\n确定继续吗？';
+            if (!confirm(doubleConfirm)) {
+                return;
+            }
+            
+            try {
+                updateStatus('🗑️ 正在清理排行榜数据...', 'warning', true);
+                
+                // 删除整个leaderboard节点
+                await database.ref('leaderboard').remove();
+                
+                currentRecords = [];
+                updateRecordCount(0);
+                document.getElementById('recordsPreview').style.display = 'none';
+                
+                updateStatus('✅ 排行榜已完全清空！', 'success');
+                
+                // 3秒后提示可以返回游戏
+                setTimeout(() => {
+                    updateStatus('🎮 清理完成！现在可以返回游戏开始全新的排行榜了', 'success');
+                }, 3000);
+                
+            } catch (error) {
+                updateStatus('❌ 清理失败: ' + error.message, 'error');
+            }
+        }
+        
+        function goToGame() {
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html> 

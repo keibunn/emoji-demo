@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试清理工具</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .status {
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        .warning { background: #fff3cd; color: #856404; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Firebase连接测试</h1>
+        
+        <div id="status" class="status info">
+            正在初始化...
+        </div>
+        
+        <div>
+            <button onclick="testConnection()">🔗 测试连接</button>
+            <button onclick="loadRecords()" id="loadBtn" disabled>📋 加载数据</button>
+            <button onclick="clearRecords()" id="clearBtn" disabled>🗑️ 清空数据</button>
+        </div>
+        
+        <div id="results"></div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    
+    <!-- Firebase 配置 -->
+    <script src="scripts/firebase-config.js"></script>
+    
+    <script>
+        let testDatabase = null;
+        
+        function updateStatus(message, type = 'info') {
+            const statusEl = document.getElementById('status');
+            statusEl.textContent = message;
+            statusEl.className = `status ${type}`;
+        }
+        
+        function updateResults(html) {
+            document.getElementById('results').innerHTML = html;
+        }
+        
+        // 初始化检查
+        setTimeout(() => {
+            testConnection();
+        }, 1000);
+        
+        function testConnection() {
+            updateStatus('正在测试Firebase连接...', 'info');
+            
+            if (window.firebaseDatabase) {
+                testDatabase = window.firebaseDatabase;
+                updateStatus('✅ Firebase连接成功！', 'success');
+                document.getElementById('loadBtn').disabled = false;
+                document.getElementById('clearBtn').disabled = false;
+            } else {
+                updateStatus('❌ Firebase连接失败', 'error');
+                updateResults('<p style="color: red;">可能的问题：<br>1. firebase-config.js文件未正确加载<br>2. Firebase SDK未正确加载<br>3. 网络连接问题</p>');
+            }
+        }
+        
+        async function loadRecords() {
+            try {
+                updateStatus('正在加载数据...', 'info');
+                
+                const snapshot = await testDatabase.ref('leaderboard').once('value');
+                const data = snapshot.val();
+                
+                if (!data) {
+                    updateStatus('📭 暂无数据', 'info');
+                    updateResults('<p>排行榜中暂无记录</p>');
+                    return;
+                }
+                
+                const records = Object.keys(data).map(key => ({
+                    id: key,
+                    ...data[key]
+                }));
+                
+                updateStatus(`✅ 找到 ${records.length} 条记录`, 'success');
+                
+                const recordsHtml = records.slice(0, 5).map((record, index) => 
+                    `<p><strong>${index + 1}.</strong> ${record.playerName} - ${record.score}分</p>`
+                ).join('');
+                
+                updateResults(`
+                    <h3>数据预览（前5条）：</h3>
+                    ${recordsHtml}
+                    ${records.length > 5 ? `<p><em>...还有 ${records.length - 5} 条记录</em></p>` : ''}
+                `);
+                
+            } catch (error) {
+                updateStatus('❌ 加载失败: ' + error.message, 'error');
+                updateResults(`<p style="color: red;">错误详情：${error.message}</p>`);
+            }
+        }
+        
+        async function clearRecords() {
+            if (!confirm('确定要清空所有排行榜数据吗？')) {
+                return;
+            }
+            
+            try {
+                updateStatus('正在清理数据...', 'warning');
+                
+                await testDatabase.ref('leaderboard').remove();
+                
+                updateStatus('✅ 数据已清空！', 'success');
+                updateResults('<p style="color: green;">排行榜已完全清空！</p>');
+                
+            } catch (error) {
+                updateStatus('❌ 清理失败: ' + error.message, 'error');
+                updateResults(`<p style="color: red;">清理失败：${error.message}</p>`);
+            }
+        }
+    </script>
+</body>
+</html> 
