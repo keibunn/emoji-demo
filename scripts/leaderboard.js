@@ -3,7 +3,7 @@ class Leaderboard {
     constructor() {
         this.database = window.firebaseDatabase;
         this.leaderboardRef = this.database.ref('leaderboard');
-        this.maxEntries = 500; // 最多保存500条记录（大幅增加容量防止高分记录丢失）
+        this.maxEntries = 1000; // 最多保存1000条记录（为下周三开放活动增加容量）
         this.isSubmitting = false; // 防止重复提交
     }
 
